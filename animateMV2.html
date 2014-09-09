@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>raphael sandbox</title>
+<style>
+html, body {
+	margin:0; 
+	padding:0; 
+	overflow:hidden;
+	background-color:grey;
+}
+
+</style>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script  type="text/javascript" src="raphael.js"></script>
+<script>
+var xsize = $(window).width();
+var ysize = $(window).innerHeight();
+
+var circ;
+var thePath;
+var animation;
+
+window.onload = function() {
+		paper = new Raphael(document.getElementById('container'), xsize, ysize);
+		var curveStr ="c1500,110 200,-600";
+		makePath(100, 200, 800, 400,curveStr,1,0.001);
+}
+
+function makePath(initx, inity, endx, endy,curve,interval,speed){
+	var bezierCurve = 
+	curve+" "+endx+", "+endy;
+	var pathStr = 
+	"M"+initx+","+inity+
+	bezierCurve
+	;
+	thePath = paper.path(pathStr).attr({stroke:"#444444","stroke-width":10, "stroke-opacity":0.5});
+	circ =  paper.ellipse(initx,inity,10,5).attr({
+	fill:"#ff0000",
+	"fill-opacity":1,
+	"stroke-opacity":0,
+	});
+
+	var start = paper.circle(initx,inity,10).attr({fill:"#222222","fill-opacity":1.0,"stroke-opacity":0});
+	var end = paper.circle(initx+endx,inity+endy,10).attr({fill:"#222222","fill-opacity":1.0,"stroke-opacity":0});
+	animation = window.setInterval("animate("+[initx,inity]+","+(thePath.getTotalLength()*speed)+","+interval+")", interval);
+}
+
+var counter=0;
+function animate(initx,inity,speed,interval){
+console.log(thePath.getTotalLength());
+	if(thePath.getTotalLength()<=counter){
+		clearInterval(animation);
+		animation = window.setInterval("animate("+[initx,inity]+","+speed+")", speed);
+		counter = 0;
+		return;
+	}
+	var pos = thePath.getPointAtLength(counter);
+	circ.attr({transform:"t"+[pos.x-initx,pos.y-inity]+"r"+pos.alpha});
+	counter+=speed;
+}
+  
+
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+    } : null;
+}
+
+</script>
+</head>
+<body>
+
+
+
+<div id="container">
+</div>
+
+
+ 
+</body>
+</html>
