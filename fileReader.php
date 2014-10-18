@@ -16,13 +16,13 @@ height:100%
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <script type="text/javascript">
 
-
 $(document).ready(function() {
                   var test = <?php
                   $file = file_get_contents('fruits.txt', FILE_USE_INCLUDE_PATH);
                   echo $file
                   ?>
-                  
+                  // in order to make txt file, put :  git log -p --reverse > txtfileName.txt
+
                    console.log(test);
                    console.log(test[2]);
                   
