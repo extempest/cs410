@@ -108,9 +108,9 @@ function ready(error, xml) {
                                                                     author = {};
                                                                     author["contribution"] = 10;
                                                          
-                                                                     var circ = svg.append("circle");
+                                                                     var circ = createAnt(svg);
                                                                      author["antMarker"] = circ;
-                                                                     circ.attr("r",7)
+                                                                     circ
                                                                      .attr("transform", "translate(" + [7,groundLevel] + ")")
                                                                      .style("fill",function() {
                                                                             return "hsl(" + Math.random() * 360 + ",100%,50%)";
@@ -170,6 +170,67 @@ function ready(error, xml) {
         .duration(1000)
         .attrTween("transform", translateAlong(path.node()))
         //.each("end", transition);// infinite loop
+    }
+    
+    function createAnt(canvas) {
+        // Draw the Circle
+        var circleData = [
+                          { "cx": 80, "cy": 80, "radius": 30, "color": "black"  },
+                          { "cx": 130, "cy": 75, "radius": 30, "color": "black" },
+                          { "cx": 180, "cy": 60, "radius": 30, "color": "black" },
+                          { "cx": 195, "cy": 55, "radius": 6, "color": "white"  },
+                          { "cx": 195, "cy": 55, "radius": 3, "color": "black"  } ];
+        
+    
+        
+        // put circles in group1
+        var group1 = canvas.append("g");
+        
+        var circles = group1.selectAll("circle")
+        .data(circleData)
+        .enter()
+        .append("circle");
+        
+        
+        var circleAttributes = circles.
+        attr("cx", function (d) {return d.cx;})
+        .attr("cy", function (d) {return d.cy;})
+        .attr("r", function (d) {return d.radius;})
+        .style("fill", function (d) {return d.color;});
+        
+        
+        
+        // draw legs in group1
+        var line = group1.append("line")
+        .attr("x1", 80)
+        .attr("y1", 80)
+        .attr("x2", 70)
+        .attr("y2", 130)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");
+        var line = group1.append("line")
+        .attr("x1", 85)
+        .attr("y1", 80)
+        .attr("x2", 100)
+        .attr("y2", 130)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");
+        var line = group1.append("line")
+        .attr("x1", 145)
+        .attr("y1", 70)
+        .attr("x2", 175)
+        .attr("y2", 110)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");
+        var line = group1.append("line")
+        .attr("x1", 140)
+        .attr("y1", 70)
+        .attr("x2", 160)
+        .attr("y2", 120)
+        .attr("stroke-width", 2)
+        .attr("stroke", "black");
+        return group1;
+
     }
     
     function translateAlong(path) {
