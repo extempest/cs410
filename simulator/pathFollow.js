@@ -57,6 +57,7 @@ function ready(error, xml) {
     
     var svg = d3.select("svg");
     
+    
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
    
@@ -69,6 +70,12 @@ function ready(error, xml) {
            })
     transition();*/
     
+    var todayLabel = svg.append("text")
+                        .attr("x", 0)
+                        .attr("y", 20)
+                        .text("")
+    
+    
     data.forEach(function(entry) {
         var commits = entry["commits"];
                  var a = 0;
@@ -76,13 +83,14 @@ function ready(error, xml) {
                  var now, before = new Date();
                  var today = new Date(entry["date"]);
                  var tommorrow = new Date(entry["date"]);
+
                  var commits = entry["commits"];
                  tommorrow.setDate(tommorrow.getDate()+1);
                  //console.log("today:"+today);
                  //console.log("tmrw:"+tommorrow);
                  //console.log()
                  var intervalId = setInterval(function() {
-
+                 todayLabel.text(today)
                             //console.log(today.getTime());
                             if (today.getTime() < tommorrow.getTime()){
                                 commits.forEach(function(commit){
