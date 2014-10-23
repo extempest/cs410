@@ -44,11 +44,25 @@
   
             //The SVG Container
             var svgContainer = d3.select("body").append("svg")
-                                                .attr("width", 500)
-                                                .attr("height", 500);
-                             
+                                                .attr("width", 400)
+                                                .attr("height", 400);
+            //Add group1
+            var group1 = svgContainer.append("g");
+            
+            //Add lines to group1
+            var lines = group1.selectAll(".line")
+                            .data(lineData)
+                            .enter().append("path")
+                            .attr("class", "line")
+                            .attr("d", lineFunction);
+            
+            
+            var lineAttributes = lines.attr("x", function (d) {return d.x})
+                                    .attr("y", function (d) {return d.y});
+            
+            
             //The line SVG Path we draw
-            var lineGraph = svgContainer.append("path")
+            var lineGraph = group1.append("path")
                                         .attr("d", lineFunction(lineData))
                                         .attr("stroke", "#AA6F4A")
                                         .attr("stroke-width", 2)
