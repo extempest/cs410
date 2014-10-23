@@ -10,12 +10,12 @@ function ready(error, xml) {
     var groundLevel = 100;
     var data = [
                 {
-                    'date':new Date(2014, 0, 0, 0, 0, 0, 0),
+                    'date':new Date(2014, 0, 1, 0, 0, 0, 0),
                     'commits'://this is already sorted chronologically
                     [
                          {
                             'author':'Thompson',
-                            'timestamp': new Date(2014, 0, 0, 1, 1 , 1, 1),
+                            'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
                             'filesAdded': ['fruits'],
                             'filesModified': [],
                             'filesDeleted':[],
@@ -23,7 +23,7 @@ function ready(error, xml) {
                          },
                          {
                          'author':'Byung',
-                         'timestamp': new Date(2014, 0, 0, 2, 1 , 1, 1),
+                         'timestamp': new Date(2014, 0, 1, 2, 1 , 1, 1),
                          'filesAdded': ['animals'],
                          'filesModified': [],
                          'filesDeleted':[],
@@ -31,7 +31,7 @@ function ready(error, xml) {
                          },
                          {
                             'author':'Thompson',
-                            'timestamp': new Date(2014, 0, 0, 3, 1 , 1, 1),
+                            'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
                              'filesAdded': ['vegetables'],
                              'filesModified': [],
                              'filesDeleted':[],
@@ -40,7 +40,7 @@ function ready(error, xml) {
                     ]
                 },
                 {
-                    'date':new Date(2014, 0, 1, 0, 0, 0, 0),
+                    'date':new Date(2014, 0, 2, 0, 0, 0, 0),
                     'commits':
                     [
                     ]
@@ -75,85 +75,82 @@ function ready(error, xml) {
                         .attr("y", 20)
                         .text("")
     
+    simulateDay(0, data.length, data)
     
-    data.forEach(function(entry) {
-        var commits = entry["commits"];
-                 var a = 0;
-                 var delay = 1000;
-                 var now, before = new Date();
-                 var today = new Date(entry["date"]);
-                 var tommorrow = new Date(entry["date"]);
-
-                 var commits = entry["commits"];
-                 tommorrow.setDate(tommorrow.getDate()+1);
-                 //console.log("today:"+today);
-                 //console.log("tmrw:"+tommorrow);
-                 //console.log()
-                 var intervalId = setInterval(function() {
-                 todayLabel.text(today)
-                            //console.log(today.getTime());
-                            if (today.getTime() < tommorrow.getTime()){
-                                commits.forEach(function(commit){
-                                                
-                                    if(!commit["processed"]){
-                                        console.log("now:"+today+" timestamp:"+commit["timestamp"])
-                                        if(today.getTime()>commit["timestamp"]){
-                                                commit["processed"] = true;
-                                                var author = authors[commit["author"]];
-                                                console.log(authors);
-                                                
-                                                if(!author){
-                                                    author = {};
-                                                    author["contribution"] = 10;
-                                                
-                                                    var circ = svg.append("circle");
-                                                    author["antMarker"] = circ;
-                                                    circ.attr("r",7)
-                                                    .attr("transform", "translate(" + [7,groundLevel] + ")")
-                                                    .style("fill",function() {
-                                                       return "hsl(" + Math.random() * 360 + ",100%,50%)";
-                                                           });
-                                                
-                                                    console.log(circ);
-                                                    circ.transition()
-                                                    .duration(500)
-                                                    .attr("transform", "translate(" + [27,groundLevel] + ")")
-                                                
-                                                    .transition()
-                                                    .duration(500)
-                                                    .attr("transform", "translate(" + [Math.random()*500,Math.random()*500] + ")");
-
-                                                authors[commit["author"]] = author;
-                                                } else {
-                                                    author["contribution"]  += 1;
-
-                                                }
-                                        }
-                                    }else{
-                                                console.log("ho")
-                                    }
-                                                
-                                })
-                                today.setHours(today.getHours()+1);
-                            } else {
-                                clearInterval(intervalId)
-                            }
-                }, delay);
-                 
-
     
-                 /*
-        commits.forEach(function(commit){
-            console.log(commit["author"])
-            if(!authors[commit["author"]]){
-                        //to do its going to be a contribution index
-                authors[commit["author"]]= 10;
-                        console.log(authors);
-            }
-                console.log(commit)
-        })*/
-    });
-
+    function simulateDay(index, lastIndex, iData){
+        if (index < lastIndex) {
+            var entry = iData[index];
+            var delay = 1000;
+            var now, before = new Date();
+            var today = new Date(entry["date"]);
+            var tommorrow = new Date(entry["date"]);
+            
+            var commits = entry["commits"];
+            tommorrow.setDate(tommorrow.getDate()+1);
+            //console.log("today:"+today);
+            //console.log("tmrw:"+tommorrow);
+            //console.log()
+            var intervalId = setInterval(function() {
+                                         todayLabel.text(today)
+                                         //console.log(today.getTime());
+                                         if (today.getTime() < tommorrow.getTime()){
+                                         commits.forEach(function(commit){
+                                                         
+                                                         if(!commit["processed"]){
+                                                         console.log("now:"+today+" timestamp:"+commit["timestamp"])
+                                                         if(today.getTime()>commit["timestamp"]){
+                                                         commit["processed"] = true;
+                                                         var author = authors[commit["author"]];
+                                                         console.log(authors);
+                                                         
+                                                         if(!author){
+                                                         author = {};
+                                                         author["contribution"] = 10;
+                                                         
+                                                         var circ = svg.append("circle");
+                                                         author["antMarker"] = circ;
+                                                         circ.attr("r",7)
+                                                         .attr("transform", "translate(" + [7,groundLevel] + ")")
+                                                         .style("fill",function() {
+                                                                return "hsl(" + Math.random() * 360 + ",100%,50%)";
+                                                                });
+                                                         
+                                                         console.log(circ);
+                                                         circ.transition()
+                                                         .duration(500)
+                                                         .attr("transform", "translate(" + [27,groundLevel] + ")")
+                                                         
+                                                         .transition()
+                                                         .duration(500)
+                                                         .attr("transform", "translate(" + [Math.random()*500,Math.random()*500] + ")");
+                                                         
+                                                         authors[commit["author"]] = author;
+                                                         } else {
+                                                         author["contribution"]  += 1;
+                                                         
+                                                         }
+                                                         }
+                                                         }else{
+                                                         console.log("ho")
+                                                         }
+                                                         
+                                                         })
+                                         today.setHours(today.getHours()+1);
+                                         } else {
+                                         clearInterval(intervalId)
+                                         simulateDay(index+1,lastIndex,iData)
+                                         }
+                                         }, delay);
+        } else {
+            todayLabel.text("Project ended")
+        }
+        
+    }
+    
+    
+    
+    
        //Get path start point for placing marker
     function pathStartPoint(path) {
         var d = path.attr("d"),
