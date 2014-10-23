@@ -98,38 +98,45 @@ function ready(error, xml) {
                                          commits.forEach(function(commit){
                                                          
                                                          if(!commit["processed"]){
-                                                         console.log("now:"+today+" timestamp:"+commit["timestamp"])
-                                                         if(today.getTime()>commit["timestamp"]){
-                                                         commit["processed"] = true;
-                                                         var author = authors[commit["author"]];
-                                                         console.log(authors);
+                                                            console.log("now:"+today+" timestamp:"+commit["timestamp"])
+                                                            if(today.getTime()>commit["timestamp"]){
+                                                                commit["processed"] = true;
+                                                                var author = authors[commit["author"]];
+                                                                console.log(authors);
                                                          
-                                                         if(!author){
-                                                         author = {};
-                                                         author["contribution"] = 10;
+                                                                if(!author){
+                                                                    author = {};
+                                                                    author["contribution"] = 10;
                                                          
-                                                         var circ = svg.append("circle");
-                                                         author["antMarker"] = circ;
-                                                         circ.attr("r",7)
-                                                         .attr("transform", "translate(" + [7,groundLevel] + ")")
-                                                         .style("fill",function() {
-                                                                return "hsl(" + Math.random() * 360 + ",100%,50%)";
-                                                                });
+                                                                     var circ = svg.append("circle");
+                                                                     author["antMarker"] = circ;
+                                                                     circ.attr("r",7)
+                                                                     .attr("transform", "translate(" + [7,groundLevel] + ")")
+                                                                     .style("fill",function() {
+                                                                            return "hsl(" + Math.random() * 360 + ",100%,50%)";
+                                                                            });
+                                                                     
+                                                                     console.log(circ);
+                                                                     circ.transition()
+                                                                     .duration(500)
+                                                                     .attr("transform", "translate(" + [27,groundLevel] + ")")
+                                                                     
+                                                                     .transition()
+                                                                     .duration(500)
+                                                                     .attr("transform", "translate(" + [Math.random()*500,Math.random()*500] + ")");
+                                                                     
+                                                                    authors[commit["author"]] = author;
                                                          
-                                                         console.log(circ);
-                                                         circ.transition()
-                                                         .duration(500)
-                                                         .attr("transform", "translate(" + [27,groundLevel] + ")")
+                                                                    } else {
                                                          
-                                                         .transition()
-                                                         .duration(500)
-                                                         .attr("transform", "translate(" + [Math.random()*500,Math.random()*500] + ")");
-                                                         
-                                                         authors[commit["author"]] = author;
-                                                         } else {
-                                                         author["contribution"]  += 1;
-                                                         
-                                                         }
+                                                                    author["contribution"]  += 1;
+                                                                    var circ = author["antMarker"]
+                                                                     circ.transition()
+                                                                     .duration(500)
+                                                                     .attr("transform", "translate(" + [Math.random()*500,Math.random()*500] + ")");
+                                                                     
+                                                                     
+                                                                    }
                                                          }
                                                          }else{
                                                          console.log("ho")
