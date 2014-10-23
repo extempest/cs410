@@ -55,8 +55,10 @@ function ready(error, xml) {
     var importedNode = document.importNode(xml.documentElement, true);
     d3.select("#pathAnimation").node().appendChild(importedNode);
     
-    var svg = d3.select("svg");
-    
+    var svg = d3.select("svg")
+    .attr("width",window.innerWidth)
+    .attr("height",window.innerHeight);
+
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -73,7 +75,7 @@ function ready(error, xml) {
     var todayLabel = svg.append("text")
                         .attr("x", 0)
                         .attr("y", 20)
-                        .text("")
+                        .text("Welcome to Git-Java Source Code Analyzer")
     
     simulateDay(0, data.length, data)
     
