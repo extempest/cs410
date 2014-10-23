@@ -23,14 +23,13 @@ $(document).ready(function() {
                   ?>
                   // in order to make txt file, put :  git log -p --reverse > txtfileName.txt
                   
-                  
                   console.log(test);
                   console.log(test[2]);
                   
                   var test2 = ["apple","orange","grapes"];
                   console.log(test2);
                   console.log(test2[2]);
-                  
+
                   
                   document.getElementById("outputjs1").innerHTML = test;
                   document.getElementById("outputjs2").innerHTML = test2;
@@ -63,18 +62,22 @@ $(document).ready(function() {
     $handle = @fopen("mockByengProject.txt","r");
     if($handle) {
         $commitIndex = -1;
+        $javaAdded = array();
+        $javaModified = array();
+        $javaDeleted = array();
         while (($buffer = fgets($handle)) !== false){
             $temp = str_word_count($buffer,1,'1234567890-+');
-            //$lineTemp = str_split($buffer);
-            print_r($temp);
-            echo "<br/>";
+//            print_r($temp);
+//            echo "<br/>";
             if($temp[0] == "commit"){
                 if($commitIndex != -1){
                     print_r($commitIndex);
-                    $commit = array($author, $email, $commitTime ,$commitDay, $commitMonth, $commitYear);
+                    $commit = array("Author" => $author, "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
                     print_r($commit);
+                    echo "<br/>";
                 }
                 $commitIndex++;
+                unset($javaAdded, $javaModified, $javaDeleted);
             }
             if($temp[0] == "Author"){
                 $authorBuffer = str_word_count($buffer,1,'1234567890@.');
@@ -94,9 +97,29 @@ $(document).ready(function() {
                 $fileNameinArray = $temp;
                 end($fileNameinArray);
                 $endIndex = key($fileNameinArray);
-//                if($temp[$endIndex] = "java"){
-//                    
-//                }
+                if($temp[$endIndex] == "java" || $temp[1] == "dev"){ //it means java file has been created or deleted.
+                    if($temp[0] == "---" && $temp[1] == "dev")
+                    //"file is being created so do nothing"
+                        $isfileRemoved = false;
+                    if($temp[0] == "---" && $temp[1] == "a"){
+                        $tempJava = $temp[$endIndex-1]; // storing the name of file.
+                        $isfileRemoved = true;
+                        // "file is being modified or deleted"
+                    }
+//                    print_r($tempJava . $isfileRemoved . true . $temp[1]);
+//                    echo "<br/>";
+                    if($temp[0] == "+++" && $temp[1] == "dev" && $isfileRemoved == true){//delete
+                        $javaDeleted[] = $tempJava;
+//                        print_r("Delete file is detected");
+//                        echo "<br/>";
+                    }
+                    if($temp[0] == "+++" && $temp[1] == "b"){
+                        if($isfileRemoved == true)
+                            $javaModified[] = $tempJava;
+                        else
+                            $javaAdded[] = $temp[$endIndex-1];
+                    }
+                }
             }
         }
         if(!feof($handle)){
@@ -104,7 +127,8 @@ $(document).ready(function() {
         }
         
         //This is for the last commit. Since I am creating $commit when a word "commit" is appeared, and there is no word "commit" at the end of file.
-        $commit = array($author, $email, $commitTime, $commitDay, $commitMonth, $commitYear);
+        print_r($commitIndex);
+        $commit = array("Author" => $author, "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
         $commitIndex++;
         print_r($commit);
         
