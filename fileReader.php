@@ -66,26 +66,34 @@ $(document).ready(function() {
         $javaModified = array();
         $javaDeleted = array();
         while (($buffer = fgets($handle)) !== false){
-            $temp = str_word_count($buffer,1,'1234567890-+');
-//            print_r($temp);
-//            echo "<br/>";
-            if($temp[0] == "commit"){
+            $temp = str_word_count($buffer,1,'1234567890-+:');
+            $tempForCommit = str_word_count($buffer,1,'1234567890-+:/');
+            if($tempForCommit[0] == "commit"){
                 if($commitIndex != -1){
                     print_r($commitIndex);
-                    $commit = array("Author" => $author, "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
+                    $commit = array("Author" => $author, "commitID" => $tempForCommit[1], "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
                     print_r($commit);
-                    echo "<br/>";
+                    echo "<br/><br/>";
                 }
                 $commitIndex++;
                 unset($javaAdded, $javaModified, $javaDeleted);
             }
-            if($temp[0] == "Author"){
+            if($tempForCommit[0] == "Author:"){
                 $authorBuffer = str_word_count($buffer,1,'1234567890@.');
                 //print_r($lineBuffer);
-                $author = $authorBuffer[1];
-                $email = $authorBuffer[2];
+                $emailLine = $authorBuffer;
+                end($emailLine);
+                $emailIndex = key($emailLine);
+                $appendName = '';
+//                print_r($emailIndex);
+                for($i = 1; $i < $emailIndex; $i++){
+//                    print_r($authorBuffer[$i] . "byung!<br/>");
+                    $appendName .= $authorBuffer[$i] . " ";
+                }
+                $author = $appendName;
+                $email = $authorBuffer[$emailIndex];
             }
-            if($temp[0] == "Date"){
+            if($tempForCommit[0] == "Date:"){
                 $dateBuffer = str_word_count($buffer,1,'1234567890:-');
 
                 $commitMonth = $dateBuffer[2];
@@ -93,7 +101,7 @@ $(document).ready(function() {
                 $commitTime = $dateBuffer[4];
                 $commitYear = $dateBuffer[5];
             }
-            if($temp[0] == "---" || $temp[0] == "+++"){ //file is removed, modified, or created
+            if($tempForCommit[0] == "---" || $tempForCommit[0] == "+++"){ //file is removed, modified, or created
                 $fileNameinArray = $temp;
                 end($fileNameinArray);
                 $endIndex = key($fileNameinArray);
@@ -106,8 +114,6 @@ $(document).ready(function() {
                         $isfileRemoved = true;
                         // "file is being modified or deleted"
                     }
-//                    print_r($tempJava . $isfileRemoved . true . $temp[1]);
-//                    echo "<br/>";
                     if($temp[0] == "+++" && $temp[1] == "dev" && $isfileRemoved == true){//delete
                         $javaDeleted[] = $tempJava;
 //                        print_r("Delete file is detected");
@@ -121,6 +127,8 @@ $(document).ready(function() {
                     }
                 }
             }
+//            print_r($tempForCommit);
+//            echo "<br/>";
         }
         if(!feof($handle)){
             echo "Error:unexpected fgets() fail\n";
