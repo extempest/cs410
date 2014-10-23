@@ -112,9 +112,8 @@ function ready(error, xml) {
                                                                      author["antMarker"] = circ;
                                                                      circ
                                                                      .attr("transform", "translate(" + [7,groundLevel] + ")")
-                                                                     .style("fill",function() {
-                                                                            return "hsl(" + Math.random() * 360 + ",100%,50%)";
-                                                                            });
+                                                                     ;
+                                                         
                                                                      
                                                                      console.log(circ);
                                                                      circ.transition()
@@ -173,19 +172,23 @@ function ready(error, xml) {
     }
     
     function createAnt(canvas) {
+        
+        //Initialize random color
+        var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
+
+        
         // Draw the Circle
         var circleData = [
-                          { "cx": 80, "cy": 80, "radius": 30, "color": "black"  },
-                          { "cx": 130, "cy": 75, "radius": 30, "color": "black" },
-                          { "cx": 180, "cy": 60, "radius": 30, "color": "black" },
-                          { "cx": 195, "cy": 55, "radius": 6, "color": "white"  },
-                          { "cx": 195, "cy": 55, "radius": 3, "color": "black"  } ];
+                          { "cx": 80, "cy": 80, "radius": 20, "color": color  },
+                          { "cx": 110, "cy": 80, "radius": 20, "color": color },
+                          { "cx": 140, "cy": 80, "radius": 20, "color": color },
+                          { "cx": 147, "cy": 73, "radius": 6, "color": "white"  },
+                          { "cx": 147, "cy": 73, "radius": 3, "color": color  } ];
         
     
         
         // put circles in group1
         var group1 = canvas.append("g");
-        
         var circles = group1.selectAll("circle")
         .data(circleData)
         .enter()
@@ -202,33 +205,37 @@ function ready(error, xml) {
         
         // draw legs in group1
         var line = group1.append("line")
-        .attr("x1", 80)
+        .attr("x1", 73)
         .attr("y1", 80)
-        .attr("x2", 70)
-        .attr("y2", 130)
+        .attr("x2", 73)
+        .attr("y2", 115)
         .attr("stroke-width", 2)
-        .attr("stroke", "black");
+        .attr("stroke", color);
         var line = group1.append("line")
         .attr("x1", 85)
         .attr("y1", 80)
-        .attr("x2", 100)
-        .attr("y2", 130)
+        .attr("x2", 85)
+        .attr("y2", 115)
         .attr("stroke-width", 2)
-        .attr("stroke", "black");
+        .attr("stroke", color);
         var line = group1.append("line")
-        .attr("x1", 145)
-        .attr("y1", 70)
-        .attr("x2", 175)
-        .attr("y2", 110)
+        .attr("x1", 120)
+        .attr("y1", 80)
+        .attr("x2", 120)
+        .attr("y2", 115)
         .attr("stroke-width", 2)
-        .attr("stroke", "black");
+        .attr("stroke", color);
         var line = group1.append("line")
-        .attr("x1", 140)
-        .attr("y1", 70)
-        .attr("x2", 160)
-        .attr("y2", 120)
+        .attr("x1", 132)
+        .attr("y1", 80)
+        .attr("x2", 132)
+        .attr("y2", 115)
         .attr("stroke-width", 2)
-        .attr("stroke", "black");
+        .attr("stroke", color);
+        
+
+                     
+        
         return group1;
 
     }
