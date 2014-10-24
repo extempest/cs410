@@ -61,12 +61,20 @@ function ready(error, xml) {
     .attr("height",window.innerHeight);
     
     var sky = createBackground(svg);
+    
     var sun = svg.append("circle")
     .attr("r", 40)
     .style("fill", "yellow");
     var moon = svg.append("circle")
     .attr("r", 30)
     .style("fill", "white");
+    
+    var ground = svg.append("rect")
+    .attr("x", 0)
+    .attr("y", groundLevel)
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight-groundLevel)
+    .style("fill", "#A9672E");
 
     
     //var path = svg.select("path#wiggle"),
@@ -85,6 +93,13 @@ function ready(error, xml) {
                         .attr("x", 0)
                         .attr("y", 20)
                         .text("Welcome to Git-Java Source Code Analyzer")
+                        .attr("stroke-width", 1)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "20px")
+                        .style("fill", "white");
+
+    
     
     simulateDay(0, data.length, data)
     
@@ -271,12 +286,7 @@ function ready(error, xml) {
     }
     
     function createBackground(canvas) {
-        var rectangle = canvas.append("rect")
-        .attr("x", 0)
-        .attr("y", groundLevel)
-        .attr("width", window.innerWidth)
-        .attr("height", window.innerHeight-groundLevel)
-        .style("fill", "#A9672E");
+
         
         var sky = canvas.append("rect")
         .attr("x", 0)
