@@ -9,42 +9,42 @@ function ready(error, xml) {
     
     var groundLevel = 200;
     var data = [
-                {
-                    'date':new Date(2014, 0, 1, 0, 0, 0, 0),
-                    'commits'://this is already sorted chronologically
-                    [
-                         {
-                            'author':'Thompson',
-                            'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
-                            'filesAdded': ['fruits'],
-                            'filesModified': [],
-                            'filesDeleted':[],
-                            'relationshipModified':[]
-                         },
-                         {
-                         'author':'Byung',
-                         'timestamp': new Date(2014, 0, 1, 2, 1 , 1, 1),
-                         'filesAdded': ['animals'],
-                         'filesModified': [],
-                         'filesDeleted':[],
-                         'relationshipModified':[]
-                         },
-                         {
-                            'author':'Thompson',
-                            'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                             'filesAdded': ['vegetables'],
-                             'filesModified': [],
-                             'filesDeleted':[],
-                             'relationshipModified':[]
-                         }
-                    ]
-                },
-                {
-                    'date':new Date(2014, 0, 2, 0, 0, 0, 0),
-                    'commits':
-                    [
-                    ]
-                }
+        {
+            'date':new Date(2014, 0, 1, 0, 0, 0, 0),
+            'commits'://this is already sorted chronologically
+            [
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
+                    'filesAdded': ['fruits'],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 },
+                 {
+                    'author':'Byung',
+                    'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
+                    'filesAdded': ['animals'],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 },
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
+                    'filesAdded': ['vegetables'],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 }
+            ]
+        },
+        {
+            'date':new Date(2014, 0, 2, 0, 0, 0, 0),
+            'commits':
+            [
+            ]
+        }
     ];
     
     var authors = {}
@@ -92,91 +92,87 @@ function ready(error, xml) {
         if (index < lastIndex) {
             var entry = iData[index];
             var delay = 1000;
-            var now, before = new Date();
             var today = new Date(entry["date"]);
             var tommorrow = new Date(entry["date"]);
+            tommorrow.setDate(tommorrow.getDate()+1);
             
             var commits = entry["commits"];
-            tommorrow.setDate(tommorrow.getDate()+1);
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
             //console.log()
             var intervalId = setInterval(function() {
-                                         todayLabel.text(today)
-                                         if(today.getHours()==0||today.getHours()==12){
-                                            sky.transition()
-                                            .duration(12000)
-                                            .style("fill", skycolor(today.getHours()));
-                                         }
-                                         
-                                         if(today.getHours()==0){
-                                         sun
-                                         .transition()
-                                         .duration(24000)
-                                         .ease("in-out")
-                                         .attrTween("transform", orbit(1/4));
-                                         moon
-                                         .transition()
-                                         .duration(24000)
-                                         .ease("in-out")
-                                         .attrTween("transform", orbit(3/4));
-                                         
-                                         }
-                                         
-                                         //console.log(today.getTime());
-                                         if (today.getTime() < tommorrow.getTime()){
-                                         commits.forEach(function(commit){
-                                                         
-                                                         if(!commit["processed"]){
-                                                            console.log("now:"+today+" timestamp:"+commit["timestamp"])
-                                                            if(today.getTime()>commit["timestamp"]){
-                                                                commit["processed"] = true;
-                                                                var author = authors[commit["author"]];
-                                                                console.log(authors);
-                                                         
-                                                                if(!author){
-                                                                    author = {};
-                                                                    author["contribution"] = 10;
-                                                         
-                                                                     var circ = createAnt(svg);
-                                                                     author["antMarker"] = circ;
-                                                         
-                                                         
-                                                         
-                                                                     
-                                                                     console.log(circ);
-                                                                     circ.transition()
-                                                                     .duration(500)
-                                                                     .attr("transform", "translate(" + [27,groundLevel-55] + ")")
-                                                                     
-                                                                     .transition()
-                                                                     .duration(500)
-                                                                     .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
-                                                                     
-                                                                    authors[commit["author"]] = author;
-                                                         
-                                                                    } else {
-                                                         
-                                                                    author["contribution"]  += 1;
-                                                                    var circ = author["antMarker"]
-                                                                     circ.transition()
-                                                                     .duration(500)
-                                                                     .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
-                                                                     
-                                                                     
-                                                                    }
-                                                         }
-                                                         }else{
-                                                         console.log("ho")
-                                                         }
-                                                         
-                                                         })
-                                         today.setHours(today.getHours()+1);
-                                         } else {
-                                         clearInterval(intervalId)
-                                         simulateDay(index+1,lastIndex,iData)
-                                         }
-                                         }, delay);
+                todayLabel.text(today)
+
+                if(today.getHours()==0||today.getHours()==12){
+                    sky.transition()
+                    .duration(12000)
+                    .style("fill", skycolor(today.getHours()));
+                }
+                 
+                if(today.getHours()==0){
+                    sun
+                    .transition()
+                    .duration(24000)
+                    .ease("in-out")
+                    .attrTween("transform", orbit(1/4));
+
+                    moon
+                    .transition()
+                    .duration(24000)
+                    .ease("in-out")
+                    .attrTween("transform", orbit(3/4));
+                }
+                 
+                 //console.log(today.getTime());
+                if (today.getTime() < tommorrow.getTime()){
+                    commits.forEach(function(commit){
+                 
+                        if(!commit["processed"]){
+                            console.log("now:"+today+" timestamp:"+commit["timestamp"])
+
+                            if(today.getTime()>commit["timestamp"]){
+                                commit["processed"] = true;
+                                var author = authors[commit["author"]];
+                                console.log(authors);
+                         
+                                if(!author){
+                                    author = {};
+                                    author["contribution"] = 10;
+                         
+                                    var circ = createAnt(svg);
+                                    author["antMarker"] = circ;
+                                     
+                                    console.log(circ);
+                                    circ.transition()
+                                    .duration(500)
+                                    .attr("transform", "translate(" + [27,groundLevel-55] + ")")
+                                    .transition()
+                                    .duration(500)
+                                    .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
+                                     
+                                    authors[commit["author"]] = author;
+                         
+                                } else {
+                                    author["contribution"]  += 1;
+                                    var circ = author["antMarker"]
+                                    circ.transition()
+                                    .duration(500)
+                                    .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
+                                }
+                            }
+                        }else{
+                            console.log("ho")
+                        }
+                    })
+
+                    today.setHours(today.getHours()+1);
+
+                } else {
+                    clearInterval(intervalId)
+                    simulateDay(index+1,lastIndex,iData)
+                }
+            }, delay);
+
         } else {
             todayLabel.text("Project ended")
         }
@@ -211,11 +207,11 @@ function ready(error, xml) {
         
         // Draw the Circle
         var circleData = [
-                          { "cx": 20, "cy": 20, "radius": 20, "color": color  },
+                          { "cx": 20, "cy": 20, "radius": 20, "color": color },
                           { "cx": 50, "cy": 20, "radius": 20, "color": color },
                           { "cx": 80, "cy": 20, "radius": 20, "color": color },
-                          { "cx": 87, "cy": 15, "radius": 6, "color": "white"  },
-                          { "cx": 87, "cy": 15, "radius": 3, "color": color  } ];
+                          { "cx": 87, "cy": 15, "radius": 6, "color": "white" },
+                          { "cx": 87, "cy": 15, "radius": 3, "color": color } ];
         
     
         
@@ -227,8 +223,8 @@ function ready(error, xml) {
         .append("circle");
         
         
-        var circleAttributes = circles.
-        attr("cx", function (d) {return d.cx;})
+        var circleAttributes = circles
+        .attr("cx", function (d) {return d.cx;})
         .attr("cy", function (d) {return d.cy;})
         .attr("r", function (d) {return d.radius;})
         .style("fill", function (d) {return d.color;});
@@ -275,16 +271,16 @@ function ready(error, xml) {
     
     function createBackground(canvas) {
         var rectangle = canvas.append("rect")
-                            .attr("x", 0)
-                            .attr("y", groundLevel)
-                            .attr("width", window.innerWidth)
-                            .attr("height", window.innerHeight-groundLevel)
+        .attr("x", 0)
+        .attr("y", groundLevel)
+        .attr("width", window.innerWidth)
+        .attr("height", window.innerHeight-groundLevel)
         .style("fill", "#A9672E");
         
         var sky = canvas.append("rect")
-                        .attr("x", 0)
-                        .attr("y", 0)
-                        .attr("width", window.innerWidth)
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", window.innerWidth)
         .attr("height", groundLevel)
         .style("fill", "#0c1317");
         
@@ -306,85 +302,85 @@ function ready(error, xml) {
                 break;
                 
                 
-                /*
-        case 0:
-            skycolor = "#00000";
-                break;
-        case 1:
-                skycolor = "#0c1317";
-                break;
-        case 2:
-                skycolor = "#19262f";
-                break;
-        case 3:
-                skycolor = "#253947";
-                break;
-        case 4:
-                skycolor = "#324c5f";
-                break;
-        case 5:
-                skycolor = "#3f6077";
-                break;
-        case 6:
-                skycolor = "#4b738e";
-                break;
-        case 7:
-                skycolor = "#5886a6";
-                break;
-        case 8:
-                skycolor = "#6499be";
-                break;
-        case 9:
-                skycolor = "#71acd6";
-                break;
-        case 10:
-                skycolor = "#7ec0ee";
-                break;
-        case 11:
-                skycolor = "#8ac6ef";
-                break;
-        case 12:
-                skycolor = "#97ccf1";
-                break;
-        case 13:
-                skycolor = "#8ac6ef";
-                break;
-        case 14:
-                skycolor = "#7ec0ee";
-                break;
-        case 15:
-                skycolor = "#71acd6";
-                break;
-        case 16:
-                skycolor = "#6499be";
-                break;
-        case 17:
-                skycolor = "#5886a6";
-                break;
-        case 18:
-                skycolor = "#4b738e";
-                break;
-        case 19:
-                skycolor = "#3f6077";
-                break;
-        case 20:
-                skycolor = "#324c5f";
-                break;
-        case 21:
-                skycolor = "#253947";
-                break;
-        case 22:
-                skycolor = "#19262f";
-                break;
-        case 23:
-                skycolor = "#0c1317";
-                break;
-        case 24:
+                    /*
+            case 0:
                 skycolor = "#00000";
-                break;
-        */
-            
+                    break;
+            case 1:
+                    skycolor = "#0c1317";
+                    break;
+            case 2:
+                    skycolor = "#19262f";
+                    break;
+            case 3:
+                    skycolor = "#253947";
+                    break;
+            case 4:
+                    skycolor = "#324c5f";
+                    break;
+            case 5:
+                    skycolor = "#3f6077";
+                    break;
+            case 6:
+                    skycolor = "#4b738e";
+                    break;
+            case 7:
+                    skycolor = "#5886a6";
+                    break;
+            case 8:
+                    skycolor = "#6499be";
+                    break;
+            case 9:
+                    skycolor = "#71acd6";
+                    break;
+            case 10:
+                    skycolor = "#7ec0ee";
+                    break;
+            case 11:
+                    skycolor = "#8ac6ef";
+                    break;
+            case 12:
+                    skycolor = "#97ccf1";
+                    break;
+            case 13:
+                    skycolor = "#8ac6ef";
+                    break;
+            case 14:
+                    skycolor = "#7ec0ee";
+                    break;
+            case 15:
+                    skycolor = "#71acd6";
+                    break;
+            case 16:
+                    skycolor = "#6499be";
+                    break;
+            case 17:
+                    skycolor = "#5886a6";
+                    break;
+            case 18:
+                    skycolor = "#4b738e";
+                    break;
+            case 19:
+                    skycolor = "#3f6077";
+                    break;
+            case 20:
+                    skycolor = "#324c5f";
+                    break;
+            case 21:
+                    skycolor = "#253947";
+                    break;
+            case 22:
+                    skycolor = "#19262f";
+                    break;
+            case 23:
+                    skycolor = "#0c1317";
+                    break;
+            case 24:
+                    skycolor = "#00000";
+                    break;
+            */ 
         }
+        
         return skycolor;
     }
 
