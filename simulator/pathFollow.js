@@ -16,7 +16,14 @@ function ready(error, xml) {
                          {
                             'author':'Thompson',
                             'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
-                            'filesAdded': ['fruits'],
+                            'filesAdded': [
+                                                {
+                                                    'filename':'fruits',
+                                                    'parents': [
+                                                                //to be filled later onß
+                                                                ]
+                                                }
+                                           ],
                             'filesModified': [],
                             'filesDeleted':[],
                             'relationshipModified':[]
@@ -24,7 +31,14 @@ function ready(error, xml) {
                          {
                          'author':'Byung',
                          'timestamp': new Date(2014, 0, 1, 2, 1 , 1, 1),
-                         'filesAdded': ['animals'],
+                         'filesAdded': [
+                                            {
+                                                'filename':'animals',
+                                                'parents': [
+                                                            //to be filled later onß
+                                                            ]
+                                            }
+                                        ],
                          'filesModified': [],
                          'filesDeleted':[],
                          'relationshipModified':[]
@@ -32,7 +46,14 @@ function ready(error, xml) {
                          {
                             'author':'Thompson',
                             'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                             'filesAdded': ['vegetables'],
+                            'filesAdded': [
+                                            {
+                                                'filename':'vegetables',
+                                                'parents': [
+                                                            //to be filled later onß
+                                                            ]
+                                            }
+                                           ],
                              'filesModified': [],
                              'filesDeleted':[],
                              'relationshipModified':[]
@@ -48,6 +69,7 @@ function ready(error, xml) {
     ];
     
     var authors = {}
+    var rooms = {}
 
     
     
