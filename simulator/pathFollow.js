@@ -62,12 +62,15 @@ function ready(error, xml) {
     
     var sky = createBackground(svg);
     
+    var star = createStars(svg);
+    
     var sun = svg.append("circle")
     .attr("r", 40)
     .style("fill", "yellow");
     var moon = svg.append("circle")
     .attr("r", 30)
     .style("fill", "white");
+
     
     var ground = svg.append("rect")
     .attr("x", 0)
@@ -123,7 +126,13 @@ function ready(error, xml) {
                     sky.transition()
                     .duration(12000)
                     .style("fill", skycolor(today.getHours()));
+                                         
+                    star.transition()
+                    .duration(12000)
+                    .style("opacity", starcolor(today.getHours()));
+                                         
                 }
+                                         
                  
                 if(today.getHours()==0){
                     sun
@@ -299,6 +308,47 @@ function ready(error, xml) {
         
         return sky;
     }
+    
+    function createStars(canvas) {
+        var starData = [
+                        { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
+                        { "cx": 2*window.innerWidth/3, "cy": 40, "radius": 2, "color": "white" },
+                        { "cx": window.innerWidth/4, "cy": 40, "radius": 2, "color": "white" },
+                        { "cx": 5*window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"},
+                        { "cx": window.innerWidth/3, "cy": 80, "radius": 2, "color": "white"  },
+                        { "cx": window.innerWidth/2, "cy": 90, "radius": 1, "color": "white"  },
+                        { "cx": window.innerWidth/20, "cy": 50, "radius": 2, "color": "white"  },
+                        { "cx": window.innerWidth/15, "cy": 120, "radius": 1, "color": "white"  },
+                        { "cx": 18*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+                        { "cx": 15*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+                        { "cx": 13*window.innerWidth/20, "cy": 160, "radius": 2, "color": "white"  },
+                        { "cx": 2*window.innerWidth/5, "cy": 170, "radius": 2, "color": "white"  }];
+        
+        var group2 = canvas.append("g");
+        var stars = group2.selectAll("circle").data(starData).enter().append("circle");
+        var starAttributes = stars
+        .attr("cx", function (d) {return d.cx;})
+        .attr("cy", function (d) {return d.cy;})
+        .attr("r", function (d) {return d.radius;})
+        .style("fill", function (d) {return d.color;});
+        
+        return group2;
+    }
+
+function starcolor(hours) {
+    var starcolor = 1;
+    switch (hours) {
+        case 0:
+            starcolor = 0;
+            break;
+        case 12:
+            starcolor = 1;
+            break;
+    }
+    return starcolor;
+}
+    
+
     
     function skycolor(hours) {
         var skycolor = "blue"
