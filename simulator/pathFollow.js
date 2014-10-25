@@ -177,34 +177,37 @@ function ready(error, xml) {
             var intervalId = setInterval(function() {
                 todayLabel.text(today)
 
-                if(today.getHours()==0||today.getHours()==12){
-                    sky.transition()
-                    .duration(12000)
-                    .style("fill", skycolor(today.getHours()));
-                                         
-                    star.transition()
-                    .duration(12000)
-                    .style("opacity", starcolor(today.getHours()));
-                                         
-                }
-                                         
-                 
-                if(today.getHours()==0){
-                    sun
-                    .transition()
-                    .duration(24000)
-                    .ease("in-out")
-                    .attrTween("transform", orbit(1/4));
-
-                    moon
-                    .transition()
-                    .duration(24000)
-                    .ease("in-out")
-                    .attrTween("transform", orbit(3/4));
-                }
                  
                  //console.log(today.getTime());
                 if (today.getTime() < tommorrow.getTime()){
+
+                    if(today.getHours()==0||today.getHours()==12){
+                        sky.transition()
+                        .duration(12000)
+                        .style("fill", skycolor(today.getHours()));
+                                             
+                        star.transition()
+                        .duration(12000)
+                        .style("opacity", starcolor(today.getHours()));
+                                             
+                    }
+                                             
+                     
+                    if(today.getHours()==0){
+
+                        sun
+                        .transition()
+                        .duration(24000)
+                        .ease("in-out")
+                        .attrTween("transform", orbit(1/4));
+
+                        moon
+                        .transition()
+                        .duration(24000)
+                        .ease("in-out")
+                        .attrTween("transform", orbit(3/4));
+                    }
+                    
                     commits.forEach(function(commit){
                  
                         if(!commit["processed"]){
@@ -262,7 +265,7 @@ function ready(error, xml) {
     
     function checkRoom(files, ant){
         if (ant != null){
-            console.log(files);
+            //console.log(files);
             files.forEach(function(file){
                 var filename = file['fileName'];
                 var existingFile = rooms[filename];
@@ -285,11 +288,11 @@ function ready(error, xml) {
 
         if(file['parents'].length > 0 ){
             //this room is a child of some file
-            console.log("I HAVE A PARENT");
+            //console.log("I HAVE A PARENT");
             file['parents'].forEach(function(parentName){
                 var parentRoom = rooms[parentName];
                 var parentRoomSvg = parentRoom['roomSvg'];
-                console.log("bbox:"+parentRoomSvg.attr('cx'));
+                //console.log("bbox:"+parentRoomSvg.attr('cx'));
             
                 var numParentKids = parentRoom['childs'].length;
                 var cx = parseInt(parentRoomSvg.attr('cx'));
@@ -356,8 +359,8 @@ function ready(error, xml) {
             var distanceBetweenRooms = 50;
             var distanceToBorder = 20;
             var distanceToGround = 25;
-            console.log("rooms"+rooms)
-            console.log("numroot:"+numRootRooms);
+            //console.log("rooms"+rooms);
+            //console.log("numroot:"+numRootRooms);
 
             var roomSvg = svg.append("ellipse")
                     .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numRootRooms)+(roomRx+distanceToBorder))
@@ -400,7 +403,7 @@ function ready(error, xml) {
         var count = 0;
         for(var key in rooms){
             var room = rooms[key];
-            console.log("key:"+key);
+            //console.log("key:"+key);
             if(room['parents'].length == 0){
                 count++;
             }
