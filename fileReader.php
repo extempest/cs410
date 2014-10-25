@@ -168,23 +168,6 @@ $(document).ready(function() {
             print_r("]<br/>");
 
         }
-//
-//            if(in_array("implements",$lineArray)){
-//                $implementsKey = array_search("implements", $lineArray);
-//                for($i = $index +2; $i < sizeof($lineArray); $i++)
-//                    if($i != $implementsKey)
-//                        $parentClass[] = $lineArray[$i];
-//                $childClass = $className;
-//            }
-//            else{
-//                for($i = $index +2; $i < sizeof($lineArray); $i++)
-//                        $parentClass[] = $lineArray[$i];
-//                $childClass = $className;
-//            }
-//            $parentClass = $lineArray[$index + 2];
-//            $childClass = $className;
-//            print_r("class ".$childClass . " is a child of ".$parentClass."<br/>");
-//        }
         //there is no extends
         if($lineArray[$index + 1] == "implements") {
             for($i = $index + 2; $i < sizeof($lineArray); $i++)
