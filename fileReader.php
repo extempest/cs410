@@ -60,7 +60,7 @@ $(document).ready(function() {
 
 <?php
 //    $handle = @fopen("mockByengProject.txt","r");
-    $handle = @fopen("moctTest.txt","r");
+    $handle = @fopen("mockTest.txt","r");
     if($handle) {
         $commitIndex = -1;
         $javaAdded = array();
@@ -130,18 +130,15 @@ $(document).ready(function() {
             }
             //if the line contains class and next index is the classname we are looking for.
             if( in_array("class",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("class", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
-                print_r("I found class, ".$classNameJava);
-                echo "<br/>";
+                print_r("I found class, ".$classNameJava."<br/>");
                 createRelations($tempForCommit, $indexClassKey, $classNameJava);
             }
             if( in_array("interface",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("interface", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
-                print_r("I found interface, ".$classNameJava);
-                echo "<br/>";
+                print_r("I found interface, ".$classNameJava."<br/>");
                 createRelations($tempForCommit, $indexClassKey, $classNameJava);
             }
             //print out raw text file in array format
-//            print_r($tempForCommit);
-//            echo "<br/>";
+//            print_r($tempForCommit."<br/>");
         }
         if(!feof($handle)){
             echo "Error:unexpected fgets() fail\n";
@@ -159,11 +156,45 @@ $(document).ready(function() {
 
 <?php
     function createRelations($lineArray,$index,$className){
-        if($lineArray[$index + 1] == "implements" || $lineArray[$index + 1] == "extends"){
-            $parentClass = $lineArray[$index + 2];
+        if($lineArray[$index + 1] == "extends"){
+            for($i = $index +2; $i < sizeof($lineArray); $i++){
+                if($lineArray[$i] != "implements")
+                    $parentClass[] = $lineArray[$i];
+            }
             $childClass = $className;
-            print_r("class ".$childClass . " is a child of ".$parentClass);
-            echo "<br/>";
+            print_r("class ".$childClass . " is a child of [");
+            for($i=0;$i<sizeof($parentClass);$i++)
+                print_r($parentClass[$i].", ");
+            print_r("]<br/>");
+
+        }
+//
+//            if(in_array("implements",$lineArray)){
+//                $implementsKey = array_search("implements", $lineArray);
+//                for($i = $index +2; $i < sizeof($lineArray); $i++)
+//                    if($i != $implementsKey)
+//                        $parentClass[] = $lineArray[$i];
+//                $childClass = $className;
+//            }
+//            else{
+//                for($i = $index +2; $i < sizeof($lineArray); $i++)
+//                        $parentClass[] = $lineArray[$i];
+//                $childClass = $className;
+//            }
+//            $parentClass = $lineArray[$index + 2];
+//            $childClass = $className;
+//            print_r("class ".$childClass . " is a child of ".$parentClass."<br/>");
+//        }
+        //there is no extends
+        if($lineArray[$index + 1] == "implements") {
+            for($i = $index + 2; $i < sizeof($lineArray); $i++)
+                $parentClass[] = $lineArray[$i];
+            $childClass = $className;
+            print_r("class ".$childClass . " is a child of [");
+            for($i=0;$i<sizeof($parentClass);$i++)
+                print_r($parentClass[$i].", ");
+            print_r("]<br/>");
+
         }
         //it means there is no parent class
         if($index + 1 == sizeof($lineArray)){
@@ -173,6 +204,7 @@ $(document).ready(function() {
         }
     }
     ?>
+
 
 
 
