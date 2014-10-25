@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hive</title>
+        <style type="text/css">
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height:100%
+            }
+        
+            </style>
+        
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    
+    <body>
+        <script>
+            //resources
+            //https://www.dashingd3js.com/svg-basic-shapes-and-d3js
+            //https://www.dashingd3js.com/svg-paths-and-d3js
+            
+            
+            //The data for our line
+            var lineData = [
+                             { "x": 200,  "y": 80},  { "x": 170, "y": 100},
+                             { "x": 140, "y": 130}, { "x": 140, "y": 160},
+                             { "x": 150, "y": 180}, { "x": 180, "y": 210},
+                             { "x": 200, "y": 220}, { "x": 230, "y": 230},
+                            { "x": 290, "y": 225}, { "x": 330, "y": 215},
+                            { "x": 360, "y": 200}, { "x": 390, "y": 170},
+                            { "x": 390, "y": 150}, { "x": 380, "y": 130},
+                            { "x": 370, "y": 120}, { "x": 350, "y": 100},
+                            { "x": 340, "y": 90}, { "x": 320, "y": 80},
+                            { "x": 300, "y": 75}, { "x": 250, "y": 70},
+                            { "x": 200, "y": 80}];
+                            
+            //This is the accessor function we talked about above
+            var lineFunction = d3.svg.line()
+                         .x(function(d) { return d.x; })
+                         .y(function(d) { return d.y; })
+                         .interpolate("cardinal");
+  
+            //The SVG Container
+            var svgContainer = d3.select("body").append("svg")
+                                                .attr("width", 400)
+                                                .attr("height", 400);
+            //Add group1
+            var group1 = svgContainer.append("g");
+            
+            //Add lines to group1
+            var lines = group1.selectAll(".line")
+                            .data(lineData)
+                            .enter().append("path")
+                            .attr("class", "line")
+                            .attr("d", lineFunction);
+            
+            
+            var lineAttributes = lines.attr("x", function (d) {return d.x})
+                                    .attr("y", function (d) {return d.y});
+            
+            
+            //The line SVG Path we draw
+            var lineGraph = group1.append("path")
+                                        .attr("d", lineFunction(lineData))
+                                        .attr("stroke", "#AA6F4A")
+                                        .attr("stroke-width", 2)
+                                        .attr("fill", "#AA6F4A");
+            
+            </script>
+        
+        
+    </body>
+</html>
