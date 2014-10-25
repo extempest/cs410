@@ -16,7 +16,22 @@ function ready(error, xml) {
                  {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
-                    'filesAdded': ['fruits'],
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'fruits',
+                                            'parents':
+                                                        [
+                                                            //to add if exist
+                                                        ]
+                                        } ,
+                                        {
+                                            'fileName':'tools',
+                                            'parents':
+                                                        [
+                                                        ]
+                                        }
+                                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
@@ -24,7 +39,16 @@ function ready(error, xml) {
                  {
                     'author':'Byung',
                     'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
-                    'filesAdded': ['animals'],
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'animals',
+                                            'parents':
+                                                        [
+                                                            //to add if exist
+                                                        ]
+                                        } 
+                                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
@@ -32,7 +56,23 @@ function ready(error, xml) {
                  {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                    'filesAdded': ['vegetables'],
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'apple',
+                                            'parents':
+                                                        [
+                                                            'fruits'
+                                                        ]
+                                        },
+                                        {
+                                            'fileName':'oranges',
+                                            'parents':
+                                                        [
+                                                            'fruits'
+                                                        ]
+                                        } 
+                                    ],                   
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
@@ -43,6 +83,23 @@ function ready(error, xml) {
             'date':new Date(2014, 0, 2, 0, 0, 0, 0),
             'commits':
             [
+                {
+                    'author':'Aki',
+                    'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'mandarin',
+                                            'parents':
+                                                        [
+                                                            'oranges'
+                                                        ]
+                                        } ,
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 }            
             ]
         }
     ];
@@ -102,8 +159,6 @@ function ready(error, xml) {
                         .style("font-size", "20px")
                         .style("fill", "white");
 
-    
-    
     simulateDay(0, data.length, data)
     
     
@@ -153,12 +208,12 @@ function ready(error, xml) {
                     commits.forEach(function(commit){
                  
                         if(!commit["processed"]){
-                            console.log("now:"+today+" timestamp:"+commit["timestamp"])
+                            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
                             if(today.getTime()>commit["timestamp"]){
                                 commit["processed"] = true;
                                 var author = authors[commit["author"]];
-                                console.log(authors);
+                                //console.log(authors);
                          
                                 if(!author){
                                     author = {};
@@ -167,7 +222,7 @@ function ready(error, xml) {
                                     var circ = createAnt(svg);
                                     author["antMarker"] = circ;
                                      
-                                    console.log(circ);
+                                    //console.log(circ);
                                     circ.transition()
                                     .duration(500)
                                     .attr("transform", "translate(" + [27,groundLevel-55] + ")")
@@ -176,13 +231,14 @@ function ready(error, xml) {
                                     .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
                                      
                                     authors[commit["author"]] = author;
-                         
+                                    checkRoom(commit['filesAdded'], circ);
                                 } else {
                                     author["contribution"]  += 1;
                                     var circ = author["antMarker"]
                                     circ.transition()
                                     .duration(500)
                                     .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
+                                    checkRoom(commit['filesAdded'], circ);
                                 }
                             }
                         }else{
@@ -197,17 +253,161 @@ function ready(error, xml) {
                     simulateDay(index+1,lastIndex,iData)
                 }
             }, delay);
-
         } else {
             todayLabel.text("Project ended")
         }
-        
     }
     
     
     
+    function checkRoom(files, ant){
+        if (ant != null){
+            console.log(files);
+            files.forEach(function(file){
+                var filename = file['fileName'];
+                var existingFile = rooms[filename];
+                if(!existingFile){
+                    //no room of this file... so create a new room
+                    createRoom(file);
+                } else {
+                    //room exist so modidfy that room
+                }
+
+            });
+
+            
+
+        }
+
+    }
     
-    
+    function createRoom(file){
+
+        if(file['parents'].length > 0 ){
+            //this room is a child of some file
+            console.log("I HAVE A PARENT");
+            file['parents'].forEach(function(parentName){
+                var parentRoom = rooms[parentName];
+                var parentRoomSvg = parentRoom['roomSvg'];
+                console.log("bbox:"+parentRoomSvg.attr('cx'));
+            
+                var numParentKids = parentRoom['childs'].length;
+                var cx = parseInt(parentRoomSvg.attr('cx'));
+                var cy = parseInt(parentRoomSvg.attr('cy'));
+
+
+                var roomRx = 80;
+                var roomRy = 50;
+                var distanceBetweenRooms = 50;
+                var distanceToBorder = 20;
+                var distanceToGround = 25;
+
+                var color = parentRoomSvg.attr('fill');
+                var roomSvg = svg.append("ellipse")
+                    .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numParentKids)+(cx))
+                    .attr("cy", cy+distanceToGround+ (roomRy*2))
+                    .attr("rx", roomRx)
+                    .attr("ry", roomRy)
+                    .attr("fill",color);
+
+                //var tunnelSvg =  svg.append("rect")
+                var tunnel = svg.append("line")
+                    .attr("x1", roomSvg.attr('cx'))
+                    .attr("y1", roomSvg.attr('cy'))
+                    .attr("x2", parentRoomSvg.attr('cx'))
+                    .attr("y2", parentRoomSvg.attr('cy'))
+                    .attr("stroke-width", 10)
+                    .attr("stroke", color);
+
+                var name = svg.append("text")
+                        .attr("x", roomSvg.attr('cx'))
+                        .attr("y", roomSvg.attr('cy'))
+                        .text(file['fileName'])
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "12px")
+                        .style("fill", "white");
+
+                rooms[file['fileName']] = {};
+                var newRootRoom = rooms[file['fileName']];
+                newRootRoom['roomSvg'] = roomSvg;
+                newRootRoom['parents'] = [];
+
+                //update relationship
+                newRootRoom['parents'].push(parentName);
+                newRootRoom['childs'] = [];                
+                parentRoom['childs'].push(file['fileName']);
+            });
+
+            
+
+
+
+        } else {
+            //this room is a root room
+            //50 is the ry 
+            //25 is tunner distance
+            var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
+
+            var numRootRooms = countNumberRootRooms();
+            var roomRx = 80;
+            var roomRy = 50;
+            var distanceBetweenRooms = 50;
+            var distanceToBorder = 20;
+            var distanceToGround = 25;
+            console.log("rooms"+rooms)
+            console.log("numroot:"+numRootRooms);
+
+            var roomSvg = svg.append("ellipse")
+                    .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numRootRooms)+(roomRx+distanceToBorder))
+                    .attr("cy", groundLevel+roomRy+distanceToGround)
+                    .attr("rx", roomRx)
+                    .attr("ry", roomRy)
+                    .attr("fill",color);
+
+            var tunnel = svg.append("line")
+                    .attr("x1", roomSvg.attr('cx'))
+                    .attr("y1", roomSvg.attr('cy'))
+                    .attr("x2", roomSvg.attr('cx'))
+                    .attr("y2", groundLevel)
+                    .attr("stroke-width", 10)
+                    .attr("stroke", color);
+
+            var name = svg.append("text")
+                        .attr("x", roomSvg.attr('cx'))
+                        .attr("y", roomSvg.attr('cy'))
+                        .text(file['fileName'])
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "12px")
+                        .style("fill", "white");
+
+
+            rooms[file['fileName']] = {};
+            var newRootRoom = rooms[file['fileName']];
+            newRootRoom['roomSvg'] = roomSvg;
+            newRootRoom['parents'] = [];
+            newRootRoom['childs'] = [];
+        }
+        
+
+
+    }
+
+    function countNumberRootRooms(){
+        var count = 0;
+        for(var key in rooms){
+            var room = rooms[key];
+            console.log("key:"+key);
+            if(room['parents'].length == 0){
+                count++;
+            }
+        }
+        return count;
+    }
+
        //Get path start point for placing marker
     function pathStartPoint(path) {
         var d = path.attr("d"),
@@ -361,85 +561,7 @@ function starcolor(hours) {
             case 12:
                 skycolor = "#0c1317";
                 break;
-                
-                
-                    /*
-            case 0:
-                skycolor = "#00000";
-                    break;
-            case 1:
-                    skycolor = "#0c1317";
-                    break;
-            case 2:
-                    skycolor = "#19262f";
-                    break;
-            case 3:
-                    skycolor = "#253947";
-                    break;
-            case 4:
-                    skycolor = "#324c5f";
-                    break;
-            case 5:
-                    skycolor = "#3f6077";
-                    break;
-            case 6:
-                    skycolor = "#4b738e";
-                    break;
-            case 7:
-                    skycolor = "#5886a6";
-                    break;
-            case 8:
-                    skycolor = "#6499be";
-                    break;
-            case 9:
-                    skycolor = "#71acd6";
-                    break;
-            case 10:
-                    skycolor = "#7ec0ee";
-                    break;
-            case 11:
-                    skycolor = "#8ac6ef";
-                    break;
-            case 12:
-                    skycolor = "#97ccf1";
-                    break;
-            case 13:
-                    skycolor = "#8ac6ef";
-                    break;
-            case 14:
-                    skycolor = "#7ec0ee";
-                    break;
-            case 15:
-                    skycolor = "#71acd6";
-                    break;
-            case 16:
-                    skycolor = "#6499be";
-                    break;
-            case 17:
-                    skycolor = "#5886a6";
-                    break;
-            case 18:
-                    skycolor = "#4b738e";
-                    break;
-            case 19:
-                    skycolor = "#3f6077";
-                    break;
-            case 20:
-                    skycolor = "#324c5f";
-                    break;
-            case 21:
-                    skycolor = "#253947";
-                    break;
-            case 22:
-                    skycolor = "#19262f";
-                    break;
-            case 23:
-                    skycolor = "#0c1317";
-                    break;
-            case 24:
-                    skycolor = "#00000";
-                    break;
-            */ 
+         
         }
         
         return skycolor;
