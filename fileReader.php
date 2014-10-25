@@ -72,9 +72,10 @@ $(document).ready(function() {
             if($tempForCommit[0] == "commit"){
                 if($commitIndex != -1){
 //                    print_r($commitIndex);
-                    $commit = array("Author" => $author, "commitID" => $tempForCommit[1], "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
-//                    print_r($commit);
-//                    echo "<br/><br/>";
+                    //"timestamp"
+                    $commit = array("author" => $author, "commitID" => $tempForCommit[1], "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "filesAdded" => $javaAdded, "filesModified" => $javaModified, "filesDeleted" => $javaDeleted);
+                    print_r($commit);
+                    echo "<br/><br/>";
                 }
                 $commitIndex++;
                 unset($javaAdded, $javaModified, $javaDeleted);
@@ -123,7 +124,7 @@ $(document).ready(function() {
                             $javaModified[] = $classNameJava;
                         else {
                             $classNameJava = $temp[$endIndex-1];
-                            $javaAdded[] = $$classNameJava;
+                            $javaAdded[] = $classNameJava;
                         }
                     }
                 }
@@ -146,7 +147,7 @@ $(document).ready(function() {
         
         //This is for the last commit. Since I am creating $commit when a word "commit" is appeared, and there is no word "commit" at the end of file.
         print_r($commitIndex);
-        $commit = array("Author" => $author, "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
+        $commit = array("author" => $author, "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "filesAdded" => $javaAdded, "filesModified" => $javaModified, "filesDeleted" => $javaDeleted);
         $commitIndex++;
         print_r($commit);
         
