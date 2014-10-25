@@ -23,7 +23,7 @@ function ready(error, xml) {
                  },
                  {
                     'author':'Byung',
-                    'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
+                    'timestamp': new Date(2014, 0, 1, 2, 1 , 1, 1),
                     'filesAdded': ['animals'],
                     'filesModified': [],
                     'filesDeleted':[],
@@ -32,6 +32,14 @@ function ready(error, xml) {
                  {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
+                    'filesAdded': ['vegetables'],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 },
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 5, 1 , 1, 1),
                     'filesAdded': ['vegetables'],
                     'filesModified': [],
                     'filesDeleted':[],
@@ -95,7 +103,7 @@ function ready(error, xml) {
             var today = new Date(entry["date"]);
             var tommorrow = new Date(entry["date"]);
             tommorrow.setDate(tommorrow.getDate()+1);
-            
+
             var commits = entry["commits"];
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
@@ -134,30 +142,31 @@ function ready(error, xml) {
                                 commit["processed"] = true;
                                 var author = authors[commit["author"]];
                                 console.log(authors);
+                                var nextPos = nextPosition();
                          
                                 if(!author){
                                     author = {};
                                     author["contribution"] = 10;
                          
-                                    var circ = createAnt(svg);
-                                    author["antMarker"] = circ;
+                                    var ant = new ants(svg);
+                                    author["antMarker"] = ant;
                                      
-                                    console.log(circ);
-                                    circ.transition()
+                                    console.log(ant.group1);
+                                    ant.group1.transition()
                                     .duration(500)
                                     .attr("transform", "translate(" + [27,groundLevel-55] + ")")
                                     .transition()
                                     .duration(500)
-                                    .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
+                                    .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+                                    ant.position = nextPos;
                                      
                                     authors[commit["author"]] = author;
                          
                                 } else {
                                     author["contribution"]  += 1;
-                                    var circ = author["antMarker"]
-                                    circ.transition()
-                                    .duration(500)
-                                    .attr("transform", "translate(" + [Math.random()*500,groundLevel-55] + ")");
+                                    var ant = author["antMarker"]
+
+                                    ant = movePosition(ant, nextPos);
                                 }
                             }
                         }else{
@@ -197,26 +206,71 @@ function ready(error, xml) {
         //.each("end", transition);// infinite loop
     }
     
-    function createAnt(canvas) {
-        //Height of an ant
+    function ants(canvas) {
+        //initializing variable used inside
+        //height of ant
         var height = 55;
-        
-        //Initialize random color
+        //initializing random color
         var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
+        var position = 0;
 
-        
-        // Draw the Circle
+        //setting variables for ant
+        this.height = height;
+        this.color = color;
+        this.position = 0;
+        this.direction = "left";
+        this.group1 = createAnt(canvas, height, color, position);
+    }
+
+
+
+    function movePosition(ant, nextPos) {
+        var pos = ant.position;
+        var direction = ant.direction;
+
+        if(direction == "rigth"){
+            if(pos < nextPos){
+                ant.group1.transition()
+                .duration(500)
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+            }
+            else if(pos > nextPos){
+                ant.direction = "left";
+                ant.group1.transition()
+                .duration(500)
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")");
+            }
+        }else{
+            if(pos < nextPos){
+                ant.direction = "right";
+                ant.group1.transition()
+                .duration(500)
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+            }
+            else if(pos > nextPos){
+                ant.group1.transition()
+                .duration(500)
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")");
+            }
+        }
+
+        ant.position = nextPos;
+        return ant;
+    }
+
+
+    function createAnt(canvas, height, color, position){
+         // Draw the Circle
         var circleData = [
-                          { "cx": 20, "cy": 20, "radius": 20, "color": color },
-                          { "cx": 50, "cy": 20, "radius": 20, "color": color },
-                          { "cx": 80, "cy": 20, "radius": 20, "color": color },
-                          { "cx": 87, "cy": 15, "radius": 6, "color": "white" },
-                          { "cx": 87, "cy": 15, "radius": 3, "color": color } ];
-        
-    
-        
+                          { "cx": position+20, "cy": 20, "radius": 20, "color": color },
+                          { "cx": position+50, "cy": 20, "radius": 20, "color": color },
+                          { "cx": position+80, "cy": 20, "radius": 20, "color": color },
+                          { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
+                          { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
+
         // put circles in group1
         var group1 = canvas.append("g");
+    
         var circles = group1.selectAll("circle")
         .data(circleData)
         .enter()
@@ -230,43 +284,23 @@ function ready(error, xml) {
         .style("fill", function (d) {return d.color;});
         
         
-        
         // draw legs in group1
-        var line = group1.append("line")
-        .attr("x1", 13)
-        .attr("y1", 20)
-        .attr("x2", 13)
-        .attr("y2", 55)
-        .attr("stroke-width", 2)
-        .attr("stroke", color);
-        var line = group1.append("line")
-        .attr("x1", 25)
-        .attr("y1", 20)
-        .attr("x2", 25)
-        .attr("y2", 55)
-        .attr("stroke-width", 2)
-        .attr("stroke", color);
-        var line = group1.append("line")
-        .attr("x1", 60)
-        .attr("y1", 20)
-        .attr("x2", 60)
-        .attr("y2", 55)
-        .attr("stroke-width", 2)
-        .attr("stroke", color);
-        var line = group1.append("line")
-        .attr("x1", 72)
-        .attr("y1", 20)
-        .attr("x2", 72)
-        .attr("y2", 55)
-        .attr("stroke-width", 2)
-        .attr("stroke", color);
+        for(i = 0; i < 2; i++){
+            for(j = 0; j < 2; j++){
+                var line = group1.append("line")
+                .attr("x1", position+13+(j*12)+(i*47))
+                .attr("y1", 20)
+                .attr("x2", position+13+(j*12)+(i*47))
+                .attr("y2", 55)
+                .attr("stroke-width", 2)
+                .attr("stroke", color);
+            }
+        }
         
         group1
         .attr("transform", "translate(" + [7,groundLevel-height] + ")");
-        
-        
-        return group1;
 
+        return group1;
     }
     
     function createBackground(canvas) {
@@ -412,5 +446,9 @@ function ready(error, xml) {
                 return "translate(" + p.x + "," + p.y + ")";//Move marker
             }
         }
+    }
+
+    function nextPosition() {
+        return  Math.random()*500;
     }
 }
