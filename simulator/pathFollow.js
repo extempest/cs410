@@ -16,15 +16,39 @@ function ready(error, xml) {
                  {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
-                    'filesAdded': ['fruits'],
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'fruits',
+                                            'parents':
+                                                        [
+                                                            //to add if exist
+                                                        ]
+                                        } ,
+                                        {
+                                            'fileName':'tools',
+                                            'parents':
+                                                        [
+                                                        ]
+                                        }
+                                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
                  },
                  {
                     'author':'Byung',
-                    'timestamp': new Date(2014, 0, 1, 2, 1 , 1, 1),
-                    'filesAdded': ['animals'],
+                    'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'animals',
+                                            'parents':
+                                                        [
+                                                            //to add if exist
+                                                        ]
+                                        } 
+                                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
@@ -32,15 +56,23 @@ function ready(error, xml) {
                  {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                    'filesAdded': ['vegetables'],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 },
-                 {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 1, 5, 1 , 1, 1),
-                    'filesAdded': ['vegetables'],
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'apple',
+                                            'parents':
+                                                        [
+                                                            'fruits'
+                                                        ]
+                                        },
+                                        {
+                                            'fileName':'oranges',
+                                            'parents':
+                                                        [
+                                                            'fruits'
+                                                        ]
+                                        } 
+                                    ],                   
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
@@ -51,11 +83,29 @@ function ready(error, xml) {
             'date':new Date(2014, 0, 2, 0, 0, 0, 0),
             'commits':
             [
+                {
+                    'author':'Aki',
+                    'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'mandarin',
+                                            'parents':
+                                                        [
+                                                            'oranges'
+                                                        ]
+                                        } ,
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 }            
             ]
         }
     ];
     
     var authors = {}
+    var rooms = {}
 
     
     
@@ -68,12 +118,23 @@ function ready(error, xml) {
     .attr("height",window.innerHeight);
     
     var sky = createBackground(svg);
+    
+    var star = createStars(svg);
+    
     var sun = svg.append("circle")
     .attr("r", 40)
     .style("fill", "yellow");
     var moon = svg.append("circle")
     .attr("r", 30)
     .style("fill", "white");
+
+    
+    var ground = svg.append("rect")
+    .attr("x", 0)
+    .attr("y", groundLevel)
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight-groundLevel)
+    .style("fill", "#A9672E");
 
     
     //var path = svg.select("path#wiggle"),
@@ -92,7 +153,12 @@ function ready(error, xml) {
                         .attr("x", 0)
                         .attr("y", 20)
                         .text("Welcome to Git-Java Source Code Analyzer")
-    
+                        .attr("stroke-width", 1)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "20px")
+                        .style("fill", "white");
+
     simulateDay(0, data.length, data)
     
     
@@ -111,37 +177,46 @@ function ready(error, xml) {
             var intervalId = setInterval(function() {
                 todayLabel.text(today)
 
-                if(today.getHours()==0||today.getHours()==12){
-                    sky.transition()
-                    .duration(12000)
-                    .style("fill", skycolor(today.getHours()));
-                }
-                 
-                if(today.getHours()==0){
-                    sun
-                    .transition()
-                    .duration(24000)
-                    .ease("in-out")
-                    .attrTween("transform", orbit(1/4));
-
-                    moon
-                    .transition()
-                    .duration(24000)
-                    .ease("in-out")
-                    .attrTween("transform", orbit(3/4));
-                }
                  
                  //console.log(today.getTime());
                 if (today.getTime() < tommorrow.getTime()){
+
+                    if(today.getHours()==0||today.getHours()==12){
+                        sky.transition()
+                        .duration(12000)
+                        .style("fill", skycolor(today.getHours()));
+                                             
+                        star.transition()
+                        .duration(12000)
+                        .style("opacity", starcolor(today.getHours()));
+                                             
+                    }
+                                             
+                     
+                    if(today.getHours()==0){
+
+                        sun
+                        .transition()
+                        .duration(24000)
+                        .ease("in-out")
+                        .attrTween("transform", orbit(1/4));
+
+                        moon
+                        .transition()
+                        .duration(24000)
+                        .ease("in-out")
+                        .attrTween("transform", orbit(3/4));
+                    }
+                    
                     commits.forEach(function(commit){
                  
                         if(!commit["processed"]){
-                            console.log("now:"+today+" timestamp:"+commit["timestamp"])
+                            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
                             if(today.getTime()>commit["timestamp"]){
                                 commit["processed"] = true;
                                 var author = authors[commit["author"]];
-                                console.log(authors);
+                                // console.log(authors);
                                 var nextPos = nextPosition();
                          
                                 if(!author){
@@ -150,7 +225,7 @@ function ready(error, xml) {
                          
                                     var ant = new ants(svg);
                                     author["antMarker"] = ant;
-                                     
+                                    
                                     console.log(ant.group1);
                                     ant.group1.transition()
                                     .duration(500)
@@ -161,12 +236,13 @@ function ready(error, xml) {
                                     ant.position = nextPos;
                                      
                                     authors[commit["author"]] = author;
-                         
+                                    checkRoom(commit['filesAdded'], ant.group1);
                                 } else {
                                     author["contribution"]  += 1;
                                     var ant = author["antMarker"]
 
                                     ant = movePosition(ant, nextPos);
+                                    checkRoom(commit['filesAdded'], ant.group1);
                                 }
                             }
                         }else{
@@ -181,17 +257,161 @@ function ready(error, xml) {
                     simulateDay(index+1,lastIndex,iData)
                 }
             }, delay);
-
         } else {
             todayLabel.text("Project ended")
         }
-        
     }
     
     
     
+    function checkRoom(files, ant){
+        if (ant != null){
+            //console.log(files);
+            files.forEach(function(file){
+                var filename = file['fileName'];
+                var existingFile = rooms[filename];
+                if(!existingFile){
+                    //no room of this file... so create a new room
+                    createRoom(file);
+                } else {
+                    //room exist so modidfy that room
+                }
+
+            });
+
+            
+
+        }
+
+    }
     
-    
+    function createRoom(file){
+
+        if(file['parents'].length > 0 ){
+            //this room is a child of some file
+            //console.log("I HAVE A PARENT");
+            file['parents'].forEach(function(parentName){
+                var parentRoom = rooms[parentName];
+                var parentRoomSvg = parentRoom['roomSvg'];
+                //console.log("bbox:"+parentRoomSvg.attr('cx'));
+            
+                var numParentKids = parentRoom['childs'].length;
+                var cx = parseInt(parentRoomSvg.attr('cx'));
+                var cy = parseInt(parentRoomSvg.attr('cy'));
+
+
+                var roomRx = 80;
+                var roomRy = 50;
+                var distanceBetweenRooms = 50;
+                var distanceToBorder = 20;
+                var distanceToGround = 25;
+
+                var color = parentRoomSvg.attr('fill');
+                var roomSvg = svg.append("ellipse")
+                    .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numParentKids)+(cx))
+                    .attr("cy", cy+distanceToGround+ (roomRy*2))
+                    .attr("rx", roomRx)
+                    .attr("ry", roomRy)
+                    .attr("fill",color);
+
+                //var tunnelSvg =  svg.append("rect")
+                var tunnel = svg.append("line")
+                    .attr("x1", roomSvg.attr('cx'))
+                    .attr("y1", roomSvg.attr('cy'))
+                    .attr("x2", parentRoomSvg.attr('cx'))
+                    .attr("y2", parentRoomSvg.attr('cy'))
+                    .attr("stroke-width", 10)
+                    .attr("stroke", color);
+
+                var name = svg.append("text")
+                        .attr("x", roomSvg.attr('cx'))
+                        .attr("y", roomSvg.attr('cy'))
+                        .text(file['fileName'])
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "12px")
+                        .style("fill", "white");
+
+                rooms[file['fileName']] = {};
+                var newRootRoom = rooms[file['fileName']];
+                newRootRoom['roomSvg'] = roomSvg;
+                newRootRoom['parents'] = [];
+
+                //update relationship
+                newRootRoom['parents'].push(parentName);
+                newRootRoom['childs'] = [];                
+                parentRoom['childs'].push(file['fileName']);
+            });
+
+            
+
+
+
+        } else {
+            //this room is a root room
+            //50 is the ry 
+            //25 is tunner distance
+            var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
+
+            var numRootRooms = countNumberRootRooms();
+            var roomRx = 80;
+            var roomRy = 50;
+            var distanceBetweenRooms = 50;
+            var distanceToBorder = 20;
+            var distanceToGround = 25;
+            //console.log("rooms"+rooms);
+            //console.log("numroot:"+numRootRooms);
+
+            var roomSvg = svg.append("ellipse")
+                    .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numRootRooms)+(roomRx+distanceToBorder))
+                    .attr("cy", groundLevel+roomRy+distanceToGround)
+                    .attr("rx", roomRx)
+                    .attr("ry", roomRy)
+                    .attr("fill",color);
+
+            var tunnel = svg.append("line")
+                    .attr("x1", roomSvg.attr('cx'))
+                    .attr("y1", roomSvg.attr('cy'))
+                    .attr("x2", roomSvg.attr('cx'))
+                    .attr("y2", groundLevel)
+                    .attr("stroke-width", 10)
+                    .attr("stroke", color);
+
+            var name = svg.append("text")
+                        .attr("x", roomSvg.attr('cx'))
+                        .attr("y", roomSvg.attr('cy'))
+                        .text(file['fileName'])
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "12px")
+                        .style("fill", "white");
+
+
+            rooms[file['fileName']] = {};
+            var newRootRoom = rooms[file['fileName']];
+            newRootRoom['roomSvg'] = roomSvg;
+            newRootRoom['parents'] = [];
+            newRootRoom['childs'] = [];
+        }
+        
+
+
+    }
+
+    function countNumberRootRooms(){
+        var count = 0;
+        for(var key in rooms){
+            var room = rooms[key];
+            //console.log("key:"+key);
+            if(room['parents'].length == 0){
+                count++;
+            }
+        }
+        return count;
+    }
+
        //Get path start point for placing marker
     function pathStartPoint(path) {
         var d = path.attr("d"),
@@ -304,12 +524,7 @@ function ready(error, xml) {
     }
     
     function createBackground(canvas) {
-        var rectangle = canvas.append("rect")
-        .attr("x", 0)
-        .attr("y", groundLevel)
-        .attr("width", window.innerWidth)
-        .attr("height", window.innerHeight-groundLevel)
-        .style("fill", "#A9672E");
+
         
         var sky = canvas.append("rect")
         .attr("x", 0)
@@ -323,6 +538,47 @@ function ready(error, xml) {
         return sky;
     }
     
+    function createStars(canvas) {
+        var starData = [
+                        { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
+                        { "cx": 2*window.innerWidth/3, "cy": 40, "radius": 2, "color": "white" },
+                        { "cx": window.innerWidth/4, "cy": 40, "radius": 2, "color": "white" },
+                        { "cx": 5*window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"},
+                        { "cx": window.innerWidth/3, "cy": 80, "radius": 2, "color": "white"  },
+                        { "cx": window.innerWidth/2, "cy": 90, "radius": 1, "color": "white"  },
+                        { "cx": window.innerWidth/20, "cy": 50, "radius": 2, "color": "white"  },
+                        { "cx": window.innerWidth/15, "cy": 120, "radius": 1, "color": "white"  },
+                        { "cx": 18*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+                        { "cx": 15*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+                        { "cx": 13*window.innerWidth/20, "cy": 160, "radius": 2, "color": "white"  },
+                        { "cx": 2*window.innerWidth/5, "cy": 170, "radius": 2, "color": "white"  }];
+        
+        var group2 = canvas.append("g");
+        var stars = group2.selectAll("circle").data(starData).enter().append("circle");
+        var starAttributes = stars
+        .attr("cx", function (d) {return d.cx;})
+        .attr("cy", function (d) {return d.cy;})
+        .attr("r", function (d) {return d.radius;})
+        .style("fill", function (d) {return d.color;});
+        
+        return group2;
+    }
+
+function starcolor(hours) {
+    var starcolor = 1;
+    switch (hours) {
+        case 0:
+            starcolor = 0;
+            break;
+        case 12:
+            starcolor = 1;
+            break;
+    }
+    return starcolor;
+}
+    
+
+    
     function skycolor(hours) {
         var skycolor = "blue"
         switch (hours) {
@@ -334,85 +590,7 @@ function ready(error, xml) {
             case 12:
                 skycolor = "#0c1317";
                 break;
-                
-                
-                    /*
-            case 0:
-                skycolor = "#00000";
-                    break;
-            case 1:
-                    skycolor = "#0c1317";
-                    break;
-            case 2:
-                    skycolor = "#19262f";
-                    break;
-            case 3:
-                    skycolor = "#253947";
-                    break;
-            case 4:
-                    skycolor = "#324c5f";
-                    break;
-            case 5:
-                    skycolor = "#3f6077";
-                    break;
-            case 6:
-                    skycolor = "#4b738e";
-                    break;
-            case 7:
-                    skycolor = "#5886a6";
-                    break;
-            case 8:
-                    skycolor = "#6499be";
-                    break;
-            case 9:
-                    skycolor = "#71acd6";
-                    break;
-            case 10:
-                    skycolor = "#7ec0ee";
-                    break;
-            case 11:
-                    skycolor = "#8ac6ef";
-                    break;
-            case 12:
-                    skycolor = "#97ccf1";
-                    break;
-            case 13:
-                    skycolor = "#8ac6ef";
-                    break;
-            case 14:
-                    skycolor = "#7ec0ee";
-                    break;
-            case 15:
-                    skycolor = "#71acd6";
-                    break;
-            case 16:
-                    skycolor = "#6499be";
-                    break;
-            case 17:
-                    skycolor = "#5886a6";
-                    break;
-            case 18:
-                    skycolor = "#4b738e";
-                    break;
-            case 19:
-                    skycolor = "#3f6077";
-                    break;
-            case 20:
-                    skycolor = "#324c5f";
-                    break;
-            case 21:
-                    skycolor = "#253947";
-                    break;
-            case 22:
-                    skycolor = "#19262f";
-                    break;
-            case 23:
-                    skycolor = "#0c1317";
-                    break;
-            case 24:
-                    skycolor = "#00000";
-                    break;
-            */ 
+         
         }
         
         return skycolor;
