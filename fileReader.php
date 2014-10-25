@@ -59,7 +59,8 @@ $(document).ready(function() {
 <div id="outputjs2"></div>
 
 <?php
-    $handle = @fopen("mockByengProject.txt","r");
+//    $handle = @fopen("mockByengProject.txt","r");
+    $handle = @fopen("moctTest.txt","r");
     if($handle) {
         $commitIndex = -1;
         $javaAdded = array();
@@ -70,22 +71,21 @@ $(document).ready(function() {
             $tempForCommit = str_word_count($buffer,1,'1234567890-+:/');
             if($tempForCommit[0] == "commit"){
                 if($commitIndex != -1){
-                    print_r($commitIndex);
+//                    print_r($commitIndex);
                     $commit = array("Author" => $author, "commitID" => $tempForCommit[1], "Email" => $email, "CommitTime" => $commitTime ,"CommitDay" => $commitDay, "CommitMonth" => $commitMonth, "CommitYear" => $commitYear, "JavaAdded" => $javaAdded, "JavaModified" => $javaModified, "JavaDeleted" => $javaDeleted);
-                    print_r($commit);
-                    echo "<br/><br/>";
+//                    print_r($commit);
+//                    echo "<br/><br/>";
                 }
                 $commitIndex++;
                 unset($javaAdded, $javaModified, $javaDeleted);
             }
             if($tempForCommit[0] == "Author:"){
-                $authorBuffer = str_word_count($buffer,1,'1234567890@.');
+                $authorBuffer = str_word_count($buffer,1,'1234567890@._-');
                 //print_r($lineBuffer);
                 $emailLine = $authorBuffer;
                 end($emailLine);
                 $emailIndex = key($emailLine);
                 $appendName = '';
-//                print_r($emailIndex);
                 for($i = 1; $i < $emailIndex; $i++){
 //                    print_r($authorBuffer[$i] . "byung!<br/>");
                     $appendName .= $authorBuffer[$i] . " ";
@@ -101,7 +101,8 @@ $(document).ready(function() {
                 $commitTime = $dateBuffer[4];
                 $commitYear = $dateBuffer[5];
             }
-            if($tempForCommit[0] == "---" || $tempForCommit[0] == "+++"){ //file is removed, modified, or created
+            //check whether file is removed, modified, or created
+            if($tempForCommit[0] == "---" || $tempForCommit[0] == "+++"){
                 $fileNameinArray = $temp;
                 end($fileNameinArray);
                 $endIndex = key($fileNameinArray);
@@ -110,23 +111,35 @@ $(document).ready(function() {
                     //"file is being created so do nothing"
                         $isfileRemoved = false;
                     if($temp[0] == "---" && $temp[1] == "a"){
-                        $tempJava = $temp[$endIndex-1]; // storing the name of file.
+                        $classNameJava = $temp[$endIndex-1]; // storing the name of file.
                         $isfileRemoved = true;
                         // "file is being modified or deleted"
                     }
                     if($temp[0] == "+++" && $temp[1] == "dev" && $isfileRemoved == true){//delete
-                        $javaDeleted[] = $tempJava;
-//                        print_r("Delete file is detected");
-//                        echo "<br/>";
+                        $javaDeleted[] = $classNameJava;
                     }
                     if($temp[0] == "+++" && $temp[1] == "b"){
                         if($isfileRemoved == true)
-                            $javaModified[] = $tempJava;
-                        else
-                            $javaAdded[] = $temp[$endIndex-1];
+                            $javaModified[] = $classNameJava;
+                        else {
+                            $classNameJava = $temp[$endIndex-1];
+                            $javaAdded[] = $$classNameJava;
+                        }
                     }
                 }
             }
+            //if the line contains class and next index is the classname we are looking for.
+            if( in_array("class",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("class", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
+                print_r("I found class, ".$classNameJava);
+                echo "<br/>";
+                createRelations($tempForCommit, $indexClassKey, $classNameJava);
+            }
+            if( in_array("interface",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("interface", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
+                print_r("I found interface, ".$classNameJava);
+                echo "<br/>";
+                createRelations($tempForCommit, $indexClassKey, $classNameJava);
+            }
+            //print out raw text file in array format
 //            print_r($tempForCommit);
 //            echo "<br/>";
         }
@@ -143,6 +156,24 @@ $(document).ready(function() {
         fclose($handle);
     }
     ?>
+
+<?php
+    function createRelations($lineArray,$index,$className){
+        if($lineArray[$index + 1] == "implements" || $lineArray[$index + 1] == "extends"){
+            $parentClass = $lineArray[$index + 2];
+            $childClass = $className;
+            print_r("class ".$childClass . " is a child of ".$parentClass);
+            echo "<br/>";
+        }
+        //it means there is no parent class
+        if($index + 1 == sizeof($lineArray)){
+            $childClass = $className;
+            $parentClass = null;
+            print_r("class " .$childClass ." does not have parent class.<br/>");
+        }
+    }
+    ?>
+
 
 
 <script>
