@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ant</title>
+        <style type="text/css">
+            html, body {
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height:100%
+            }
+        
+            </style>
+        
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    
+    <body>
+        
+        
+        <script>
+            //resources
+            //https://www.dashingd3js.com/svg-basic-shapes-and-d3js
+            //https://www.dashingd3js.com/svg-paths-and-d3js
+            
+            
+                            //This is the accessor function we talked about above
+                            var lineFunction = d3.svg.line()
+                            .x(function(d) { return d.x; })
+                            .y(function(d) { return d.y; })
+                            .interpolate("linear");
+                            
+                            // Draw the Circle
+                            var circleData = [
+                                              { "cx": 80, "cy": 80, "radius": 30, "color": "black"  },
+                                              { "cx": 130, "cy": 75, "radius": 30, "color": "black" },
+                                              { "cx": 180, "cy": 60, "radius": 30, "color": "black" },
+                                              { "cx": 195, "cy": 55, "radius": 6, "color": "white"  },
+                                              { "cx": 195, "cy": 55, "radius": 3, "color": "black"  } ];
+
+                                              //The SVG Container
+                                              var svgContainer = d3.select("body").append("svg")
+                                              .attr("width",400)
+                                              .attr("height", 400);
+                             
+                                           
+                                              /*
+                                              var circle = svgContainer.append("circle").attr("cx", 80).attr("cy", 80).attr("r", 30);
+                                              
+                                              var circle = svgContainer.append("circle").attr("cx", 130).attr("cy", 75).attr("r", 30);
+                                              var circle = svgContainer.append("circle").attr("cx", 180).attr("cy", 60).attr("r", 30);
+                                               var circle = svgContainer.append("circle").attr("cx", 195).attr("cy", 55).attr("r", 6).attr("fill", "white");
+                                               var circle = svgContainer.append("circle").attr("cx", 195).attr("cy", 55).attr("r", 3).attr("fill", "black");
+                                             */
+        
+                                            // put circles in group1
+                                              var group1 = svgContainer.append("g");
+                                              
+                                              var circles = group1.selectAll("circle")
+                                                                .data(circleData)
+                                                                .enter()
+                                                                .append("circle");
+
+
+                                              var circleAttributes = circles.
+                                                                attr("cx", function (d) {return d.cx;})
+                                                                .attr("cy", function (d) {return d.cy;})
+                                                                .attr("r", function (d) {return d.radius;})
+                                                                .style("fill", function (d) {return d.color;});
+                                             
+                                              
+                                              
+                                              // draw legs in group1
+                                              var line = group1.append("line")
+                                                    .attr("x1", 80)
+                                                    .attr("y1", 80)
+                                                    .attr("x2", 70)
+                                                    .attr("y2", 130)
+                                                    .attr("stroke-width", 2)
+                                                    .attr("stroke", "black");
+                                              var line = group1.append("line")
+                                                    .attr("x1", 85)
+                                                    .attr("y1", 80)
+                                                    .attr("x2", 100)
+                                                    .attr("y2", 130)
+                                                    .attr("stroke-width", 2)
+                                                    .attr("stroke", "black");
+                                              var line = group1.append("line")
+                                                    .attr("x1", 145)
+                                                    .attr("y1", 70)
+                                                    .attr("x2", 175)
+                                                    .attr("y2", 110)
+                                                    .attr("stroke-width", 2)
+                                                    .attr("stroke", "black");
+                                              var line = group1.append("line")
+                                                    .attr("x1", 140)
+                                                    .attr("y1", 70)
+                                                    .attr("x2", 160)
+                                                    .attr("y2", 120)
+                                                    .attr("stroke-width", 2)
+                                                    .attr("stroke", "black");
+                                            
+                                            
+
+        </script>
+        
+        
+    </body>
+</html>
