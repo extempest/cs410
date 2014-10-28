@@ -1,0 +1,220 @@
+commit 01a1bece67d2b39f15aac2648391aadd4eae3841
+Author: BoRa Choi <boradori_@hotmail.com>
+Date:   Fri Oct 24 14:39:09 2014 -0700
+
+    MockData1
+
+diff --git a/childParentTest/.classpath b/childParentTest/.classpath
+new file mode 100644
+index 0000000..fb565a5
+--- /dev/null
++++ b/childParentTest/.classpath
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<classpath>
++	<classpathentry kind="src" path="src"/>
++	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
++	<classpathentry kind="output" path="bin"/>
++</classpath>
+diff --git a/childParentTest/.project b/childParentTest/.project
+new file mode 100644
+index 0000000..254b240
+--- /dev/null
++++ b/childParentTest/.project
+@@ -0,0 +1,17 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<projectDescription>
++	<name>childParentTest</name>
++	<comment></comment>
++	<projects>
++	</projects>
++	<buildSpec>
++		<buildCommand>
++			<name>org.eclipse.jdt.core.javabuilder</name>
++			<arguments>
++			</arguments>
++		</buildCommand>
++	</buildSpec>
++	<natures>
++		<nature>org.eclipse.jdt.core.javanature</nature>
++	</natures>
++</projectDescription>
+diff --git a/childParentTest/.settings/org.eclipse.jdt.core.prefs b/childParentTest/.settings/org.eclipse.jdt.core.prefs
+new file mode 100644
+index 0000000..7341ab1
+--- /dev/null
++++ b/childParentTest/.settings/org.eclipse.jdt.core.prefs
+@@ -0,0 +1,11 @@
++eclipse.preferences.version=1
++org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
++org.eclipse.jdt.core.compiler.codegen.targetPlatform=1.7
++org.eclipse.jdt.core.compiler.codegen.unusedLocal=preserve
++org.eclipse.jdt.core.compiler.compliance=1.7
++org.eclipse.jdt.core.compiler.debug.lineNumber=generate
++org.eclipse.jdt.core.compiler.debug.localVariable=generate
++org.eclipse.jdt.core.compiler.debug.sourceFile=generate
++org.eclipse.jdt.core.compiler.problem.assertIdentifier=error
++org.eclipse.jdt.core.compiler.problem.enumIdentifier=error
++org.eclipse.jdt.core.compiler.source=1.7
+diff --git a/childParentTest/bin/childParent/A.class b/childParentTest/bin/childParent/A.class
+new file mode 100644
+index 0000000..4321174
+Binary files /dev/null and b/childParentTest/bin/childParent/A.class differ
+diff --git a/childParentTest/bin/childParent/B.class b/childParentTest/bin/childParent/B.class
+new file mode 100644
+index 0000000..5e3acc8
+Binary files /dev/null and b/childParentTest/bin/childParent/B.class differ
+diff --git a/childParentTest/bin/childParent/C.class b/childParentTest/bin/childParent/C.class
+new file mode 100644
+index 0000000..cb3780a
+Binary files /dev/null and b/childParentTest/bin/childParent/C.class differ
+diff --git a/childParentTest/bin/childParent/D.class b/childParentTest/bin/childParent/D.class
+new file mode 100644
+index 0000000..d69697f
+Binary files /dev/null and b/childParentTest/bin/childParent/D.class differ
+diff --git a/childParentTest/bin/childParent/E.class b/childParentTest/bin/childParent/E.class
+new file mode 100644
+index 0000000..8e48113
+Binary files /dev/null and b/childParentTest/bin/childParent/E.class differ
+diff --git a/childParentTest/src/childParent/A.java b/childParentTest/src/childParent/A.java
+new file mode 100644
+index 0000000..6232745
+--- /dev/null
++++ b/childParentTest/src/childParent/A.java
+@@ -0,0 +1,5 @@
++package childParent;
++
++public abstract class A implements D{
++
++}
+diff --git a/childParentTest/src/childParent/B.java b/childParentTest/src/childParent/B.java
+new file mode 100644
+index 0000000..31e74ca
+--- /dev/null
++++ b/childParentTest/src/childParent/B.java
+@@ -0,0 +1,5 @@
++package childParent;
++
++public class B extends A{
++
++}
+diff --git a/childParentTest/src/childParent/C.java b/childParentTest/src/childParent/C.java
+new file mode 100644
+index 0000000..fc14d7d
+--- /dev/null
++++ b/childParentTest/src/childParent/C.java
+@@ -0,0 +1,5 @@
++package childParent;
++
++public class C extends A{
++
++}
+diff --git a/childParentTest/src/childParent/D.java b/childParentTest/src/childParent/D.java
+new file mode 100644
+index 0000000..1a63e8c
+--- /dev/null
++++ b/childParentTest/src/childParent/D.java
+@@ -0,0 +1,5 @@
++package childParent;
++
++public interface D {
++
++}
+diff --git a/childParentTest/src/childParent/E.java b/childParentTest/src/childParent/E.java
+new file mode 100644
+index 0000000..8871b7f
+--- /dev/null
++++ b/childParentTest/src/childParent/E.java
+@@ -0,0 +1,5 @@
++package childParent;
++
++public class E implements D{
++
++}
+
+commit df6f954dd21825f9369df78742058fed8a9baf60
+Author: BoRa Choi <boradori_@hotmail.com>
+Date:   Fri Oct 24 14:52:29 2014 -0700
+
+    Test2
+
+diff --git a/childParentTest/src/childParent/C.java b/childParentTest/src/childParent/C.java
+index fc14d7d..bba0a8e 100644
+--- a/childParentTest/src/childParent/C.java
++++ b/childParentTest/src/childParent/C.java
+@@ -1,5 +1,5 @@
+ package childParent;
+ 
+-public class C extends A{
++public class C extends B {
+ 
+ }
+diff --git a/childParentTest/src/childParent/E.java b/childParentTest/src/childParent/E.java
+index 8871b7f..1b34fd9 100644
+--- a/childParentTest/src/childParent/E.java
++++ b/childParentTest/src/childParent/E.java
+@@ -1,5 +1,5 @@
+ package childParent;
+ 
+-public class E implements D{
++public class E {
+ 
+ }
+
+commit 3e0dc26c556a367ee7c586d303d30a531b8c4fba
+Author: BoRa Choi <boradori_@hotmail.com>
+Date:   Fri Oct 24 14:53:23 2014 -0700
+
+    MockData3
+
+diff --git a/childParentTest/src/childParent/A.java b/childParentTest/src/childParent/A.java
+index 6232745..020298f 100644
+--- a/childParentTest/src/childParent/A.java
++++ b/childParentTest/src/childParent/A.java
+@@ -1,5 +1,5 @@
+ package childParent;
+ 
+-public abstract class A implements D{
++public abstract class A {
+ 
+ }
+diff --git a/childParentTest/src/childParent/E.java b/childParentTest/src/childParent/E.java
+index 1b34fd9..3d1849a 100644
+--- a/childParentTest/src/childParent/E.java
++++ b/childParentTest/src/childParent/E.java
+@@ -1,5 +1,5 @@
+ package childParent;
+ 
+-public class E {
++public class E extends A {
+ 
+ }
+
+commit ce3b4fda3cf9bdeb8aaca64b2e78b07d4aa6b07a
+Author: BoRa Choi <boradori_@hotmail.com>
+Date:   Fri Oct 24 14:55:00 2014 -0700
+
+    MockData4
+
+diff --git a/childParentTest/src/childParent/B.java b/childParentTest/src/childParent/B.java
+index 31e74ca..778496b 100644
+--- a/childParentTest/src/childParent/B.java
++++ b/childParentTest/src/childParent/B.java
+@@ -1,5 +1,5 @@
+ package childParent;
+ 
+-public class B extends A{
++public class B implements D{
+ 
+ }
+diff --git a/childParentTest/src/childParent/C.java b/childParentTest/src/childParent/C.java
+index bba0a8e..eaf4342 100644
+--- a/childParentTest/src/childParent/C.java
++++ b/childParentTest/src/childParent/C.java
+@@ -1,5 +1,5 @@
+ package childParent;
+ 
+-public class C extends B {
++public class C implements D {
+ 
+ }
