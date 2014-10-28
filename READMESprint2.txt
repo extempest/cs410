@@ -33,30 +33,30 @@ Test:
 
 Visualization Components:
 
-1.
+1.visualizing the classes as a room underground
 Input:	mock data with classes and their parent/child information
 Output:	a visualization
-Test:	visualizing the classes as a room underground
+Test:	mock data with class, parent/child information in the commit, and checking throught the commit data, then creating rooms to underground. Checked with several commits.
 
-2.
+2.checking the visualization for ants moving to the next position
 Input:	random x coordinates
 Output:	a visualization
-Test:	checking the visualization for ants moving to the next position
+Test:	from the current position, check if the ant moves to the next position.
 
-3.
+3.checking the visualization for ants changing direction when moving
 Input:	random x coordinates
 Output:	a visualization
-Test:	checking the visualization for ants changing direction when moving
+Test:	from the current position, we move the ant to a new position, and depending on ant moving left or right, change the direction of the ant to the corresponding direction.
 
-4.
+4.checking the visualization of ants, sun and moon
 Input:	x and y coordinates, and length
 Output:	a visualization
-Test:	checking the visualization of ants, sun and moon
+Test:	setting the x and y coordinats and length, width and radius using drawing fuctions so that we are able to create images of ants, sun and moon desired.
 
-5.
-Input:	mock data with time information
+5.checking the visualization of ants moving at certain time
+Input:	mock data with time information in a commit and random positon
 Output:	a visualization
-Test:	checking the visualization of ants moving at certain time
+Test:	we set a "time" in a commit, and check if the ants move to the random positon at that setted time.
 
 6.
 Input: sky color changes according to the time
