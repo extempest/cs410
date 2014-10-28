@@ -14,20 +14,21 @@ Input: raw text file of git log with various authors in one projects and dates.
 Output: Author information in string format and date in number format
 Test: Checking if information of date is parsed in number format by printing out in html ( whether the string of date is splited correctly or not, whether word of month has converted correctly into number format or not). Checking if author information in string format is parsed correctly by comparing with raw text file one by one.
 
-3. Checking parent/child relationship is parsed correctly (Manual testing)
-Input: one raw text file of git log of mock projects that involves lot of 'implements' 'extends' changes
-Output: key is the name of child and it is mapping to array of parents
-Test: 
-
-4. Checking file addition/modification/deletion is classified correctly (Manual testing)
+3. Checking java file addition/modification/deletion is classified correctly (Manual testing)
 Input: raw text file of git log
 Output: 3 arrays of strings of file name
-Test: 
+Test:  Have to make sure if parser only reads the changes of java files. raw text file contains various files already and output did not show any other files but java. Also we have to check if the files are classified correctly per each commit. There was shorter version of input to do manual tesing (mockByengProject.txt) to 
+test this. and all modification/addtion/deletion data was retrieved successfully.
+
+4. Checking parent/child relationship is parsed correctly (Manual testing)
+Input: one raw text file of git log of mock projects that involves lot of 'implements' 'extends' changes
+Output: key(index) is the name of child and each key is mapping to array of parents
+Test: First of all, I checked the data correctness. Using moctTest.txt, I printed out all the filname that has been added or modified in html per each commit to make sure I have right key in the array of output. (and there was.) After that I printed out the array that maps to the corresponding key. I already had expected output in text file, so I manually compared if array has right data or not.
 
 5. Checking all output is successfully converted to json format from php array (Manual testing)
-Input: 
-Output:
-Test:
+Input: php array
+Output: json array in string format
+Test: This testing failed at this sprint. I printed out php array in html format, and also printed out json array in html, but they were not equally printed. This error will be handled at the next sprint. Eventually this components will be the connector to the visualizer.
 
 
 
