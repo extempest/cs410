@@ -33,42 +33,42 @@ Test:
 
 Visualization Components:
 
-1.
+1.visualizing the classes as a room underground
 Input:	mock data with classes and their parent/child information
 Output:	a visualization
-Test:	visualizing the classes as a room underground
+Test:	mock data with class, parent/child information in the commit, and checking throught the commit data, then creating rooms to underground. Checked with several commits.
 
-2.
+2.checking the visualization for ants moving to the next position
 Input:	random x coordinates
 Output:	a visualization
-Test:	checking the visualization for ants moving to the next position
+Test:	from the current position, check if the ant moves to the next position.
 
-3.
+3.checking the visualization for ants changing direction when moving
 Input:	random x coordinates
 Output:	a visualization
-Test:	checking the visualization for ants changing direction when moving
+Test:	from the current position, we move the ant to a new position, and depending on ant moving left or right, change the direction of the ant to the corresponding direction.
 
-4.
+4.checking the visualization of ants, sun and moon
 Input:	x and y coordinates, and length
 Output:	a visualization
-Test:	checking the visualization of ants, sun and moon
+Test:	setting the x and y coordinats and length, width and radius using drawing fuctions so that we are able to create images of ants, sun and moon desired.
 
-5.
-Input:	mock data with time information
+5.checking the visualization of ants moving at certain time
+Input:	mock data with time information in a commit and random positon
 Output:	a visualization
-Test:	checking the visualization of ants moving at certain time
+Test:	we set a "time" in a commit, and check if the ants move to the random positon at that setted time.
 
 6.
-Input: sky color changes according to the time
+Input: different colors for the sky according to the time
 Output: a visualization of a sky getting brighter during the day and getting darker during the night
-Test: checking the visualization of a sky color transition at a certain time
+Test: checking the visualization of a sky color transition at a certain time. For example, when the simulator starts at 0:00, the sky is black. It gradually turns brighter and reaches its maximum brightness at 12:00 and then slowly turns darker. This process repeats until the project ends. 
 
 7.
 Input: changes in opacity of stars according to the time
 Output: a visualization of stars disappearing during the day and appearing during the night.
-Test: checking the visualization of stars at a certain time
+Test: checking the visualization of stars at a certain time. At 0:00, stars show the full opacity, which is 1, and then their opacity slowly changes to 0 until 12:00. The process repeats until the project ends. When implementing it, we tried to make sure the stars show the correct opacity at a certain time. 
 
 8. 
 Input: random color of ants and rooms whenever they are generated
 Output: a visualization of ants and rooms in random color
-Test: checking the visualization of the colors of ants and rooms 
+Test: checking the visualization of the colors of ants and rooms. For example, when the project starts and the ants and rooms appear on the screen one by one, we made sure that the color of each item is automatically chosen at random. 
