@@ -23,7 +23,7 @@ Visualization Components:
 1.
 Input:	mock data with classes and their parent/child information
 Output:	a visualization
-Test:	visualizing the classes as a room undeground
+Test:	visualizing the classes as a room underground
 
 2.
 Input:	random x coordinates
@@ -43,4 +43,19 @@ Test:	checking the visualization of ants, sun and moon
 5.
 Input:	mock data with time information
 Output:	a visualization
-Test:	checking the visualaztion of ants moving at certain time
+Test:	checking the visualization of ants moving at certain time
+
+6.
+Input: sky color changes according to the time
+Output: a visualization of a sky getting brighter during the day and getting darker during the night
+Test: checking the visualization of a sky color transition at a certain time
+
+7.
+Input: changes in opacity of stars according to the time
+Output: a visualization of stars disappearing during the day and appearing during the night.
+Test: checking the visualization of stars at a certain time
+
+8. 
+Input: random color of ants and rooms whenever they are generated
+Output: a visualization of ants and rooms in random color
+Test: checking the visualization of the colors of ants and rooms 
