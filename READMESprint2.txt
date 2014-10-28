@@ -12,20 +12,20 @@ Test:  Checking whether the component is parsing right amount of commits. Using 
 2. Checking data correctness of author and date (Manual testing)
 Input: raw text file of git log with various authors in one projects and dates.
 Output: Author information in string format and date in number format
-Test: Checking if information of date is parsed in number format by printing out in html ( whether the string of date is splited correctly or not, whether word of month has converted correctly into number format or not). Checking if author information in string format is parsed correctly for some projects.
+Test: Checking if information of date is parsed in number format by printing out in html ( whether the string of date is splited correctly or not, whether word of month has converted correctly into number format or not). Checking if author information in string format is parsed correctly by comparing with raw text file one by one.
 
-3. Checking parent/child relationship is parsed correctly
-Input:
-Output:
-Test:
+3. Checking parent/child relationship is parsed correctly (Manual testing)
+Input: one raw text file of git log of mock projects that involves lot of 'implements' 'extends' changes
+Output: key is the name of child and it is mapping to array of parents
+Test: 
 
-4. Checking file addition/modification/deletion is classified correctly
-Input:
-Output:
-Test:
+4. Checking file addition/modification/deletion is classified correctly (Manual testing)
+Input: raw text file of git log
+Output: 3 arrays of strings of file name
+Test: 
 
-5. Checking all output is successfully converted to json format from php array
-Input:
+5. Checking all output is successfully converted to json format from php array (Manual testing)
+Input: 
 Output:
 Test:
 
