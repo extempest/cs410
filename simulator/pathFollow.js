@@ -47,7 +47,14 @@ function ready(error, xml) {
                                                         [
                                                             //to add if exist
                                                         ]
-                                        } 
+                                        },
+                                        {
+                                            'fileName':'cat',
+                                            'parents':
+                                                        [
+                                                            'animals'
+                                                        ]
+                                        }  
                                     ],
                     'filesModified': [],
                     'filesDeleted':[],
@@ -94,7 +101,14 @@ function ready(error, xml) {
                                                         [
                                                             'oranges'
                                                         ]
-                                        } ,
+                                        },
+                                        {
+                                            'fileName':'hammer',
+                                            'parents': 
+                                                        [
+                                                            'tools'
+                                                        ]
+                                        }
                                     ],
                     'filesModified': [],
                     'filesDeleted':[],
@@ -106,7 +120,7 @@ function ready(error, xml) {
     
     var authors = {}
     var rooms = {}
-
+    var grid = new Grid()
     
     
     //Adding our svg file to HTML document
@@ -226,7 +240,7 @@ function ready(error, xml) {
                                     var ant = new ants(svg);
                                     author["antMarker"] = ant;
                                     
-                                    console.log(ant.group1);
+                                    //console.log(ant.group1);
                                     ant.group1.transition()
                                     .duration(500)
                                     .attr("transform", "translate(" + [27,groundLevel-55] + ")")
@@ -246,7 +260,7 @@ function ready(error, xml) {
                                 }
                             }
                         }else{
-                            console.log("ho")
+                            //console.log("ho")
                         }
                     })
 
@@ -272,7 +286,9 @@ function ready(error, xml) {
                 var existingFile = rooms[filename];
                 if(!existingFile){
                     //no room of this file... so create a new room
-                    createRoom(file);
+                    var newRoom = new Room(file)
+                    rooms[filename] = newRoom; //creating an empty dictionary in the global "room" variable with the filename as the key
+
                 } else {
                     //room exist so modidfy that room
                 }
@@ -285,67 +301,156 @@ function ready(error, xml) {
 
     }
     
-    function createRoom(file){
+
+    function Grid(){
+        this.rooms = [[]];
+        this.push = function (x,y,room){
+            console.log("grid:")
+            console.log(this.rooms)
+            console.log("inserted room:")            
+            console.log(room)
+            console.log("rooms.length:"+this.rooms.length)
+            console.log("y"+y)
+            if (y >= this.rooms.length) {
+                //need more depth
+                console.log("PUSHING MORE DEPTH")
+                this.rooms.push([]);
+            }
+            console.log("checking grid["+x+"]["+y+"]:")
+            console.log(this.rooms[y][x])
+            if (!this.rooms[y][x]) {
+                //if no room in the grid
+                
+                console.log("undefined")
+                this.rooms[y].push(room)
+            }else {
+                //theres room in grid
+                console.log("defined")
+                var occupyingRoom = this.rooms[y][x]
+                if (occupyingRoom.parents.length == 0){
+                    room.x = room.x + 1
+                } else {
+                    console.log(occupyingRoom.parents[0])
+                    console.log(room.parents[0])
+                    if (occupyingRoom.parents[0].x < room.parents[0].x){
+                        console.log("printing room:")
+                        console.log(room)
+                        room.move(x+1,y)                        
+                        this.push(x+1, y, room)
+                    } else {
+                        occupyingRoom.move(x+1,y)
+                        occupyingRoom.x = x + 1
+                    }
+                }
+            }
+            
+
+
+
+
+        }
+
+
+    }
+
+    function Room(file){
+        var roomRx = 80; //Rx means radius in x direction since the room is ellipse
+        var roomRy = 50; //Ry means radius in y direction
+        var distanceXBetweenRooms = 50;
+        var distanceYBetweenRooms = 25;        
+        var distanceToBorder = 20;
+        var distanceToGround = 25;
+        this.x = -1; //Coordinates in respect to grid
+        this.y = -1;
+        this.nameLabel
+        this.svg
+        this.parents = [];
+        this.childs = [];
+        this.name = file['fileName'];
+        this.tunnel
+        this.move = function (newx,newy){
+
+            var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder) 
+            this.svg.transition()
+            .duration(500)
+            .attr("cx", newXCoor)
+            this.nameLabel.transition()
+            .duration(500)
+            .attr("x",newXCoor)
+            this.tunnel.transition()
+            .duration(500)
+            .attr("x1", newXCoor)
+
+        }
+
+
 
         if(file['parents'].length > 0 ){
             //this room is a child of some file
             //console.log("I HAVE A PARENT");
-            file['parents'].forEach(function(parentName){
-                var parentRoom = rooms[parentName];
-                var parentRoomSvg = parentRoom['roomSvg'];
-                //console.log("bbox:"+parentRoomSvg.attr('cx'));
-            
-                var numParentKids = parentRoom['childs'].length;
-                var cx = parseInt(parentRoomSvg.attr('cx'));
-                var cy = parseInt(parentRoomSvg.attr('cy'));
+
+            var parentRoom = rooms[file['parents'][0]];
+                //var parentRoomSvg = parentRoom['roomSvg'];
+            var parentRoomSvg = parentRoom.svg;
+
+            //console.log("bbox:"+parentRoomSvg.attr('cx'));
+            //console.log("printing a parent room:");
+            //console.log(parentRoom)
+            var numParentKids = parentRoom.childs.length;
+            var cx = parseInt(parentRoomSvg.attr('cx'));
+            var cy = parseInt(parentRoomSvg.attr('cy'));
+            this.x = parentRoom.x + numParentKids
+            this.y = parentRoom.y + 1;
+            this.parents = [];
+            this.childs = [];
+            this.parents.push(parentRoom);
+            parentRoom.childs.push(file['fileName']);
+
+            var color = parentRoomSvg.attr('fill');
+            var roomSvg = svg.append("ellipse")
+                .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
+                .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
+                .attr("rx", roomRx)
+                .attr("ry", roomRy)
+                .attr("fill",color);
+
+            //var tunnelSvg =  svg.append("rect")
+            var tunnel = svg.append("line")
+                .attr("x1", roomSvg.attr('cx'))
+                .attr("y1", roomSvg.attr('cy'))
+                .attr("x2", parentRoomSvg.attr('cx'))
+                .attr("y2", parentRoomSvg.attr('cy'))
+                .attr("stroke-width", 10)
+                .attr("stroke", color);
+
+            var name = svg.append("text")
+            .attr("x", roomSvg.attr('cx'))
+            .attr("y", roomSvg.attr('cy'))
+            .text(file['fileName'])
+            .attr("stroke-width", 0.5)
+            .attr("stroke", "black")
+            .style("font-family", "Verdana")
+            .style("font-size", "12px")
+            .style("fill", "white");
+
+            this.nameLabel = name
+
+            this.svg = roomSvg;
+
+            this.tunnel = tunnel
+            //rooms[file['fileName']] = {};
+            //var newRootRoom = rooms[file['fileName']];
+            //newRootRoom['roomSvg'] = roomSvg;
+            //update relationship
+            //newRootRoom['parents'] = [];
 
 
-                var roomRx = 80;
-                var roomRy = 50;
-                var distanceBetweenRooms = 50;
-                var distanceToBorder = 20;
-                var distanceToGround = 25;
+            //update relationship
+            //newRootRoom['parents'].push(parentName);
+            //newRootRoom['childs'] = [];                
+            //parentRoom['childs'].push(file['fileName']);
 
-                var color = parentRoomSvg.attr('fill');
-                var roomSvg = svg.append("ellipse")
-                    .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numParentKids)+(cx))
-                    .attr("cy", cy+distanceToGround+ (roomRy*2))
-                    .attr("rx", roomRx)
-                    .attr("ry", roomRy)
-                    .attr("fill",color);
-
-                //var tunnelSvg =  svg.append("rect")
-                var tunnel = svg.append("line")
-                    .attr("x1", roomSvg.attr('cx'))
-                    .attr("y1", roomSvg.attr('cy'))
-                    .attr("x2", parentRoomSvg.attr('cx'))
-                    .attr("y2", parentRoomSvg.attr('cy'))
-                    .attr("stroke-width", 10)
-                    .attr("stroke", color);
-
-                var name = svg.append("text")
-                        .attr("x", roomSvg.attr('cx'))
-                        .attr("y", roomSvg.attr('cy'))
-                        .text(file['fileName'])
-                        .attr("stroke-width", 0.5)
-                        .attr("stroke", "black")
-                        .style("font-family", "Verdana")
-                        .style("font-size", "12px")
-                        .style("fill", "white");
-
-                rooms[file['fileName']] = {};
-                var newRootRoom = rooms[file['fileName']];
-                newRootRoom['roomSvg'] = roomSvg;
-                newRootRoom['parents'] = [];
-
-                //update relationship
-                newRootRoom['parents'].push(parentName);
-                newRootRoom['childs'] = [];                
-                parentRoom['childs'].push(file['fileName']);
-            });
-
-            
-
+            grid.push(this.x, this.y, this)
 
 
         } else {
@@ -355,17 +460,17 @@ function ready(error, xml) {
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
 
             var numRootRooms = countNumberRootRooms();
-            var roomRx = 80;
-            var roomRy = 50;
-            var distanceBetweenRooms = 50;
-            var distanceToBorder = 20;
-            var distanceToGround = 25;
+
             //console.log("rooms"+rooms);
             //console.log("numroot:"+numRootRooms);
+            this.y = 0;
+            this.x = numRootRooms;
+            this.parents = [];
+            this.childs = [];
 
             var roomSvg = svg.append("ellipse")
-                    .attr("cx", (roomRx*2 + distanceBetweenRooms)*(numRootRooms)+(roomRx+distanceToBorder))
-                    .attr("cy", groundLevel+roomRy+distanceToGround)
+                    .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
+                    .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
                     .attr("rx", roomRx)
                     .attr("ry", roomRy)
                     .attr("fill",color);
@@ -378,34 +483,45 @@ function ready(error, xml) {
                     .attr("stroke-width", 10)
                     .attr("stroke", color);
 
+            this.tunnel = tunnel
+            //rooms[file['fileName']] = {}; //creating an empty dictionary in the global "room" variable with the filename as the key
+            //var newRootRoom = rooms[file['fileName']];
+            //newRootRoom['roomSvg'] = roomSvg;
+            //newRootRoom['parents'] = [];
+            //newRootRoom['childs'] = [];
             var name = svg.append("text")
-                        .attr("x", roomSvg.attr('cx'))
-                        .attr("y", roomSvg.attr('cy'))
-                        .text(file['fileName'])
-                        .attr("stroke-width", 0.5)
-                        .attr("stroke", "black")
-                        .style("font-family", "Verdana")
-                        .style("font-size", "12px")
-                        .style("fill", "white");
+            .attr("x", roomSvg.attr('cx'))
+            .attr("y", roomSvg.attr('cy'))
+            .text(file['fileName'])
+            .attr("stroke-width", 0.5)
+            .attr("stroke", "black")
+            .style("font-family", "Verdana")
+            .style("font-size", "12px")
+            .style("fill", "white");
 
+            this.nameLabel = name
 
-            rooms[file['fileName']] = {};
-            var newRootRoom = rooms[file['fileName']];
-            newRootRoom['roomSvg'] = roomSvg;
-            newRootRoom['parents'] = [];
-            newRootRoom['childs'] = [];
+            this.svg = roomSvg;
+
+            grid.push(this.x, this.y, this)
+
         }
-        
 
+       
 
     }
 
     function countNumberRootRooms(){
         var count = 0;
+        //console.log("print all rooms");
+        //console.log(rooms)
         for(var key in rooms){
             var room = rooms[key];
+                //console.log("printing a root room:");
+                //console.log(room)
+
             //console.log("key:"+key);
-            if(room['parents'].length == 0){
+            if(room.parents.length == 0){
                 count++;
             }
         }
@@ -583,7 +699,7 @@ function starcolor(hours) {
         var skycolor = "blue"
         switch (hours) {
             case 0:
-                console.log("its getting brighter");
+                //console.log("its getting brighter");
                 skycolor = "#97ccf1";
                 
                 break;
