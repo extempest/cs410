@@ -83,6 +83,30 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
+                 },
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'persian',
+                                            'parents':
+                                                        [
+                                                            'cat'
+                                                        ]
+                                        },
+                                        {
+                                            'fileName':'dog',
+                                            'parents':
+                                                        [
+                                                            'animals'
+                                                        ]
+                                        } 
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
                  }
             ]
         },
@@ -113,7 +137,25 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 }            
+                 },
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'banana',
+                                            'parents':
+                                                        [
+                                                            'fruits'
+                                                        ]
+                                        },
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 }    
+
             ]
         }
     ];
@@ -307,48 +349,55 @@ function ready(error, xml) {
         this.push = function (x,y,room){
             console.log("grid:")
             console.log(this.rooms)
-            console.log("inserted room:")            
-            console.log(room)
-            console.log("rooms.length:"+this.rooms.length)
-            console.log("y"+y)
+            //console.log("inserted room:")            
+            //console.log(room)
+            //console.log("rooms.length:"+this.rooms.length)
+            //console.log("y"+y)
             if (y >= this.rooms.length) {
                 //need more depth
-                console.log("PUSHING MORE DEPTH")
+                //console.log("PUSHING MORE DEPTH")
                 this.rooms.push([]);
             }
-            console.log("checking grid["+x+"]["+y+"]:")
-            console.log(this.rooms[y][x])
+
+            if (x >= this.rooms[y].length){
+                //console.log("PUHSING MORE WIDTH")
+                this.rooms[y].push(0);
+            }
+
+
+            //console.log("checking grid["+x+"]["+y+"]:")
+            //console.log(this.rooms[y][x])
             if (!this.rooms[y][x]) {
                 //if no room in the grid
                 
-                console.log("undefined")
-                this.rooms[y].push(room)
+                //console.log("undefined")
+                this.rooms[y][x]=room
             }else {
                 //theres room in grid
-                console.log("defined")
+                //console.log("defined")
                 var occupyingRoom = this.rooms[y][x]
                 if (occupyingRoom.parents.length == 0){
                     room.x = room.x + 1
                 } else {
-                    console.log(occupyingRoom.parents[0])
-                    console.log(room.parents[0])
+                    //console.log(occupyingRoom.parents[0])
+                    //console.log(room.parents[0])
                     if (occupyingRoom.parents[0].x < room.parents[0].x){
-                        console.log("printing room:")
-                        console.log(room)
-                        room.move(x+1,y)                        
-                        this.push(x+1, y, room)
+                        //console.log("printing room:")
+                        //console.log(room)
+                        room.x = room.x+1
+                        this.push(x+1, y, room)                        
+                        room.move(x+1,y)
                     } else {
+                        occupyingRoom.x = occupyingRoom.x + 1
+
                         occupyingRoom.move(x+1,y)
-                        occupyingRoom.x = x + 1
+                        this.push(x+1,y, occupyingRoom)
+                        this.rooms[y][x] = room
                     }
                 }
             }
-            
-
-
-
-
         }
+
 
 
     }
@@ -370,7 +419,11 @@ function ready(error, xml) {
         this.tunnel
         this.move = function (newx,newy){
 
-            var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder) 
+            var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
+
+            console.log("parent of "+this.name+" is "+this.parents[0].name)
+            console.log("parent x: "+this.parents[0].x)
+            var parentX =  (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
             this.svg.transition()
             .duration(500)
             .attr("cx", newXCoor)
@@ -380,6 +433,22 @@ function ready(error, xml) {
             this.tunnel.transition()
             .duration(500)
             .attr("x1", newXCoor)
+            .attr("x2", parentX)
+
+            if (this.name == "cat"){
+                console.log("cat x: "+this.x)
+            }
+
+            this.childs.forEach(function(child){
+                console.log("aaaaaaaaa")
+                console.log(child)
+                child.x = child.x + 1
+                grid.push(child.x, child.y, child)
+                grid.rooms[child.y][child.x] = 0
+                child.move(child.x, child.y)
+
+            })
+
 
         }
 
@@ -404,7 +473,7 @@ function ready(error, xml) {
             this.parents = [];
             this.childs = [];
             this.parents.push(parentRoom);
-            parentRoom.childs.push(file['fileName']);
+            parentRoom.childs.push(this);
 
             var color = parentRoomSvg.attr('fill');
             var roomSvg = svg.append("ellipse")
