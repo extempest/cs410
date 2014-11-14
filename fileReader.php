@@ -58,19 +58,32 @@ $(document).ready(function() {
     ?>
 </div>
 
-<div> <?php
-    $thiss = parse();
-    $newArray = sortCommits($thiss);
-    print_r(convertJsArray($thiss));
-    print_r("helloByeng");
-    print_r($newArray);
-//    print_r($thiss[0]["timestamp"]["year"]);
-//    for($i =0; $i < sizeof($thiss); $i++){
-//        print_r($i);
-//        print_r($thiss[$i]);
-//        echo "<br/>";
-//    }
+<div>
+//<?php
+//    $thiss = parse();
+//    print_r("PARSE DONE");
+//    $newArray = sortCommits($thiss);
+//    print_r(convertJsArray($newArray));
+//    print_r("<br/>helloByeng<br/>");
+//    print_r($newArray);
+////    print_r($thiss[0]["timestamp"]["year"]);
+////    for($i =0; $i < sizeof($thiss); $i++){
+////        print_r($i);
+//	//        print_r($thiss[$i]);
+////        echo "<br/>";
+////    }
+//    ?>
+<?php
+    echo printRealData();
     ?>
+<?php
+    function printRealData(){
+        $commitList = parse();
+        $newArray = sortCommits($commitList);
+        return convertJsArray($newArray);
+    }
+    ?>
+
 </div>
 <br/>
 
@@ -86,10 +99,9 @@ $(document).ready(function() {
 //        $initialDay = $commitArray[0]["timestamp"];
 //        $lastDay = $commitArray[$lastIndex]["timestamp"];
         $commits = array();
-        for($i = 0; $i < sizeof($commitArray); i++){
+        for($i = 0; $i < sizeof($commitArray); $i++){
             $currentDate = $commitArray[$i]["timestamp"];
             if(empty($commits) || ($commits[0]["timestamp"]["day"] == $currentDate["day"] && $commits[0]["timestamp"]["month"] == $currentDate["month"] && $commits[0]["timestamp"]["year"] == $currentDate["year"] )){
-                
                 array_push($commits, $commitArray[$i]);
                 //resolve bug for last index ///////////////////////////
             }
@@ -98,7 +110,11 @@ $(document).ready(function() {
                 $current = new DateTime((string)$currentDate["year"]."-".(string)$currentDate["month"]."-".(string)$currentDate["day"]);//16
                 $previous = new DateTime((string)$commits[0]["timestamp"]["year"]."-".(string)$commits[0]["timestamp"]["month"]."-".(string)$commits[0]["timestamp"]["day"]);//13
                 $dateDiff = date_diff($previous, $current);
-                for($i = 1; $i < $dateDiff; $i++){
+//                print_r($dateDiff->format('%d'));
+                for($j = 1; $j < $dateDiff->format('%d'); $j++){
+//                    print_r("YOYOYOYOYO");
+//                    print_r($dateDiff->format('%d'));
+//                    print_r("POPOPOPOPO");
                     $previous->modify('+1 day');
                     $emptyDate = createTimeStamp((int)$previous->format('Y'), (int)$previous->format('m'), (int)$previous->format('d'), 0,0,0); //not checked
                     array_push($newArray, createDateCommits($emptyDate, null));
@@ -108,6 +124,9 @@ $(document).ready(function() {
                 $commits = array();
                 array_push($commits, $commitArray[$i]);
                 //read this part again
+            }
+            if($i == sizeof($commitArray)-1){
+                array_push($newArray, createDateCommits($commits[$i]["timestamp"], $commits));
             }
         } //lastIndex not added in newArray yet
         return $newArray;
@@ -128,8 +147,8 @@ $(document).ready(function() {
     ?>
 <?php
     function parse(){
-        $handle = @fopen("mockByengProject.txt","r");
-//        $handle = @fopen("mockTest.txt","r");
+//        $handle = @fopen("mockByengProject.txt","r");
+        $handle = @fopen("mockTest.txt","r");
         if($handle) {
             $commitIndex = -1;
             $javaAdded = array();
