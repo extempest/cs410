@@ -17,12 +17,17 @@ height:100%
 <script type="text/javascript">
 
 $(document).ready(function() {
+                  var test3 = <?php   $thiss = parse();
+                  $hello = convertJsArray($thiss);
+                  echo $hello;
+                  ?>;
                   var test = <?php
                   $file = file_get_contents('fruits.txt', FILE_USE_INCLUDE_PATH);
                   echo $file
                   ?>
                   // in order to make txt file, put :  git log -p --reverse > txtfileName.txt
                   
+                  console.log(test3);
                   console.log(test);
                   console.log(test[2]);
                   
@@ -54,7 +59,17 @@ $(document).ready(function() {
 </div>
 
 <div> <?php
-    parse();
+    $thiss = parse();
+    $newArray = sortCommits($thiss);
+    print_r(convertJsArray($thiss));
+    print_r("helloByeng");
+    print_r($newArray);
+//    print_r($thiss[0]["timestamp"]["year"]);
+//    for($i =0; $i < sizeof($thiss); $i++){
+//        print_r($i);
+//        print_r($thiss[$i]);
+//        echo "<br/>";
+//    }
     ?>
 </div>
 <br/>
@@ -64,33 +79,91 @@ $(document).ready(function() {
 <div id="outputjs2"></div>
 
 <?php
-    $emptyaddeddd = array();
+    function sortCommits($commitArray){
+        $newArray = array();
+        //$newArray = [{ 'date' => 2014, 'commits' => [1,2,3,4] }, {},{}]
+//        $totalDays = calculateTotaldays($commitArray);
+//        $initialDay = $commitArray[0]["timestamp"];
+//        $lastDay = $commitArray[$lastIndex]["timestamp"];
+        $commits = array();
+        for($i = 0; $i < sizeof($commitArray); i++){
+            $currentDate = $commitArray[$i]["timestamp"];
+            if(empty($commits) || ($commits[0]["timestamp"]["day"] == $currentDate["day"] && $commits[0]["timestamp"]["month"] == $currentDate["month"] && $commits[0]["timestamp"]["year"] == $currentDate["year"] )){
+                
+                array_push($commits, $commitArray[$i]);
+                //resolve bug for last index ///////////////////////////
+            }
+            else {
+                array_push($newArray, createDateCommits($commits[0]["timestamp"], $commits));//have to change to 0,0,0) format ////////////
+                $current = new DateTime((string)$currentDate["year"]."-".(string)$currentDate["month"]."-".(string)$currentDate["day"]);//16
+                $previous = new DateTime((string)$commits[0]["timestamp"]["year"]."-".(string)$commits[0]["timestamp"]["month"]."-".(string)$commits[0]["timestamp"]["day"]);//13
+                $dateDiff = date_diff($previous, $current);
+                for($i = 1; $i < $dateDiff; $i++){
+                    $previous->modify('+1 day');
+                    $emptyDate = createTimeStamp((int)$previous->format('Y'), (int)$previous->format('m'), (int)$previous->format('d'), 0,0,0); //not checked
+                    array_push($newArray, createDateCommits($emptyDate, null));
+                }
+//                array_push($newArray, createDateCommits($commits[0]["timestamp"], $commits));
+//                unset($commits);
+                $commits = array();
+                array_push($commits, $commitArray[$i]);
+                //read this part again
+            }
+        } //lastIndex not added in newArray yet
+        return $newArray;
+    }
+    
+    
+    function createDateCommits($date, $commits){
+        return array("date" => $date, "commits" => $commits);
+    }
+    
+    function calculateTotaldays($commitArray){
+        $lastIndex = sizeof($commitArray)-1;
+        $date1 = date_create((string)$commitArray[0]["timestamp"]["year"]."-".(string)$commitArray[0]["timestamp"]["month"]."-".(string)$commitArray[0]["timestamp"]["day"]);
+        $date2 = date_create((string)$commitArray[$lastIndex]["timestamp"]["year"]."-".(string)$commitArray[$lastIndex]["timestamp"]["month"]."-".(string)$commitArray[$lastIndex]["timestamp"]["day"]);
+        $diff = date_diff($date1, $date2);
+        return $diff->format('%d')+1;
+    }
+    ?>
+<?php
     function parse(){
-        //    $handle = @fopen("mockByengProject.txt","r");
-        $handle = @fopen("mockTest.txt","r");
+        $handle = @fopen("mockByengProject.txt","r");
+//        $handle = @fopen("mockTest.txt","r");
         if($handle) {
             $commitIndex = -1;
             $javaAdded = array();
             $javaModified = array();
             $javaDeleted = array();
             $files = array();
-            $addedfiles = array();
-            $modifiedfiles = array();
-            
             while (($buffer = fgets($handle)) !== false){
                 $temp = str_word_count($buffer,1,'1234567890-+:');
                 $tempForCommit = str_word_count($buffer,1,'1234567890-+:/');
                 if($tempForCommit[0] == "commit"){
                     if($commitIndex != -1){
 //                      print_r($commitIndex);
-//                        sortfiles($files, $addedfiles, $modifiedfiles, $javaAdded, $javaModified);
-                        $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $javaDeleted);
-                        print_r(convertJsArray($commit)."<br/>");
-                        print_r($commit);
-                        echo "<br/><br/>";
+                        $addedfiles = sortfiles($files, $javaAdded);
+                        $modifiedfiles = sortfiles($files, $javaModified);
+//                        print_r("Added Java files: ");
+//                        print_r($addedfiles);
+//                        print_r("<br/>");
+//                        print_r("Modified Java files: ");
+//                        print_r($modifiedfiles);
+//                        print_r("<br/>");
+                        $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+                        $commits[] = $commit;
+//                        print_r(convertJsArray($commit)."<br/>");
+//                        print_r("Added files: ");
+//                        print_r($javaAdded); // any added java files of commit
+//                        print_r("<br/>");
+//                        print_r("Modified files: ");
+//                        print_r($javaModified); // any modified java files of commit
+//                        print_r("<br/>");
+//                        print_r($commit);
+//                        echo "<br/><br/>";
                     }
                     $commitIndex++;
-                    unset($files,$javaAdded, $javaModified, $javaDeleted);
+                    unset($files,$addedfiles, $modifiedfiles, $javaAdded, $javaModified, $javaDeleted);
                 }
                 if($tempForCommit[0] == "Author:"){
                     $authorBuffer = str_word_count($buffer,1,'1234567890@._-');
@@ -141,10 +214,10 @@ $(document).ready(function() {
                         }
                     }
                 }
-                //if the line contains class and next index is the classname we are looking for.
+                //if the line contains 'class' and next index is the classname we are looking for, and if class relation has been changed,
                 if( in_array("class",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("class", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
 //                    print_r("I found class, ".$classNameJava."<br/>");
-                    $file = createJavafileInstance($classNameJava,showParents($tempForCommit, $indexClassKey, $classNameJava));//////////////
+                    $file = createJavafileInstance($classNameJava,showParents($tempForCommit, $indexClassKey, $classNameJava));////////////
                     $files[] = $file;
                 }
                 if( in_array("interface",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("interface", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
@@ -162,36 +235,44 @@ $(document).ready(function() {
             
             //This is for the last commit. Since I am creating $commit when a word "commit" is appeared, and there is no word "commit" at the end of file.
 //            print_r($commitIndex);
-//            sortfiles($files, $addedfiles, $modifiedfiles, $javaAdded, $javaModified);
-            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $javaDeleted);
+            $addedfiles = sortfiles($files, $javaAdded);
+            $modifiedfiles = sortfiles($files, $javaModified);
+            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+            $commits[] = $commit;
             $commitIndex++;
 //            print_r(convertJsArray($commit));
 //            print_r($commit);
             fclose($handle);
         }
+        return $commits;
     }
+    ?>
 
-    function sortfiles($files, $emptyadded, $emptymodified, $alreadyadded, $alreadymodified){
-        global $emptyaddeddd;
+<?php
+    function sortfiles($files, $alreadychanged){////////////////////////////////////////
         for($i = 0; $i < sizeof($files); $i++){
             $file = $files[$i];
-            if($alreadyadded != null && in_array($file["fileName"],$alreadyadded)){
-                print_r("there is!");
-                print_r($file."BYENG");
-                $emptyaddeddd[] = $file;
-                print_r($emptyaddeddd."HEE");
+            if($alreadychanged != null && in_array($file["fileName"], $alreadychanged)){
+                $changedfiles[] = $file;
             }
-//                $emptyadded[] = $files[$i];
-//            if(in_array($files[$i]["fileName"],$alreadymodified))
-//                $emptymodified[] = $files[$i];
         }
-        print_r("Look at this:".$emptyadded."<br/>");
+//        print_r($changedfiles);
+//        echo "<br/>";
+        return $changedfiles;
     }
-    
+    ?>
+
+<?php
     function createJavafileInstance($childName, $parentsArray){
         return array("fileName" => $childName, "parents" => $parentsArray);
     }
-    
+    ?>
+<?php
+    function createTimeStamp($year, $month, $day, $hour, $minute, $second){
+        return array("year" => $year, "month" => $month, "day" => $day, "hour" => $hour, "minute" => $minute, "second" => $second);
+    }
+    ?>
+<?php
     function showParents($lineArray,$index,$className){
         if($lineArray[$index + 1] == "extends"){
             for($i = $index +2; $i < sizeof($lineArray); $i++){
@@ -227,9 +308,9 @@ $(document).ready(function() {
     ?>
 
 <?php
-    function commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $javaDeleted){
+    function commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $added, $modified,$parentsAdded, $parentsModified, $deleted){
         $date = convertdatetoJsstr($commitYear, $commitMonth, $commitDay, $commitTime);
-        return array("author" => $author, "Email" => $email, "timestamp" => $date, "filesAdded" => $javaAdded, "filesModified" => $javaModified, "filesDeleted" => $javaDeleted);
+        return array("author" => $author, "Email" => $email, "timestamp" => $date, "filesAdded" => $added, "filesModified" => $modified, "ParentsAdded" => $parentsAdded, "ParentsModified" => $parentsModified, "filesDeleted" => $deleted);
     }
     ?>
 
@@ -238,15 +319,21 @@ $(document).ready(function() {
         $timeArray = str_word_count($time,1,'1234567890');
         date_default_timezone_set("America/Los_Angeles");
         $monthNum = strtotime($month);
-        return "new Date(".$year.", ".date('m',$monthNum).", ".$day.", ".$timeArray[0].", ".$timeArray[1].", ".$timeArray[2].", 0)";
+//        $str = "new Date(".$year.", ".date('m',$monthNum).", ".$day.", ".$timeArray[0].", ".$timeArray[1].", ".$timeArray[2].", 0)";
+        $str = createTimeStamp((int)$year, (int)date('m',$monthNum), (int)$day, (int)$timeArray[0], (int)$timeArray[1], (int)$timeArray[2]);
+
+        return $str;
     }
     ?>
 
 
-
-// http://stackoverflow.com/questions/5618925/convert-php-array-to-javascript
-<script type='text/javascript'>
+<!-- comment -->
+ <script type='text/javascript'>
 <?php
+    
+    /*
+     http://stackoverflow.com/questions/5618925/convert-php-array-to-javascript
+     */
     function convertJsArray($php_array){
         $js_array = json_encode($php_array);
         return $js_array;
@@ -254,6 +341,7 @@ $(document).ready(function() {
     
     ?>
 
+</script>
 
 <script>
 
