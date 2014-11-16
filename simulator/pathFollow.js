@@ -166,7 +166,40 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 }    
+                 },    
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'clothes',
+                                            'parents':
+                                                        [
+                                                        ]
+                                        },
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 },
+                 {
+                    'author':'Byung',
+                    'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'pants',
+                                            'parents':
+                                                        [
+                                                            'clothes'
+                                                        ]
+                                        },
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 }        
 
             ]
         }
@@ -296,7 +329,10 @@ function ready(error, xml) {
                                     var ant = new ants(svg);
                                     author["antMarker"] = ant;
                                     
-                                    //console.log(ant.group1);
+                                    //console.log(ant.group1); 
+                                    authors[commit["author"]] = author;
+                                    checkRoom(commit['filesAdded'], ant.group1);
+
                                     ant.group1.transition()
                                     .duration(500)
                                     .attr("transform", "translate(" + [27,groundLevel-55] + ")")
@@ -304,9 +340,7 @@ function ready(error, xml) {
                                     .duration(500)
                                     .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
                                     ant.position = nextPos;
-                                     
-                                    authors[commit["author"]] = author;
-                                    checkRoom(commit['filesAdded'], ant.group1);
+
                                 } else {
                                     author["contribution"]  += 1;
                                     var ant = author["antMarker"]
@@ -342,6 +376,7 @@ function ready(error, xml) {
                 var existingFile = rooms[filename];
                 if(!existingFile){
                     //no room of this file... so create a new room
+
                     var newRoom = new Room(file)
                     rooms[filename] = newRoom; //creating an empty dictionary in the global "room" variable with the filename as the key
 
@@ -402,6 +437,7 @@ function ready(error, xml) {
                 //if no room in the grid
                 
                 //console.log("undefined")
+
                 this.rooms[y][x]=room
                 if(callback){
                     callback(room)
@@ -411,17 +447,15 @@ function ready(error, xml) {
                 //console.log("defined")
                 var occupyingRoom = this.rooms[y][x]
 
-                console.log(occupyingRoom.name)
+                console.log("occupying room:"+occupyingRoom.name)
 
-                if (occupyingRoom.parents.length == 0){
+                if (occupyingRoom.parents.length == 0 && !(room.svg)){
                     room.x = room.x + 1                    
                     this.push(x+1, y, room)
                     if(room.svg){
                         room.move(x+1, y)
                     }
-                    if(callback){
-                        callback(room)
-                    }
+
                 } else {
                     //console.log(occupyingRoom.parents[0].name)
                     //console.log(room.parents[0].name)
@@ -463,8 +497,12 @@ function ready(error, xml) {
 
                     this.push(targetMove.x,targetMove.y,targetMove, pushChildren)
                     targetMove.move(targetMove.x,targetMove.y)   
-                      
-
+                    if(!this.rooms[y][x]){
+                        this.rooms[y][x]=room
+                        if(callback){
+                            callback(room)
+                        }
+                    }
 
                 }
             }
@@ -486,30 +524,33 @@ function ready(error, xml) {
         this.childs = [];
         this.name = file['fileName'];
         this.tunnel
-
+        this.group
 
         this.addSvg = function (x, y){
 
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
-            
 
-            var roomSvg = svg.append("ellipse")
+            var group = svg.append("g");
+
+            var roomSvg = group.append("ellipse")
                 .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
                 .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
                 .attr("rx", roomRx)
                 .attr("ry", roomRy)
-                .attr("fill",color);
+                .attr("fill",color)
+                .attr("opacity",0);
 
             //var tunnelSvg =  svg.append("rect")
-            var tunnel = svg.append("line")
+            var tunnel = group.append("line")
                     .attr("x1", roomSvg.attr('cx'))
                     .attr("y1", roomSvg.attr('cy'))
                     .attr("x2", roomSvg.attr('cx'))
                     .attr("y2", groundLevel)
                     .attr("stroke-width", 10)
-                    .attr("stroke", color);
+                    .attr("stroke", color)
+                    .attr("opacity",0);
 
-            var name = svg.append("text")
+            var name = group.append("text")
             .attr("x", roomSvg.attr('cx'))
             .attr("y", roomSvg.attr('cy'))
             .text(file['fileName'])
@@ -517,7 +558,8 @@ function ready(error, xml) {
             .attr("stroke", "black")
             .style("font-family", "Verdana")
             .style("font-size", "12px")
-            .style("fill", "white");
+            .style("fill", "white")
+            .attr("opacity",0);
             
 
             if (y > 0) {
@@ -536,13 +578,26 @@ function ready(error, xml) {
 
             } 
 
-           
-
+            this.group = group
             this.nameLabel = name
 
             this.svg = roomSvg;
 
             this.tunnel = tunnel
+
+            roomSvg.transition()
+            .duration(500)
+            .delay(500)            
+            .attr("opacity", 1)
+
+            name.transition()
+            .duration(500)
+            .delay(500)            
+            .attr("opacity", 1)
+
+            tunnel.transition()
+            .duration(500)
+            .attr("opacity", 1)
 
         }
         this.move = function (newx,newy){
