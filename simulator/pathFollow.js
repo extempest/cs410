@@ -7,7 +7,18 @@ function ready(error, xml) {
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
-    //console.log(realData);
+//    console.log(realData);
+    for(var i = 0; i < realData.length; i++){
+//        console.log(realData[i]);
+        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+        if(realData[i].commits !== null){
+            for(var j = 0; j < realData[i].commits.length;j++){
+                var tempDate = realData[i]["commits"][j]["timestamp"];
+                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+            }
+        }
+    }
+    console.log(realData)
     var groundLevel = 200;
     var data = [
         {
@@ -193,7 +204,8 @@ function ready(error, xml) {
             ]
         }
     ];
-    
+//    console.log(data)
+    data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -298,6 +310,7 @@ function ready(error, xml) {
                         .attrTween("transform", orbit(3/4));
                     }
                     
+                 if(commits !== null){
                     commits.forEach(function(commit){
                  
                         if(!commit["processed"]){
@@ -335,7 +348,7 @@ function ready(error, xml) {
                             //console.log("ho")
                         }
                     })
-
+                  }
                     today.setHours(today.getHours()+1);
 
                 } else {
@@ -389,7 +402,6 @@ function ready(error, xml) {
 
         this.moveChildren = function(parentRoom){
             for(var i = parentRoom.childs.length-1; i >= 0 ;i--){
-                //console.log("moving kids..."+parentRoom.childs[i].name)
                 if(parentRoom.childs[i].svg){
                     grid.delete(parentRoom.childs[i].x,parentRoom.childs[i].y)
                     parentRoom.childs[i].move(parentRoom.childs[i].x+1, parentRoom.childs[i].y)
@@ -619,8 +631,12 @@ function ready(error, xml) {
         }
 
 
+
+
+        console.log(rooms)
+        console.log()
         
-        if(file['parents'].length > 0 ){
+        if(rooms[file['parents']]){
             //this room is a child of some file
             //console.log("I HAVE A PARENT");
 
