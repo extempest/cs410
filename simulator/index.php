@@ -59,7 +59,7 @@
                     //                    print_r("POPOPOPOPO");
                     $previous->modify('+1 day');
                     $emptyDate = createTimeStamp((int)$previous->format('Y'), (int)$previous->format('m'), (int)$previous->format('d'), 0,0,0); //not checked
-                    array_push($newArray, createDateCommits($emptyDate, null));
+                    array_push($newArray, createDateCommits($emptyDate, array()));
                 }
                 //                array_push($newArray, createDateCommits($commits[0]["timestamp"], $commits));
                 //                unset($commits);
@@ -90,8 +90,8 @@
     ?>
 <?php
     function parse(){
-        $handle = @fopen("mockByengProject.txt","r");
-        //        $handle = @fopen("mockTest.txt","r");
+//        $handle = @fopen("mockByengProject.txt","r");
+                $handle = @fopen("mockTest.txt","r");
         if($handle) {
             $commitIndex = -1;
             $javaAdded = array();
@@ -116,7 +116,9 @@
                         //                        print_r("Modified Java files: ");
                         //                        print_r($modifiedfiles);
                         //                        print_r("<br/>");
-                            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+//                            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+                            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $addedfiles, $modifiedfiles, $javaAdded, $javaModified,$javaDeleted);
+
                             $commits[] = $commit;
                         //                        print_r(convertJsArray($commit)."<br/>");
                         //                        print_r("Added files: ");
@@ -222,7 +224,8 @@
             //            print_r($commitIndex);
             $addedfiles = sortfiles($files, $javaAdded);
             $modifiedfiles = sortfiles($files, $javaModified);
-            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+//            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $addedfiles, $modifiedfiles, $javaAdded, $javaModified,$javaDeleted);
             $commits[] = $commit;
             $commitIndex++;
             //            print_r(convertJsArray($commit));
@@ -235,10 +238,10 @@
 
 <?php
     function sortfiles($files, $alreadychanged){////////////////////////////////////////
-        $changedfiles = null;
+        $changedfiles = array();
         for($i = 0; $i < sizeof($files); $i++){
             $file = $files[$i];
-            if($alreadychanged != null && in_array($file["fileName"], $alreadychanged)){
+            if(count($alreadychanged) != 0 && in_array($file["fileName"], $alreadychanged)){
                 $changedfiles[] = $file;
             }
         }
@@ -260,7 +263,7 @@
     ?>
 <?php
     function showParents($lineArray,$index,$className){
-        $parentClass = null;
+        $parentClass = array();
         if(sizeof($lineArray) >  $index+1){
             if($lineArray[$index + 1] == "extends"){
                 for($i = $index +2; $i < sizeof($lineArray); $i++){
@@ -288,7 +291,7 @@
         //it means there is no parent class
             if($index + 1 == sizeof($lineArray)){
                 $childClass = $className;
-                $parentClass = null;
+                $parentClass = array();
             //            print_r("class " .$childClass ." does not have parent class.<br/>");
             }
         }
