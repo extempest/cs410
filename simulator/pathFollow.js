@@ -27,7 +27,7 @@ function ready(error, xml) {
                                                         ]
                                         } ,
                                         {
-                                            'fileName':'animals',
+                                            'fileName':'tools',
                                             'parents':
                                                         [
                                                         ]
@@ -43,7 +43,7 @@ function ready(error, xml) {
                     'filesAdded': 
                                     [
                                         {
-                                            'fileName':'tools',
+                                            'fileName':'animals',
                                             'parents':
                                                         [
                                                             //to add if exist
@@ -434,7 +434,7 @@ function ready(error, xml) {
 
                 console.log("occupying room:"+occupyingRoom.name)
 
-                if (occupyingRoom.parents.length == 0 && x == 0 && y == 0){
+                if (occupyingRoom.parents.length == 0 && !(room.svg)){
                     room.x = room.x + 1                    
                     this.push(x+1, y, room)
                     if(room.svg){
