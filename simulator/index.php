@@ -68,7 +68,8 @@
                 //read this part again
             }
             if($i == sizeof($commitArray)-1){
-                array_push($newArray, createDateCommits($commits[$i]["timestamp"], $commits));
+                //print_r($commitArray);
+                array_push($newArray, createDateCommits($commitArray[$i]["timestamp"], $commits));
             }
         } //lastIndex not added in newArray yet
         return $newArray;
@@ -100,19 +101,23 @@
             while (($buffer = fgets($handle)) !== false){
                 $temp = str_word_count($buffer,1,'1234567890-+:');
                 $tempForCommit = str_word_count($buffer,1,'1234567890-+:/');
-                if($tempForCommit[0] == "commit"){
-                    if($commitIndex != -1){
+                //print_r(sizeof($tempForCommit));               
+                if(!empty($tempForCommit)){
+                //print_r($tempForCommit);
+
+                    if($tempForCommit[0] == "commit"){
+                        if($commitIndex != -1){
                         //                      print_r($commitIndex);
-                        $addedfiles = sortfiles($files, $javaAdded);
-                        $modifiedfiles = sortfiles($files, $javaModified);
+                            $addedfiles = sortfiles($files, $javaAdded);
+                            $modifiedfiles = sortfiles($files, $javaModified);
                         //                        print_r("Added Java files: ");
                         //                        print_r($addedfiles);
                         //                        print_r("<br/>");
                         //                        print_r("Modified Java files: ");
                         //                        print_r($modifiedfiles);
                         //                        print_r("<br/>");
-                        $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
-                        $commits[] = $commit;
+                            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
+                            $commits[] = $commit;
                         //                        print_r(convertJsArray($commit)."<br/>");
                         //                        print_r("Added files: ");
                         //                        print_r($javaAdded); // any added java files of commit
@@ -122,37 +127,43 @@
                         //                        print_r("<br/>");
                         //                        print_r($commit);
                         //                        echo "<br/><br/>";
+                        }
+                        $commitIndex++;
+                        $files = array();
+                        $addedfiles = array();
+                        $modifiedfiles = array();
+                        $javaAdded = array();
+                        $javaModified = array();
+                        $javaDeleted  = array();
+                        //unset($files,$addedfiles, $modifiedfiles, $javaAdded, $javaModified, $javaDeleted);
                     }
-                    $commitIndex++;
-                    unset($files,$addedfiles, $modifiedfiles, $javaAdded, $javaModified, $javaDeleted);
-                }
-                if($tempForCommit[0] == "Author:"){
-                    $authorBuffer = str_word_count($buffer,1,'1234567890@._-');
+                    if($tempForCommit[0] == "Author:"){
+                        $authorBuffer = str_word_count($buffer,1,'1234567890@._-');
                     //print_r($lineBuffer);
-                    $emailLine = $authorBuffer;
-                    end($emailLine);
-                    $emailIndex = key($emailLine);
-                    $appendName = '';
-                    for($i = 1; $i < $emailIndex; $i++){
+                        $emailLine = $authorBuffer;
+                        end($emailLine);
+                        $emailIndex = key($emailLine);
+                        $appendName = '';
+                        for($i = 1; $i < $emailIndex; $i++){
                         //                    print_r($authorBuffer[$i] . "byung!<br/>");
-                        $appendName .= $authorBuffer[$i] . " ";
+                            $appendName .= $authorBuffer[$i] . " ";
+                        }
+                        $author = trim($appendName);
+                        $email = $authorBuffer[$emailIndex];
                     }
-                    $author = trim($appendName);
-                    $email = $authorBuffer[$emailIndex];
-                }
-                if($tempForCommit[0] == "Date:"){
-                    $dateBuffer = str_word_count($buffer,1,'1234567890:-');
-                    
-                    $commitMonth = $dateBuffer[2];
-                    $commitDay = $dateBuffer[3];
-                    $commitTime = $dateBuffer[4];
-                    $commitYear = $dateBuffer[5];
-                }
+                    if($tempForCommit[0] == "Date:"){
+                        $dateBuffer = str_word_count($buffer,1,'1234567890:-');
+
+                        $commitMonth = $dateBuffer[2];
+                        $commitDay = $dateBuffer[3];
+                        $commitTime = $dateBuffer[4];
+                        $commitYear = $dateBuffer[5];
+                    }
                 //check whether file is removed, modified, or created
-                if($tempForCommit[0] == "---" || $tempForCommit[0] == "+++"){
-                    $fileNameinArray = $temp;
-                    end($fileNameinArray);
-                    $endIndex = key($fileNameinArray);
+                    if($tempForCommit[0] == "---" || $tempForCommit[0] == "+++"){
+                        $fileNameinArray = $temp;
+                        end($fileNameinArray);
+                        $endIndex = key($fileNameinArray);
                     if($temp[$endIndex] == "java" || $temp[1] == "dev"){ //it means java file has been created or deleted.
                         if($temp[0] == "---" && $temp[1] == "dev")
                             //"file is being created so do nothing"
@@ -175,21 +186,34 @@
                         }
                     }
                 }
-                //if the line contains 'class' and next index is the classname we are looking for, and if class relation has been changed,
-                if( in_array("class",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("class", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
-                    //                    print_r("I found class, ".$classNameJava."<br/>");
-                    $file = createJavafileInstance($classNameJava,showParents($tempForCommit, $indexClassKey, $classNameJava));////////////
-                    $files[] = $file;
+
+                if(sizeof($tempForCommit) > array_search("class", $tempForCommit)+1){
+                    //if the line contains 'class' and next index is the classname we are looking for, and if class relation has been changed,
+                    if( in_array("class",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("class", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
+                        //                    print_r("I found class, ".$classNameJava."<br/>");
+                        $file = createJavafileInstance($classNameJava,showParents($tempForCommit, $indexClassKey, $classNameJava));////////////
+                        $files[] = $file;
+                    }
                 }
-                if( in_array("interface",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("interface", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
-                    //                    print_r("I found interface, ".$classNameJava."<br/>");
-                    $file = createJavafileInstance($classNameJava,showParents($tempForCommit, $indexClassKey, $classNameJava));
-                    $files[] = $file;
+                if(sizeof($tempForCommit) > array_search("interface", $tempForCommit)+1){
+                    if( in_array("interface",$tempForCommit) && $tempForCommit[$indexClassKey = array_search("interface", $tempForCommit)+1]==$classNameJava && substr($tempForCommit[0],0,1) == "+"){
+                        //                    print_r("I found interface, ".$classNameJava."<br/>");
+                        $file = createJavafileInstance($classNameJava,showParents($tempForCommit, $indexClassKey, $classNameJava));
+                        $files[] = $file;
+                    }
                 }
                 
                 //print out raw text file in array format
                 //            print_r($tempForCommit."<br/>");
             }
+
+            }
+
+
+
+
+
+
             if(!feof($handle)){
                 echo "Error:unexpected fgets() fail\n";
             }
@@ -211,6 +235,7 @@
 
 <?php
     function sortfiles($files, $alreadychanged){////////////////////////////////////////
+        $changedfiles = null;
         for($i = 0; $i < sizeof($files); $i++){
             $file = $files[$i];
             if($alreadychanged != null && in_array($file["fileName"], $alreadychanged)){
@@ -235,35 +260,39 @@
     ?>
 <?php
     function showParents($lineArray,$index,$className){
-        if($lineArray[$index + 1] == "extends"){
-            for($i = $index +2; $i < sizeof($lineArray); $i++){
-                if($lineArray[$i] != "implements")
-                    $parentClass[] = $lineArray[$i];
+        $parentClass = null;
+        if(sizeof($lineArray) >  $index+1){
+            if($lineArray[$index + 1] == "extends"){
+                for($i = $index +2; $i < sizeof($lineArray); $i++){
+                    if($lineArray[$i] != "implements")
+                        $parentClass[] = $lineArray[$i];
+                }
+                $childClass = $className;
+            //            print_r("class ".$childClass . " is a child of [");
+            //            for($i=0;$i<sizeof($parentClass);$i++)
+            //                print_r($parentClass[$i].", ");
+            //            print_r("]<br/>");
+
             }
-            $childClass = $className;
-            //            print_r("class ".$childClass . " is a child of [");
-            //            for($i=0;$i<sizeof($parentClass);$i++)
-            //                print_r($parentClass[$i].", ");
-            //            print_r("]<br/>");
-            
-        }
         //there is no extends
-        if($lineArray[$index + 1] == "implements") {
-            for($i = $index + 2; $i < sizeof($lineArray); $i++)
-                $parentClass[] = $lineArray[$i];
-            $childClass = $className;
+            if($lineArray[$index + 1] == "implements") {
+                for($i = $index + 2; $i < sizeof($lineArray); $i++)
+                    $parentClass[] = $lineArray[$i];
+                $childClass = $className;
             //            print_r("class ".$childClass . " is a child of [");
             //            for($i=0;$i<sizeof($parentClass);$i++)
             //                print_r($parentClass[$i].", ");
             //            print_r("]<br/>");
-            
-        }
+
+            }
         //it means there is no parent class
-        if($index + 1 == sizeof($lineArray)){
-            $childClass = $className;
-            $parentClass = null;
+            if($index + 1 == sizeof($lineArray)){
+                $childClass = $className;
+                $parentClass = null;
             //            print_r("class " .$childClass ." does not have parent class.<br/>");
+            }
         }
+        
         return $parentClass;
     }
     ?>

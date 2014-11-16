@@ -7,7 +7,7 @@ function ready(error, xml) {
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
-    console.log(realData);
+    //console.log(realData);
     var groundLevel = 200;
     var data = [
         {
