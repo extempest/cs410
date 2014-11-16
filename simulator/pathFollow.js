@@ -27,7 +27,7 @@ function ready(error, xml) {
                                                         ]
                                         } ,
                                         {
-                                            'fileName':'tools',
+                                            'fileName':'animals',
                                             'parents':
                                                         [
                                                         ]
@@ -43,7 +43,7 @@ function ready(error, xml) {
                     'filesAdded': 
                                     [
                                         {
-                                            'fileName':'animals',
+                                            'fileName':'tools',
                                             'parents':
                                                         [
                                                             //to add if exist
@@ -155,7 +155,40 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 }    
+                 },    
+                 {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'clothes',
+                                            'parents':
+                                                        [
+                                                        ]
+                                        },
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 },
+                 {
+                    'author':'Byung',
+                    'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
+                    'filesAdded': 
+                                    [
+                                        {
+                                            'fileName':'pants',
+                                            'parents':
+                                                        [
+                                                            'clothes'
+                                                        ]
+                                        },
+                                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                 }        
 
             ]
         }
@@ -389,6 +422,7 @@ function ready(error, xml) {
                 //if no room in the grid
                 
                 //console.log("undefined")
+
                 this.rooms[y][x]=room
                 if(callback){
                     callback(room)
@@ -398,17 +432,15 @@ function ready(error, xml) {
                 //console.log("defined")
                 var occupyingRoom = this.rooms[y][x]
 
-                console.log(occupyingRoom.name)
+                console.log("occupying room:"+occupyingRoom.name)
 
-                if (occupyingRoom.parents.length == 0){
+                if (occupyingRoom.parents.length == 0 && x == 0 && y == 0){
                     room.x = room.x + 1                    
                     this.push(x+1, y, room)
                     if(room.svg){
                         room.move(x+1, y)
                     }
-                    if(callback){
-                        callback(room)
-                    }
+
                 } else {
                     //console.log(occupyingRoom.parents[0].name)
                     //console.log(room.parents[0].name)
@@ -450,8 +482,12 @@ function ready(error, xml) {
 
                     this.push(targetMove.x,targetMove.y,targetMove, pushChildren)
                     targetMove.move(targetMove.x,targetMove.y)   
-                      
-
+                    if(!this.rooms[y][x]){
+                        this.rooms[y][x]=room
+                        if(callback){
+                            callback(room)
+                        }
+                    }
 
                 }
             }
