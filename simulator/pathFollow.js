@@ -3,168 +3,168 @@ queue()
 .await(ready);
 
 function ready(error, xml) {
-    
+
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
     var groundLevel = 200;
     var data = [
-        {
-            'date':new Date(2014, 0, 1, 0, 0, 0, 0),
+    {
+        'date':new Date(2014, 0, 1, 0, 0, 0, 0),
             'commits'://this is already sorted chronologically
             [
-                 {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
-                    'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'fruits',
-                                            'parents':
-                                                        [
-                                                            //to add if exist
-                                                        ]
-                                        } ,
-                                        {
-                                            'fileName':'tools',
-                                            'parents':
-                                                        [
-                                                        ]
-                                        }
-                                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 },
-                 {
-                    'author':'Byung',
-                    'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
-                    'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'animals',
-                                            'parents':
-                                                        [
-                                                            //to add if exist
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'cat',
-                                            'parents':
-                                                        [
-                                                            'animals'
-                                                        ]
-                                        }  
-                                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 },
-                 {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                    'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'apple',
-                                            'parents':
-                                                        [
-                                                            'fruits'
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'oranges',
-                                            'parents':
-                                                        [
-                                                            'fruits'
-                                                        ]
-                                        } 
-                                    ],                   
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 },
-                 {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
-                    'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'persian',
-                                            'parents':
-                                                        [
-                                                            'cat'
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'dog',
-                                            'parents':
-                                                        [
-                                                            'animals'
-                                                        ]
-                                        } 
-                                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 }
-            ]
-        },
-        {
-            'date':new Date(2014, 0, 2, 0, 0, 0, 0),
-            'commits':
-            [
+            {
+                'author':'Thompson',
+                'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
+                'filesAdded': 
+                [
                 {
-                    'author':'Aki',
-                    'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
-                    'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'mandarin',
-                                            'parents':
+                    'fileName':'fruits',
+                    'parents':
+                    [
+                                                            //to add if exist
+                                                            ]
+                                                        } ,
+                                                        {
+                                                            'fileName':'tools',
+                                                            'parents':
+                                                            [
+                                                            ]
+                                                        }
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    },
+                                                    {
+                                                        'author':'Byung',
+                                                        'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
+                                                        'filesAdded': 
                                                         [
-                                                            'oranges'
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'hammer',
-                                            'parents': 
+                                                        {
+                                                            'fileName':'animals',
+                                                            'parents':
+                                                            [
+                                                            //to add if exist
+                                                            ]
+                                                        },
+                                                        {
+                                                            'fileName':'cat',
+                                                            'parents':
+                                                            [
+                                                            'animals'
+                                                            ]
+                                                        }  
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    },
+                                                    {
+                                                        'author':'Thompson',
+                                                        'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
+                                                        'filesAdded': 
                                                         [
-                                                            'tools'
-                                                        ]
-                                        }
-                                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 },
-                 {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
-                    'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'banana',
-                                            'parents':
-                                                        [
+                                                        {
+                                                            'fileName':'apple',
+                                                            'parents':
+                                                            [
                                                             'fruits'
-                                                        ]
-                                        },
-                                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                 }    
+                                                            ]
+                                                        },
+                                                        {
+                                                            'fileName':'oranges',
+                                                            'parents':
+                                                            [
+                                                            'fruits'
+                                                            ]
+                                                        } 
+                                                        ],                   
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    },
+                                                    {
+                                                        'author':'Thompson',
+                                                        'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
+                                                        'filesAdded': 
+                                                        [
+                                                        {
+                                                            'fileName':'persian',
+                                                            'parents':
+                                                            [
+                                                            'cat'
+                                                            ]
+                                                        },
+                                                        {
+                                                            'fileName':'dog',
+                                                            'parents':
+                                                            [
+                                                            'animals'
+                                                            ]
+                                                        } 
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    }
+                                                    ]
+                                                },
+                                                {
+                                                    'date':new Date(2014, 0, 2, 0, 0, 0, 0),
+                                                    'commits':
+                                                    [
+                                                    {
+                                                        'author':'Aki',
+                                                        'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
+                                                        'filesAdded': 
+                                                        [
+                                                        {
+                                                            'fileName':'mandarin',
+                                                            'parents':
+                                                            [
+                                                            'oranges'
+                                                            ]
+                                                        },
+                                                        {
+                                                            'fileName':'hammer',
+                                                            'parents': 
+                                                            [
+                                                            'tools'
+                                                            ]
+                                                        }
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    },
+                                                    {
+                                                        'author':'Thompson',
+                                                        'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
+                                                        'filesAdded': 
+                                                        [
+                                                        {
+                                                            'fileName':'banana',
+                                                            'parents':
+                                                            [
+                                                            'fruits'
+                                                            ]
+                                                        },
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    }    
 
-            ]
-        }
-    ];
-    
-    var authors = {}
-    var rooms = {}
-    var grid = new Grid()
-    
-    
+                                                    ]
+                                                }
+                                                ];
+
+                                                var authors = {}
+                                                var rooms = {}
+                                                var grid = new Grid()
+
+
     //Adding our svg file to HTML document
     var importedNode = document.importNode(xml.documentElement, true);
     d3.select("#pathAnimation").node().appendChild(importedNode);
@@ -192,10 +192,12 @@ function ready(error, xml) {
     .attr("height", window.innerHeight-groundLevel)
     .style("fill", "#A9672E");
 
+    var stopCounter = 0;
+    var isPaused = false;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
-   
+
     //http://stackoverflow.com/questions/13563471/random-colors-for-circles-in-d3-js-graph
     /*var marker = svg.append("circle");
     marker.attr("r", 7)
@@ -203,123 +205,271 @@ function ready(error, xml) {
     .style("fill",function() {
            return "hsl(" + Math.random() * 360 + ",100%,50%)";
            })
-    transition();*/
-    
-    var todayLabel = svg.append("text")
-                        .attr("x", 0)
-                        .attr("y", 20)
-                        .text("Welcome to Git-Java Source Code Analyzer")
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "black")
-                        .style("font-family", "Verdana")
-                        .style("font-size", "20px")
-                        .style("fill", "white");
+transition();*/
 
-    simulateDay(0, data.length, data)
-    
-    
-    function simulateDay(index, lastIndex, iData){
-        if (index < lastIndex) {
-            var entry = iData[index];
-            var delay = 1000;
-            var today = new Date(entry["date"]);
-            var tommorrow = new Date(entry["date"]);
-            tommorrow.setDate(tommorrow.getDate()+1);
+var todayLabel = svg.append("text")
+.attr("x", 0)
+.attr("y", 20)
+.text("Welcome to Git-Java Source Code Analyzer")
+.attr("stroke-width", 1)
+.attr("stroke", "black")
+.style("font-family", "Verdana")
+.style("font-size", "20px")
+.style("fill", "white");
 
-            var commits = entry["commits"];
+simulateDay(0, data.length, data)
+
+
+function simulateDay(index, lastIndex, iData){
+    if (index < lastIndex) {
+        var entry = iData[index];
+        var delay = 1000;
+        var today = new Date(entry["date"]);
+        var tommorrow = new Date(entry["date"]);
+        tommorrow.setDate(tommorrow.getDate()+1);
+
+
+
+        var commits = entry["commits"];
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
             //console.log()
             var intervalId = setInterval(function() {
-                todayLabel.text(today)
 
-                 
-                 //console.log(today.getTime());
-                if (today.getTime() < tommorrow.getTime()){
+                if(!isPaused){
+                    todayLabel.text(today)
 
-                    if(today.getHours()==0||today.getHours()==12){
-                        sky.transition()
-                        .duration(12000)
-                        .style("fill", skycolor(today.getHours()));
-                                             
-                        star.transition()
-                        .duration(12000)
-                        .style("opacity", starcolor(today.getHours()));
-                                             
-                    }
-                                             
-                     
-                    if(today.getHours()==0){
+                     //console.log(today.getTime());
+                     if (today.getTime() < tommorrow.getTime()){
 
-                        sun
-                        .transition()
-                        .duration(24000)
-                        .ease("in-out")
-                        .attrTween("transform", orbit(1/4));
+                        if(today.getHours()==0||today.getHours()==12){
+                            sky.transition()
+                            .duration(12000)
+                            .style("fill", skycolor(today.getHours()));
 
-                        moon
-                        .transition()
-                        .duration(24000)
-                        .ease("in-out")
-                        .attrTween("transform", orbit(3/4));
-                    }
-                    
-                    commits.forEach(function(commit){
-                 
-                        if(!commit["processed"]){
-                            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
+                            star.transition()
+                            .duration(12000)
+                            .style("opacity", starcolor(today.getHours()));
 
-                            if(today.getTime()>commit["timestamp"]){
-                                commit["processed"] = true;
-                                var author = authors[commit["author"]];
-                                // console.log(authors);
-                                var nextPos = nextPosition();
-                         
-                                if(!author){
-                                    author = {};
-                                    author["contribution"] = 10;
-                         
-                                    var ant = new ants(svg);
-                                    author["antMarker"] = ant;
-                                    
-                                    //console.log(ant.group1);
-                                    ant.group1.transition()
-                                    .duration(500)
-                                    .attr("transform", "translate(" + [27,groundLevel-55] + ")")
-                                    .transition()
-                                    .duration(500)
-                                    .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
-                                    ant.position = nextPos;
-                                     
-                                    authors[commit["author"]] = author;
-                                    checkRoom(commit['filesAdded'], ant.group1);
-                                } else {
-                                    author["contribution"]  += 1;
-                                    var ant = author["antMarker"]
-
-                                    ant = movePosition(ant, nextPos);
-                                    checkRoom(commit['filesAdded'], ant.group1);
-                                }
-                            }
-                        }else{
-                            //console.log("ho")
                         }
-                    })
 
-                    today.setHours(today.getHours()+1);
 
-                } else {
-                    clearInterval(intervalId)
-                    simulateDay(index+1,lastIndex,iData)
+                        if(today.getHours()==0){
+
+                            sun
+                            .transition()
+                            .duration(24000)
+                            .ease("in-out")
+                            .attrTween("transform", orbit(1/4));
+
+                            moon
+                            .transition()
+                            .duration(24000)
+                            .ease("in-out")
+                            .attrTween("transform", orbit(3/4));
+                        }
+
+
+                        resumeAnimeationFromCommit(today.getHours());
+
+                        commits.forEach(function(commit){
+
+                            if(!commit["processed"]){
+                                //console.log("now:"+today+" timestamp:"+commit["timestamp"])
+
+                                if(today.getTime()>commit["timestamp"]){
+                                    isPaused = true;
+                                    today.setHours(today.getHours()-1);
+                                    pauseAnimationForCommit();
+                                    commit["processed"] = true;
+                                    var author = authors[commit["author"]];
+                                    // console.log(authors);
+                                    var nextPos = nextPosition();
+                                    var tempTime = today.getHours();
+
+                                    if(!author){
+                                        author = {};
+                                        author["contribution"] = 10;
+
+                                        var ant = new ants(svg);
+                                        author["antMarker"] = ant;
+                                        
+                                        //console.log(ant.group1);
+                                        ant.group1.transition()
+                                        .duration(500)
+                                        .attr("transform", "translate(" + [27,groundLevel-55] + ")")
+                                        .transition()
+                                        .duration(500)
+                                        .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+                                        .each("end", function(tempTime) {
+                                            isPaused = false;});
+                                        ant.position = nextPos;
+
+                                        authors[commit["author"]] = author;
+                                        checkRoom(commit['filesAdded'], ant.group1);
+                                    } else {
+                                        author["contribution"]  += 1;
+                                        var ant = author["antMarker"]
+
+                                        ant = movePosition(ant, nextPos, tempTime);
+                                        checkRoom(commit['filesAdded'], ant.group1);
+                                    }
+
+                                    // checkSleep(5000);
+                                }
+                            }else{
+                                //console.log("ho")
+                            }
+                        })
+
+                        // commits.forEach(oneCommit(commit));
+
+                        today.setHours(today.getHours()+1);
+
+                        stopCounter++;
+                        if(stopCounter == 2){
+                        //     // moon.transition()
+                        //     // .duration(0);
+
+                        //     // moon.transition()
+                        //     // .duration(24000)
+                        //     // .ease("in-out")
+                        //     // .attrTween("transform", orbit((18+today.getHours() - 1 )/24));
+
+                        //     // console.log(sky.style("Fill"));
+                        //     // moon.style("fill", sky.style("Fill"));
+
+                        //     pauseAnimationForCommit();
+                        //     resumeAnimeationFromCommit(today.getHours() - 1);
+
+                        console.log("check1");
+                        console.log(moon.style("fill"));
+                        console.log("check2");
+                        console.log(moon.transform);
+                    }
+
+                        // if(stopCounter == 2){
+                        //     pauseAnimationForCommit();
+                        //     // resumeAnimeationFromCommit(today.getHours() - 1);
+                        // }
+                        // if(stopCounter == 3){
+                        //     resumeAnimeationFromCommit(today.getHours() - 1);
+                        // }
+
+
+                    } else {
+                        pauseAnimationForCommit();
+                        clearInterval(intervalId)
+                        simulateDay(index+1,lastIndex,iData)
+                    }
                 }
             }, delay);
-        } else {
-            todayLabel.text("Project ended")
+} else {
+    todayLabel.text("Project ended")
+}
+}
+
+
+function oneCommit(commit){
+
+    if(!commit["processed"]){
+            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
+
+            if(today.getTime()>commit["timestamp"]){
+                commit["processed"] = true;
+                var author = authors[commit["author"]];
+                // console.log(authors);
+                var nextPos = nextPosition();
+
+                if(!author){
+                    author = {};
+                    author["contribution"] = 10;
+
+                    var ant = new ants(svg);
+                    author["antMarker"] = ant;
+                    
+                    //console.log(ant.group1);
+                    ant.group1.transition()
+                    .duration(500)
+                    .attr("transform", "translate(" + [27,groundLevel-55] + ")")
+                    .transition()
+                    .duration(500)
+                    .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+                    ant.position = nextPos;
+
+                    authors[commit["author"]] = author;
+                    checkRoom(commit['filesAdded'], ant.group1);
+                } else {
+                    author["contribution"]  += 1;
+                    var ant = author["antMarker"]
+
+                    ant = movePosition(ant, nextPos);
+                    checkRoom(commit['filesAdded'], ant.group1);
+                }
+            }
+        }else{
+            //console.log("ho")
         }
     }
+
+    function sleep(delay) {
+        var start = new Date().getTime();
+        while (new Date().getTime() < start + delay);
+    }
+
+    function checkSleep(time){
+        console.log("sleeping");
+        sleep(time);
+        console.log("awake");
+    }
+
+    //stopping the animation except the ants
+    function pauseAnimationForCommit(){
+        sky.transition().duration(0);
+        star.transition().duration(0);
+        sun.transition().duration(0);
+        moon.transition().duration(0);
+    }
+
+    //resuming the animation of the background
+    function resumeAnimeationFromCommit(time){
+        var tweleveTime = (time % 12);
+        sky.transition().duration((12 - tweleveTime)*1000)
+        .style("fill", resumeSkyColor(time));
+        star.transition().duration((12 - tweleveTime)*1000)
+        .style("opacity", resumeStarColor(time));
+
+        sun.transition().duration(24000)
+        .ease("in-out")
+        .attrTween("transform", orbit(sunPosition(time)));
+        moon.transition().duration(24000)
+        .ease("in-out")
+        .attrTween("transform", orbit(moonPosition(time)));
+    }
+
+    function resumeSkyColor(time){
+        if(time < 12)
+            return skycolor(0);
+        else
+            return skycolor(12);
+    }
+
+    function resumeStarColor(time){
+        if(time < 12)
+            return starcolor(0);
+        else
+            return starcolor(12);
+    }
+
+    function sunPosition(time){
+        return ((6+time)%24)/24;
+    }
+
+    function moonPosition(time){
+        return ((18+time)%24)/24;
+    }
     
-    
-    
+
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
@@ -460,7 +610,7 @@ function ready(error, xml) {
 
             var parentRoom = rooms[file['parents'][0]];
                 //var parentRoomSvg = parentRoom['roomSvg'];
-            var parentRoomSvg = parentRoom.svg;
+                var parentRoomSvg = parentRoom.svg;
 
             //console.log("bbox:"+parentRoomSvg.attr('cx'));
             //console.log("printing a parent room:");
@@ -477,20 +627,20 @@ function ready(error, xml) {
 
             var color = parentRoomSvg.attr('fill');
             var roomSvg = svg.append("ellipse")
-                .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
-                .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
-                .attr("rx", roomRx)
-                .attr("ry", roomRy)
-                .attr("fill",color);
+            .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
+            .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
+            .attr("rx", roomRx)
+            .attr("ry", roomRy)
+            .attr("fill",color);
 
             //var tunnelSvg =  svg.append("rect")
             var tunnel = svg.append("line")
-                .attr("x1", roomSvg.attr('cx'))
-                .attr("y1", roomSvg.attr('cy'))
-                .attr("x2", parentRoomSvg.attr('cx'))
-                .attr("y2", parentRoomSvg.attr('cy'))
-                .attr("stroke-width", 10)
-                .attr("stroke", color);
+            .attr("x1", roomSvg.attr('cx'))
+            .attr("y1", roomSvg.attr('cy'))
+            .attr("x2", parentRoomSvg.attr('cx'))
+            .attr("y2", parentRoomSvg.attr('cy'))
+            .attr("stroke-width", 10)
+            .attr("stroke", color);
 
             var name = svg.append("text")
             .attr("x", roomSvg.attr('cx'))
@@ -538,19 +688,19 @@ function ready(error, xml) {
             this.childs = [];
 
             var roomSvg = svg.append("ellipse")
-                    .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
-                    .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
-                    .attr("rx", roomRx)
-                    .attr("ry", roomRy)
-                    .attr("fill",color);
+            .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
+            .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
+            .attr("rx", roomRx)
+            .attr("ry", roomRy)
+            .attr("fill",color);
 
             var tunnel = svg.append("line")
-                    .attr("x1", roomSvg.attr('cx'))
-                    .attr("y1", roomSvg.attr('cy'))
-                    .attr("x2", roomSvg.attr('cx'))
-                    .attr("y2", groundLevel)
-                    .attr("stroke-width", 10)
-                    .attr("stroke", color);
+            .attr("x1", roomSvg.attr('cx'))
+            .attr("y1", roomSvg.attr('cy'))
+            .attr("x2", roomSvg.attr('cx'))
+            .attr("y2", groundLevel)
+            .attr("stroke-width", 10)
+            .attr("stroke", color);
 
             this.tunnel = tunnel
             //rooms[file['fileName']] = {}; //creating an empty dictionary in the global "room" variable with the filename as the key
@@ -576,7 +726,7 @@ function ready(error, xml) {
 
         }
 
-       
+
 
     }
 
@@ -598,7 +748,7 @@ function ready(error, xml) {
     }
 
        //Get path start point for placing marker
-    function pathStartPoint(path) {
+       function pathStartPoint(path) {
         var d = path.attr("d"),
         dsplitted = d.split(" ");
         return dsplitted[1].split(",");
@@ -629,7 +779,7 @@ function ready(error, xml) {
 
 
 
-    function movePosition(ant, nextPos) {
+    function movePosition(ant, nextPos, tempTime) {
         var pos = ant.position;
         var direction = ant.direction;
 
@@ -637,28 +787,35 @@ function ready(error, xml) {
             if(pos < nextPos){
                 ant.group1.transition()
                 .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+                .each("end", function(tempTime) {
+                    isPaused = false;});
             }
             else if(pos > nextPos){
                 ant.direction = "left";
                 ant.group1.transition()
                 .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")");
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+                .each("end", function(tempTime) {
+                    isPaused = false;});
             }
         }else{
             if(pos < nextPos){
                 ant.direction = "right";
                 ant.group1.transition()
                 .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+                .each("end", function(tempTime) {
+                    isPaused = false;});
             }
             else if(pos > nextPos){
                 ant.group1.transition()
                 .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")");
+                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+                .each("end", function(tempTime) {
+                    isPaused = false;});
             }
         }
-
         ant.position = nextPos;
         return ant;
     }
@@ -666,16 +823,16 @@ function ready(error, xml) {
 
     function createAnt(canvas, height, color, position){
          // Draw the Circle
-        var circleData = [
-                          { "cx": position+20, "cy": 20, "radius": 20, "color": color },
-                          { "cx": position+50, "cy": 20, "radius": 20, "color": color },
-                          { "cx": position+80, "cy": 20, "radius": 20, "color": color },
-                          { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
-                          { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
+         var circleData = [
+         { "cx": position+20, "cy": 20, "radius": 20, "color": color },
+         { "cx": position+50, "cy": 20, "radius": 20, "color": color },
+         { "cx": position+80, "cy": 20, "radius": 20, "color": color },
+         { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
+         { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
         // put circles in group1
         var group1 = canvas.append("g");
-    
+
         var circles = group1.selectAll("circle")
         .data(circleData)
         .enter()
@@ -710,7 +867,7 @@ function ready(error, xml) {
     
     function createBackground(canvas) {
 
-        
+
         var sky = canvas.append("rect")
         .attr("x", 0)
         .attr("y", 0)
@@ -725,18 +882,18 @@ function ready(error, xml) {
     
     function createStars(canvas) {
         var starData = [
-                        { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
-                        { "cx": 2*window.innerWidth/3, "cy": 40, "radius": 2, "color": "white" },
-                        { "cx": window.innerWidth/4, "cy": 40, "radius": 2, "color": "white" },
-                        { "cx": 5*window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"},
-                        { "cx": window.innerWidth/3, "cy": 80, "radius": 2, "color": "white"  },
-                        { "cx": window.innerWidth/2, "cy": 90, "radius": 1, "color": "white"  },
-                        { "cx": window.innerWidth/20, "cy": 50, "radius": 2, "color": "white"  },
-                        { "cx": window.innerWidth/15, "cy": 120, "radius": 1, "color": "white"  },
-                        { "cx": 18*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
-                        { "cx": 15*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
-                        { "cx": 13*window.innerWidth/20, "cy": 160, "radius": 2, "color": "white"  },
-                        { "cx": 2*window.innerWidth/5, "cy": 170, "radius": 2, "color": "white"  }];
+        { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
+        { "cx": 2*window.innerWidth/3, "cy": 40, "radius": 2, "color": "white" },
+        { "cx": window.innerWidth/4, "cy": 40, "radius": 2, "color": "white" },
+        { "cx": 5*window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"},
+        { "cx": window.innerWidth/3, "cy": 80, "radius": 2, "color": "white"  },
+        { "cx": window.innerWidth/2, "cy": 90, "radius": 1, "color": "white"  },
+        { "cx": window.innerWidth/20, "cy": 50, "radius": 2, "color": "white"  },
+        { "cx": window.innerWidth/15, "cy": 120, "radius": 1, "color": "white"  },
+        { "cx": 18*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+        { "cx": 15*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+        { "cx": 13*window.innerWidth/20, "cy": 160, "radius": 2, "color": "white"  },
+        { "cx": 2*window.innerWidth/5, "cy": 170, "radius": 2, "color": "white"  }];
         
         var group2 = canvas.append("g");
         var stars = group2.selectAll("circle").data(starData).enter().append("circle");
@@ -749,18 +906,18 @@ function ready(error, xml) {
         return group2;
     }
 
-function starcolor(hours) {
-    var starcolor = 1;
-    switch (hours) {
-        case 0:
+    function starcolor(hours) {
+        var starcolor = 1;
+        switch (hours) {
+            case 0:
             starcolor = 0;
             break;
-        case 12:
+            case 12:
             starcolor = 1;
             break;
+        }
+        return starcolor;
     }
-    return starcolor;
-}
     
 
     
@@ -772,40 +929,40 @@ function starcolor(hours) {
                 skycolor = "#97ccf1";
                 
                 break;
-            case 12:
+                case 12:
                 skycolor = "#0c1317";
                 break;
-         
+
+            }
+
+            return skycolor;
         }
-        
-        return skycolor;
-    }
 
-    
-    function orbit(initValue) {
-        
-        return function(d, i, a) {
-            return function(t) {
 
-                var t_x, t_y;
-                
-                var rotation_radius_x = (window.innerWidth/2)+80;
-                var rotation_radius_y = 200;
-                var t_angle = (2 * Math.PI) * (t+(initValue));
-                var t_x = rotation_radius_x * Math.cos(t_angle);
-                var t_y = rotation_radius_y * Math.sin(t_angle);
-                
-                
-                return "translate(" + ((window.innerWidth/2) + t_x) + "," + (200 + t_y) + ")";
+        function orbit(initValue) {
+
+            return function(d, i, a) {
+                return function(t) {
+
+                    var t_x, t_y;
+
+                    var rotation_radius_x = (window.innerWidth/2)+80;
+                    var rotation_radius_y = 200;
+                    var t_angle = (2 * Math.PI) * (t+(initValue));
+                    var t_x = rotation_radius_x * Math.cos(t_angle);
+                    var t_y = rotation_radius_y * Math.sin(t_angle);
+
+
+                    return "translate(" + ((window.innerWidth/2) + t_x) + "," + (200 + t_y) + ")";
+                };
             };
-        };
-    }
-    
-    function translateAlong(path) {
-        var l = path.getTotalLength();
-        return function(i) {
-            return function(t) {
-                var p = path.getPointAtLength(t * l);
+        }
+
+        function translateAlong(path) {
+            var l = path.getTotalLength();
+            return function(i) {
+                return function(t) {
+                    var p = path.getPointAtLength(t * l);
                 return "translate(" + p.x + "," + p.y + ")";//Move marker
             }
         }
