@@ -205,7 +205,7 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    data = realData
+    // data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()
