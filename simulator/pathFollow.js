@@ -8,6 +8,7 @@ function ready(error, xml) {
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
 //    console.log(realData);
+/*
     for(var i = 0; i < realData.length; i++){
 //        console.log(realData[i]);
         realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
@@ -18,7 +19,7 @@ function ready(error, xml) {
             }
         }
     }
-    console.log(realData)
+    console.log(realData)*/
     var groundLevel = 200;
     var data = [
         {
@@ -205,7 +206,7 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    // data = realData
+    //data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -325,28 +326,23 @@ function ready(error, xml) {
                                 if(!author){
                                     author = {};
                                     author["contribution"] = 10;
-                         
+                                    
                                     var ant = new ants(svg);
+                                    ant.name = commit["author"];
                                     author["antMarker"] = ant;
                                     
                                     //console.log(ant.group1); 
                                     authors[commit["author"]] = author;
-                                    checkRoom(commit['filesAdded'], ant.group1);
+                                    checkRoom(commit['filesAdded'], ant);
 
-                                    ant.group1.transition()
-                                    .duration(500)
-                                    .attr("transform", "translate(" + [27,groundLevel-55] + ")")
-                                    .transition()
-                                    .duration(500)
-                                    .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
-                                    ant.position = nextPos;
+                                    
 
                                 } else {
                                     author["contribution"]  += 1;
                                     var ant = author["antMarker"]
 
-                                    ant = movePosition(ant, nextPos);
-                                    checkRoom(commit['filesAdded'], ant.group1);
+                                    //ant = movePosition(ant, nextPos);
+                                    checkRoom(commit['filesAdded'], ant);
                                 }
                             }
                         }else{
@@ -379,13 +375,22 @@ function ready(error, xml) {
 
                     var newRoom = new Room(file)
                     rooms[filename] = newRoom; //creating an empty dictionary in the global "room" variable with the filename as the key
+                    //console.log(newRoom)
+                    ant.moveToRoom(newRoom)
 
                 } else {
                     //room exist so modidfy that room
                 }
 
             });
+            //console.log(ant.name)
+            //console.log(ant.moveStack)
+            var a  = d3.select(ant.group1);
+            //console.log()
+            a.moveToFront();            
 
+            ant.runAllMove(ant.lastMoveIndex-1);
+            ant.lastMoveIndex = ant.moveStack.length -1
             
 
         }
@@ -402,7 +407,6 @@ function ready(error, xml) {
 
         this.moveChildren = function(parentRoom){
             for(var i = parentRoom.childs.length-1; i >= 0 ;i--){
-//                console.log("moving kids..."+parentRoom.childs[i].name)
                 if(parentRoom.childs[i].svg){
                     grid.delete(parentRoom.childs[i].x,parentRoom.childs[i].y)
                     parentRoom.childs[i].move(parentRoom.childs[i].x+1, parentRoom.childs[i].y)
@@ -414,9 +418,9 @@ function ready(error, xml) {
         }
 
         this.push = function (x,y,room, callback){
-//            console.log("grid:")
-//            console.log(this.rooms)
-//            console.log("pushing "+room.name+" to:( "+x+","+y+")")            
+            //console.log("grid:")
+            //console.log(this.rooms)
+            //console.log("pushing "+room.name+" to:( "+x+","+y+")")            
             //console.log("rooms.length:"+this.rooms.length)
             //console.log("y"+y)
             if (y >= this.rooms.length) {
@@ -447,7 +451,7 @@ function ready(error, xml) {
                 //console.log("defined")
                 var occupyingRoom = this.rooms[y][x]
 
-                console.log("occupying room:"+occupyingRoom.name)
+                //console.log("occupying room:"+occupyingRoom.name)
 
                 if (occupyingRoom.parents.length == 0 && !(room.svg)){
                     room.x = room.x + 1                    
@@ -509,7 +513,7 @@ function ready(error, xml) {
         }
     }
 
-    function Room(file){
+    function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
         var roomRy = 50; //Ry means radius in y direction
         var distanceXBetweenRooms = 50;
@@ -526,33 +530,60 @@ function ready(error, xml) {
         this.tunnel
         this.group
 
+        this.showSvg = function (delay, index, ant){
+            this.tunnel.transition()
+            .duration(200)
+            .delay((delay*index))
+            .attr("opacity", 1)
+
+            this.svg.transition()
+            .duration(200)
+            .delay((delay*index))            
+            .attr("opacity", 1)
+
+            this.nameLabel.transition()
+            .duration(200)
+            .delay((delay*index))            
+            .attr("opacity", 1)
+            .each("end", ant.runAllMove(index+1))
+
+            
+
+        }
+
         this.addSvg = function (x, y){
 
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
 
             var group = svg.append("g");
 
+            var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
+            var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
+
+
+            var tunnel = group.append("line")
+                    .attr("x1", calcX)
+                    .attr("y1", calcY)
+                    .attr("x2", calcX)
+                    .attr("y2", groundLevel)
+                    .attr("stroke-width", 10)
+                    .attr("stroke", color)
+                    .attr("opacity",0);
+
             var roomSvg = group.append("ellipse")
-                .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
-                .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
+                .attr("cx", calcX)
+                .attr("cy", calcY)
                 .attr("rx", roomRx)
                 .attr("ry", roomRy)
                 .attr("fill",color)
                 .attr("opacity",0);
 
             //var tunnelSvg =  svg.append("rect")
-            var tunnel = group.append("line")
-                    .attr("x1", roomSvg.attr('cx'))
-                    .attr("y1", roomSvg.attr('cy'))
-                    .attr("x2", roomSvg.attr('cx'))
-                    .attr("y2", groundLevel)
-                    .attr("stroke-width", 10)
-                    .attr("stroke", color)
-                    .attr("opacity",0);
+
 
             var name = group.append("text")
-            .attr("x", roomSvg.attr('cx'))
-            .attr("y", roomSvg.attr('cy'))
+            .attr("x", calcX)
+            .attr("y", calcY)
             .text(file['fileName'])
             .attr("stroke-width", 0.5)
             .attr("stroke", "black")
@@ -585,51 +616,34 @@ function ready(error, xml) {
 
             this.tunnel = tunnel
 
-            roomSvg.transition()
-            .duration(500)
-            .delay(500)            
-            .attr("opacity", 1)
-
-            name.transition()
-            .duration(500)
-            .delay(500)            
-            .attr("opacity", 1)
-
-            tunnel.transition()
-            .duration(500)
-            .attr("opacity", 1)
-
         }
         this.move = function (newx,newy){
 
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
-//            console.log("moving..."+this.name)
+            //console.log("moving..."+this.name)
             var parentXcoor = newXCoor
             if (this.parents[0]){
                 parentXcoor = (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
             }
 
+                
+                
+                this.tunnel.transition()
+                .duration(500)
+                .attr("x1", newXCoor)
+                .attr("x2", parentXcoor)
                 this.svg.transition()
                 .duration(500)
                 .attr("cx", newXCoor)
                 this.nameLabel.transition()
                 .duration(500)
                 .attr("x",newXCoor)
-                this.tunnel.transition()
-                .duration(500)
-                .attr("x1", newXCoor)
-                .attr("x2", parentXcoor)
-
-            
 
 
 
         }
 
 
-
-        console.log(rooms)
-        console.log()
         
         if(rooms[file['parents']]){
             //this room is a child of some file
@@ -666,7 +680,7 @@ function ready(error, xml) {
             this.x = parentRoom.x + numParentKids
             this.y = parentRoom.y + 1;
             grid.push(this.x, this.y, this)
-
+            //ant.roomCreateStack.push(this)
             this.addSvg(this.x, this.y)
 
 
@@ -686,6 +700,8 @@ function ready(error, xml) {
 
 
             grid.push(this.x, this.y, this)
+            //ant.roomCreateStack.push(this)
+
             this.addSvg(this.x, this.y)
 
         }
@@ -739,44 +755,112 @@ function ready(error, xml) {
         this.position = 0;
         this.direction = "left";
         this.group1 = createAnt(canvas, height, color, position);
-    }
+        this.lastMoveIndex = 1;
+        this.moveStack = []
+        this.roomCreateStack = []
+        this.name = ""
+        this.room
+        this.moveDuration = 500
 
-
-
-    function movePosition(ant, nextPos) {
-        var pos = ant.position;
-        var direction = ant.direction;
-
-        if(direction == "rigth"){
-            if(pos < nextPos){
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+        this.moveUpToGround = function(room){
+            var tempRoom = room;
+            while(tempRoom.parents[0]){
+                parentRoom = tempRoom.parents[0]
+                this.move(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
+                tempRoom = parentRoom
+                this.room = parentRoom
             }
-            else if(pos > nextPos){
-                ant.direction = "left";
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")");
+            this.move(this.room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.room = 0
+        }
+
+        this.moveDownToParent = function(room){
+            var roomPath = []
+            var tempRoom = room;
+
+            while(tempRoom.parents[0]){
+                parentRoom = tempRoom.parents[0]
+                roomPath.push(parentRoom)
+                tempRoom = parentRoom                
             }
-        }else{
-            if(pos < nextPos){
-                ant.direction = "right";
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
-            }
-            else if(pos > nextPos){
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")");
+            this.move(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, groundLevel-55)
+            for (var i = roomPath.length-1 ; i >=0 ; i--){
+                this.move(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
             }
         }
 
-        ant.position = nextPos;
-        return ant;
-    }
+        this.moveToRoom = function(room){
 
+            if(this.room){
+                this.moveUpToGround(this.room)
+            }
+
+            if(room.parents[0]){                
+                this.moveDownToParent(room)
+                //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
+                this.moveStack.push(room)                
+                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.room = room
+            }else{
+                //console.log(room.svg[0][0].cx["baseVal"].value)
+                
+                
+                this.move(room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+                this.moveStack.push(room)                
+                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.room = room
+
+            }
+            
+
+        }
+
+        this.runAllMove = function(i){
+            //console.log(this.moveStack.length)
+            //console.log(i)
+            if (i < this.moveStack.length && i >= 0){
+
+                if(!this.moveStack[i].svg){
+                    //console.log(this.moveStack[i])
+
+                    this.group1.transition()
+                    .duration(this.moveDuration)
+                    .delay(this.moveDuration*i)
+                    .attr("transform", this.moveStack[i])
+                    .each("end", this.runAllMove(i+1))
+                }else{
+                    //console.log(this.moveStack[i].name)
+
+                    this.moveStack[i].showSvg(this.moveDuration, i, this)
+                }
+            }
+        }
+
+        this.move = function(x,y){
+            var pos = this.position;
+            var direction = this.direction;
+            this.moveStack.push("translate(" + [x,y] + ")")
+            /*
+            if(direction == "rigth"){
+                if(pos < x){
+                    this.moveStack.push("translate(" + [x,y] + ")")
+                }
+                else if(pos >= x){
+                    this.direction = "left";
+                    this.moveStack.push("translate(" + [x,y] + ")" + "scale(" + [-1,1] + ")")
+                }
+            }else{
+                if(pos < x){
+                    this.direction = "right";
+                    this.moveStack.push("translate(" + [x,y] + ")")
+                }
+                else if(pos >= x){
+                    this.moveStack.push("translate(" + [x,y] + ")" + "scale(" + [-1,1] + ")")
+                }
+            }*/
+            this.position = x;
+        }
+    }
 
     function createAnt(canvas, height, color, position){
          // Draw the Circle
@@ -928,4 +1012,21 @@ function starcolor(hours) {
     function nextPosition() {
         return  Math.random()*500;
     }
+
+    d3.selection.prototype.moveToFront = function() {
+        return this.each(function(){
+        this[0][0].parentNode.appendChild(this[0][0]);
+    });
+
+//not yet customized to work
+    d3.selection.prototype.moveToBack = function() { 
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    }); 
+};
+
+};
 }
