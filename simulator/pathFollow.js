@@ -8,6 +8,7 @@ function ready(error, xml) {
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
 //    console.log(realData);
+/*
     for(var i = 0; i < realData.length; i++){
 //        console.log(realData[i]);
         realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
@@ -18,7 +19,7 @@ function ready(error, xml) {
             }
         }
     }
-    console.log(realData)
+    console.log(realData)*/
     var groundLevel = 200;
     var data = [
         {
@@ -205,7 +206,7 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    data = realData
+    //data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -382,8 +383,12 @@ function ready(error, xml) {
                 }
 
             });
-            console.log(ant.name)
-            console.log(ant.moveStack)            
+            //console.log(ant.name)
+            //console.log(ant.moveStack)
+            var a  = d3.select(ant.group1);
+            //console.log()
+            a.moveToFront();            
+
             ant.runAllMove(ant.lastMoveIndex-1);
             ant.lastMoveIndex = ant.moveStack.length -1
             
@@ -526,6 +531,11 @@ function ready(error, xml) {
         this.group
 
         this.showSvg = function (delay, index, ant){
+            this.tunnel.transition()
+            .duration(200)
+            .delay((delay*index))
+            .attr("opacity", 1)
+
             this.svg.transition()
             .duration(200)
             .delay((delay*index))            
@@ -537,10 +547,7 @@ function ready(error, xml) {
             .attr("opacity", 1)
             .each("end", ant.runAllMove(index+1))
 
-            this.tunnel.transition()
-            .duration(200)
-            .delay((delay*index))
-            .attr("opacity", 1)
+            
 
         }
 
@@ -550,27 +557,33 @@ function ready(error, xml) {
 
             var group = svg.append("g");
 
+            var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
+            var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
+
+
+            var tunnel = group.append("line")
+                    .attr("x1", calcX)
+                    .attr("y1", calcY)
+                    .attr("x2", calcX)
+                    .attr("y2", groundLevel)
+                    .attr("stroke-width", 10)
+                    .attr("stroke", color)
+                    .attr("opacity",0);
+
             var roomSvg = group.append("ellipse")
-                .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
-                .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
+                .attr("cx", calcX)
+                .attr("cy", calcY)
                 .attr("rx", roomRx)
                 .attr("ry", roomRy)
                 .attr("fill",color)
                 .attr("opacity",0);
 
             //var tunnelSvg =  svg.append("rect")
-            var tunnel = group.append("line")
-                    .attr("x1", roomSvg.attr('cx'))
-                    .attr("y1", roomSvg.attr('cy'))
-                    .attr("x2", roomSvg.attr('cx'))
-                    .attr("y2", groundLevel)
-                    .attr("stroke-width", 10)
-                    .attr("stroke", color)
-                    .attr("opacity",0);
+
 
             var name = group.append("text")
-            .attr("x", roomSvg.attr('cx'))
-            .attr("y", roomSvg.attr('cy'))
+            .attr("x", calcX)
+            .attr("y", calcY)
             .text(file['fileName'])
             .attr("stroke-width", 0.5)
             .attr("stroke", "black")
@@ -613,28 +626,24 @@ function ready(error, xml) {
                 parentXcoor = (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
             }
 
+                
+                
+                this.tunnel.transition()
+                .duration(500)
+                .attr("x1", newXCoor)
+                .attr("x2", parentXcoor)
                 this.svg.transition()
                 .duration(500)
                 .attr("cx", newXCoor)
                 this.nameLabel.transition()
                 .duration(500)
                 .attr("x",newXCoor)
-                this.tunnel.transition()
-                .duration(500)
-                .attr("x1", newXCoor)
-                .attr("x2", parentXcoor)
-
-            
 
 
 
         }
 
 
-
-
-        console.log(rooms)
-        console.log()
         
         if(rooms[file['parents']]){
             //this room is a child of some file
@@ -808,11 +817,11 @@ function ready(error, xml) {
 
         this.runAllMove = function(i){
             //console.log(this.moveStack.length)
-            console.log(i)
+            //console.log(i)
             if (i < this.moveStack.length && i >= 0){
 
                 if(!this.moveStack[i].svg){
-                    console.log(this.moveStack[i])
+                    //console.log(this.moveStack[i])
 
                     this.group1.transition()
                     .duration(this.moveDuration)
@@ -820,7 +829,7 @@ function ready(error, xml) {
                     .attr("transform", this.moveStack[i])
                     .each("end", this.runAllMove(i+1))
                 }else{
-                    console.log(this.moveStack[i].name)
+                    //console.log(this.moveStack[i].name)
 
                     this.moveStack[i].showSvg(this.moveDuration, i, this)
                 }
@@ -1003,4 +1012,21 @@ function starcolor(hours) {
     function nextPosition() {
         return  Math.random()*500;
     }
+
+    d3.selection.prototype.moveToFront = function() {
+        return this.each(function(){
+        this[0][0].parentNode.appendChild(this[0][0]);
+    });
+
+//not yet customized to work
+    d3.selection.prototype.moveToBack = function() { 
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    }); 
+};
+
+};
 }

@@ -7,7 +7,7 @@
                 <script src="http://d3js.org/d3.v3.min.js"></script>
                 <script src="http://d3js.org/queue.v1.min.js"></script>
                 <script>
-                    var realData = <?php echo printRealData();?>;
+                    //var realData = <?php //echo printRealData();?>;
                 </script>
         </head>
         <body>
