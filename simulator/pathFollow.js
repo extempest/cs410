@@ -3,124 +3,134 @@ queue()
 .await(ready);
 
 function ready(error, xml) {
-    
+   //var dependencyData1 = dependencyData
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
 //    console.log(realData);
-/*
-    for(var i = 0; i < realData.length; i++){
-//        console.log(realData[i]);
-        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
-        if(realData[i].commits !== null){
-            for(var j = 0; j < realData[i].commits.length;j++){
-                var tempDate = realData[i]["commits"][j]["timestamp"];
-                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+
+    // global constants
+    var REAL_DATA = false;
+    var TICK_DELAY = 1000;
+    var GROUND_LEVEL = 200;
+    var SPEED_CONTROLLER = 2;
+
+    if(REAL_DATA){
+        for(var i = 0; i < realData.length; i++){
+    //        console.log(realData[i]);
+            realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+            if(realData[i].commits !== null){
+                for(var j = 0; j < realData[i].commits.length;j++){
+                    var tempDate = realData[i]["commits"][j]["timestamp"];
+                    realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+                }
             }
         }
+
+        console.log(realData)
+        console.log(dependencyData)
     }
-    console.log(realData)*/
-    var groundLevel = 200;
     var data = [
         {
             'date':new Date(2014, 0, 1, 0, 0, 0, 0),
             'commits'://this is already sorted chronologically
             [
-                 {
+                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'fruits',
-                                            'parents':
-                                                        [
-                                                            //to add if exist
-                                                        ]
-                                        } ,
-                                        {
-                                            'fileName':'tools',
-                                            'parents':
-                                                        [
-                                                        ]
-                                        }
-                                    ],
+                    [
+                        {
+                            'fileName':'fruits',
+                            'parents':
+                            [
+                                        //to add if exist
+                            ]
+                        },
+                        {
+                            'fileName':'tools',
+                            'parents':
+                            [
+                            ]
+                        }
+                    ],
+                    
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 },
-                 {
+                },
+                {
                     'author':'Byung',
                     'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'animals',
-                                            'parents':
-                                                        [
-                                                            //to add if exist
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'cat',
-                                            'parents':
-                                                        [
-                                                            'animals'
-                                                        ]
-                                        }  
-                                    ],
+                    [
+                    {
+                        'fileName':'animals',
+                        'parents':
+                        [
+                        //to add if exist
+                        ]
+                    },
+                    {
+                        'fileName':'cat',
+                        'parents':
+                        [
+                        'animals'
+                        ]
+                    }  
+                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 },
-                 {
+                },
+                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'apple',
-                                            'parents':
-                                                        [
-                                                            'fruits'
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'oranges',
-                                            'parents':
-                                                        [
-                                                            'fruits'
-                                                        ]
-                                        } 
-                                    ],                   
+                    [
+                    {
+                        'fileName':'apple',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    },
+                    {
+                        'fileName':'oranges',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    } 
+                    ],                   
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 },
-                 {
+                },
+                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'persian',
-                                            'parents':
-                                                        [
-                                                            'cat'
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'dog',
-                                            'parents':
-                                                        [
-                                                            'animals'
-                                                        ]
-                                        } 
-                                    ],
+                    [
+                    {
+                        'fileName':'persian',
+                        'parents':
+                        [
+                        'cat'
+                        ]
+                    },
+                    {
+                        'fileName':'dog',
+                        'parents':
+                        [
+                        'animals'
+                        ]
+                    } 
+                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 }
+                }
             ]
         },
         {
@@ -131,82 +141,84 @@ function ready(error, xml) {
                     'author':'Aki',
                     'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'mandarin',
-                                            'parents':
-                                                        [
-                                                            'oranges'
-                                                        ]
-                                        },
-                                        {
-                                            'fileName':'hammer',
-                                            'parents': 
-                                                        [
-                                                            'tools'
-                                                        ]
-                                        }
-                                    ],
+                    [
+                    {
+                        'fileName':'mandarin',
+                        'parents':
+                        [
+                        'oranges'
+                        ]
+                    },
+                    {
+                        'fileName':'hammer',
+                        'parents': 
+                        [
+                        'tools'
+                        ]
+                    }
+                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 },
-                 {
+                },
+                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'banana',
-                                            'parents':
-                                                        [
-                                                            'fruits'
-                                                        ]
-                                        },
-                                    ],
+                    [
+                    {
+                        'fileName':'banana',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    },
+                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 },    
-                 {
+                },    
+                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'clothes',
-                                            'parents':
-                                                        [
-                                                        ]
-                                        },
-                                    ],
+                    [
+                    {
+                        'fileName':'clothes',
+                        'parents':
+                        [
+                        ]
+                    },
+                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 },
-                 {
+                },
+                {
                     'author':'Byung',
                     'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
                     'filesAdded': 
-                                    [
-                                        {
-                                            'fileName':'pants',
-                                            'parents':
-                                                        [
-                                                            'clothes'
-                                                        ]
-                                        },
-                                    ],
+                    [
+                    {
+                        'fileName':'pants',
+                        'parents':
+                        [
+                        'clothes'
+                        ]
+                    },
+                    ],
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                 }        
-
+                }
             ]
         }
     ];
 //    console.log(data)
-    //data = realData
+    if(REAL_DATA){
+        data = realData
+    }
+
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -216,33 +228,24 @@ function ready(error, xml) {
     var importedNode = document.importNode(xml.documentElement, true);
     d3.select("#pathAnimation").node().appendChild(importedNode);
     
-    var svg = d3.select("svg")
-    .attr("width",window.innerWidth)
-    .attr("height",window.innerHeight);
+    var svg =   d3.select("svg")
+                .attr("width",window.innerWidth)
+                .attr("height",window.innerHeight);
     
-    var sky = createBackground(svg);
+    var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
     
-    var star = createStars(svg);
-    
-    var sun = svg.append("circle")
-    .attr("r", 40)
-    .style("fill", "yellow");
-    var moon = svg.append("circle")
-    .attr("r", 30)
-    .style("fill", "white");
+    var tooltipAnt = d3.select("body").append("div")
+    .attr("class", "tooltipAnt")
+    .style("opacity", 0);
 
-    
-    var ground = svg.append("rect")
-    .attr("x", 0)
-    .attr("y", groundLevel)
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-groundLevel)
-    .style("fill", "#A9672E");
-
+    var isPaused = false;
+    var universalHour;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
-   
+
     //http://stackoverflow.com/questions/13563471/random-colors-for-circles-in-d3-js-graph
     /*var marker = svg.append("circle");
     marker.attr("r", 7)
@@ -251,117 +254,231 @@ function ready(error, xml) {
            return "hsl(" + Math.random() * 360 + ",100%,50%)";
            })
     transition();*/
-    
-    var todayLabel = svg.append("text")
-                        .attr("x", 0)
-                        .attr("y", 20)
-                        .text("Welcome to Git-Java Source Code Analyzer")
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "black")
-                        .style("font-family", "Verdana")
-                        .style("font-size", "20px")
-                        .style("fill", "white");
+
+
 
     simulateDay(0, data.length, data)
-    
-    
+
+
     function simulateDay(index, lastIndex, iData){
         if (index < lastIndex) {
             var entry = iData[index];
-            var delay = 1000;
             var today = new Date(entry["date"]);
             var tommorrow = new Date(entry["date"]);
             tommorrow.setDate(tommorrow.getDate()+1);
 
+
+
             var commits = entry["commits"];
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
-            //console.log()
             var intervalId = setInterval(function() {
-                todayLabel.text(today)
 
-                 
-                 //console.log(today.getTime());
-                if (today.getTime() < tommorrow.getTime()){
+                if(!isPaused){
+                    todayLabel.text(today)
 
-                    if(today.getHours()==0||today.getHours()==12){
-                        sky.transition()
-                        .duration(12000)
-                        .style("fill", skycolor(today.getHours()));
-                                             
-                        star.transition()
-                        .duration(12000)
-                        .style("opacity", starcolor(today.getHours()));
-                                             
-                    }
-                                             
-                     
-                    if(today.getHours()==0){
+                    //console.log(today.getTime());
+                    if (today.getTime() < tommorrow.getTime()){
 
-                        sun
-                        .transition()
-                        .duration(24000)
-                        .ease("in-out")
-                        .attrTween("transform", orbit(1/4));
-
-                        moon
-                        .transition()
-                        .duration(24000)
-                        .ease("in-out")
-                        .attrTween("transform", orbit(3/4));
-                    }
-                    
-                 if(commits !== null){
-                    commits.forEach(function(commit){
-                 
-                        if(!commit["processed"]){
-                            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
-
-                            if(today.getTime()>commit["timestamp"]){
-                                commit["processed"] = true;
-                                var author = authors[commit["author"]];
-                                // console.log(authors);
-                                var nextPos = nextPosition();
-                         
-                                if(!author){
-                                    author = {};
-                                    author["contribution"] = 10;
-                                    
-                                    var ant = new ants(svg, commit["author"]);
-                                    author["antMarker"] = ant;
-                                    
-                                    //console.log(ant.group1); 
-                                    authors[commit["author"]] = author;
-                                    checkRoom(commit['filesAdded'], ant);
-
-                                    
-
-                                } else {
-                                    author["contribution"]  += 1;
-                                    var ant = author["antMarker"]
-
-                                    //ant = movePosition(ant, nextPos);
-                                    checkRoom(commit['filesAdded'], ant);
-                                }
-                            }
-                        }else{
-                            //console.log("ho")
+                        if(today.getHours()==0||today.getHours()==12){
+                            initializeSky(today.getHours());
                         }
-                    })
-                  }
-                    today.setHours(today.getHours()+1);
 
-                } else {
-                    clearInterval(intervalId)
-                    simulateDay(index+1,lastIndex,iData)
+
+                        if(today.getHours()==0){
+                            initializeOrbits();
+                        }
+                        
+                        if(commits !== null){
+                            commits.forEach(function(commit){
+                                if(!commit["processed"]){
+                                //console.log("now:"+today+" timestamp:"+commit["timestamp"])
+
+                                    if(today.getTime()>commit["timestamp"]){
+                                       isPaused = true;
+                                       universalHour = today.getHours();
+                                       pauseAnimationForCommit();
+                                        commit["processed"] = true;
+                                        var author = authors[commit["author"]];
+                                        // console.log(authors);
+                                        var nextPos = nextPosition();
+
+                                        if(!author){
+                                            author = {};
+                                            author["contribution"] = 10;
+                                            
+                                            var ant = new ants(svg,commit["author"]);
+                                            ant.name = commit["author"];
+                                            author["antMarker"] = ant;
+                                            
+                                            //console.log(ant.group1); 
+                                            authors[commit["author"]] = author;
+                                            checkRoom(commit['filesAdded'], ant);
+
+                                        } else {
+                                            author["contribution"]  += 1;
+                                            var ant = author["antMarker"]
+
+                                            //ant = movePosition(ant, nextPos);
+                                            checkRoom(commit['filesAdded'], ant);
+                                        }
+                                            
+                                            //Tooltip for each ant
+                                            mergedRoom.selectAll('.eachAnt').on("mouseover", mouseoverAnt)
+                                            .on("mousemove", mousemove)
+                                            .on("mouseout", mouseout)
+                                            .attr("author", function(d) { return commit['author']});
+                                            
+                                            function mouseoverAnt()
+                                            {
+                                            var myAnt = d3.select(this);
+                                            
+                                            
+                                            myAnt.attr("class", "dataAntSelected").style("fill", "white");
+                                            
+                                            tooltip.html(    //Populate tooltip text
+                                                         "Name: " + myAnt.attr("author")
+                                                         )
+                                            .transition()
+                                            .delay(150)
+                                            //.duration(250)
+                                            .style("opacity", 1);
+                                            }
+                                            
+                                    }else{
+                                    //console.log("ho")
+                                    }
+                                }
+                            })
+                        }
+
+                        today.setHours(today.getHours()+1);
+
+                    } else {
+                        pauseAnimationForCommit();
+                        clearInterval(intervalId)
+                        simulateDay(index+1,lastIndex,iData)
+                    }
                 }
-            }, delay);
+            }, TICK_DELAY);
         } else {
+            //after finishing all commits
             todayLabel.text("Project ended")
         }
     }
+
+    //function to initialize sky
+    function initializeSky(time){
+        var durationTime = TICK_DELAY * 12;
+
+        sky.transition()
+        .duration(durationTime)
+        .style("fill", skycolor(time));
+
+        star.transition()
+        .duration(durationTime)
+        .style("opacity", starcolor(time));
+    }
+
+    //funcion to initialize sun and moon
+    function initializeOrbits(){
+        var durationTime = TICK_DELAY * 24;
+
+        sun
+        .transition()
+        .duration(durationTime)
+        .ease("in-out")
+        .attrTween("transform", orbit(1/4));
+
+        moon
+        .transition()
+        .duration(durationTime)
+        .ease("in-out")
+        .attrTween("transform", orbit(3/4));
+    }
+
+    //stopping the animation except the ants
+    function pauseAnimationForCommit(){
+        sky.transition().duration(0);
+        star.transition().duration(0);
+        sun.transition().duration(0);
+        moon.transition().duration(0);
+    }
+
+    //resuming the animation of the background
+    function resumeAnimeationFromCommit(time){
+        var tweleveTime = (time % 12);
+        var skyDuration = (12 - tweleveTime)*TICK_DELAY;
+        var orbitDuration = 24 * TICK_DELAY;
+
+        sky.transition().duration(skyDuration)
+        .style("fill", resumeSkyColor(time));
+        star.transition().duration(skyDuration)
+        .style("opacity", resumeStarColor(time));
+
+        sun.transition().duration(orbitDuration)
+        .ease("in-out")
+        .attrTween("transform", orbit(sunPosition(time)));
+        moon.transition().duration(orbitDuration)
+        .ease("in-out")
+        .attrTween("transform", orbit(moonPosition(time)));
+    }
+
+    // retrieves the color of sky
+    function resumeSkyColor(time){
+        if(time < 12)
+            return skycolor(0);
+        else
+            return skycolor(12);
+    }
+
+    // retrieves the color of stars
+    function resumeStarColor(time){
+        if(time < 12)
+            return starcolor(0);
+        else
+            return starcolor(12);
+    }
+
+    // retruns the position of sun
+    function sunPosition(time){
+        // depending on the time, calculates the angle
+        return ((6+time)%24)/24;
+    }
+
+    // returns the positon of moon
+    function moonPosition(time){
+        // depending on the time, calculates the angle
+        return ((18+time)%24)/24;
+    }
+ 
+    var sky = createBackground(svg);
     
+    var star = createStars(svg);
     
+    var sun =   svg.append("circle")
+    .attr("r", 40)
+    .style("fill", "yellow");
+    var moon =  svg.append("circle")
+    .attr("r", 30)
+    .style("fill", "white");
+    
+    var ground =    svg.append("rect")
+    .attr("x", 0)
+    .attr("y", GROUND_LEVEL)
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight-GROUND_LEVEL)
+    .style("fill", "#A9672E");
+    
+    var todayLabel =    svg.append("text")
+    .attr("x", 0)
+    .attr("y", 20)
+    .text("Welcome to Git-Java Source Code Analyzer")
+    .attr("stroke-width", 1)
+    .attr("stroke", "black")
+    .style("font-family", "Verdana")
+    .style("font-size", "20px")
+    .style("fill", "white");
     
     function checkRoom(files, ant){
         if (ant != null){
@@ -381,18 +498,18 @@ function ready(error, xml) {
                 } else {
                     //room exist so modidfy that room
                 }
-
             });
-            //console.log(ant.name)
-            //console.log(ant.moveStack)
+
             var a  = d3.select(ant.group1);
             //console.log()
             a.moveToFront();            
+            /*
+            if(ant.room){
+                ant.moveUpToGround(ant.room)
+            }*/
 
-            ant.runAllMove(ant.lastMoveIndex-1);
+            ant.runAllMove(ant.lastMoveIndex+1);
             ant.lastMoveIndex = ant.moveStack.length -1
-            
-
         }
 
     }
@@ -511,6 +628,7 @@ function ready(error, xml) {
                     if(!this.rooms[y][x]){
                         this.rooms[y][x]=room
                         if(callback){
+                            this.pushingRoom.moveStack.push(room)
                             callback(room)
                         }
                     }
@@ -519,14 +637,41 @@ function ready(error, xml) {
             }
         }
     }
+    
+    
+    
+    var mergedRoom = svg.append('g')
+                        .call(d3.behavior.drag().origin(function() {
+                                                    var t = d3.select(this);
+                                                    return {    x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
+                                                                y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
+                                                })
+                                                .on("drag", function(d,i) {
+                                                    d3.select(this).attr("transform", function(d,i){
+                                                        return "translate(" + [ d3.event.x,0 ] + ")"
+                                                    })
+                                                })
+                        )
+
+
+    var inviGround = mergedRoom.append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 999999)
+    .attr("height", 999999)
+    .attr("opacity", 0);
+    
 
     function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
         var roomRy = 50; //Ry means radius in y direction
         var distanceXBetweenRooms = 50;
-        var distanceYBetweenRooms = 25;        
+        var distanceYBetweenRooms = 25;
         var distanceToBorder = 20;
         var distanceToGround = 25;
+
+        var ROOM_DELAY = TICK_DELAY/(SPEED_CONTROLLER*2.5);
+
         this.x = -1; //Coordinates in respect to grid
         this.y = -1;
         this.nameLabel
@@ -539,20 +684,21 @@ function ready(error, xml) {
         this.antsInside = {}
         this.moveStack = [] 
 
+
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
-            .duration(200)
-            .delay((delay*index))
+            .duration(ROOM_DELAY)
+            .delay((delay*(index-ant.lastMoveIndex)))
             .attr("opacity", 1)
 
             this.svg.transition()
-            .duration(200)
-            .delay((delay*index))            
+            .duration(ROOM_DELAY)
+            .delay((delay*(index-ant.lastMoveIndex)))            
             .attr("opacity", 1)
 
             this.nameLabel.transition()
-            .duration(200)
-            .delay((delay*index))            
+            .duration(ROOM_DELAY)
+            .delay((delay*(index-ant.lastMoveIndex)))            
             .attr("opacity", 1)
             .each("end", ant.runAllMove(index+1))
 
@@ -560,46 +706,51 @@ function ready(error, xml) {
 
         }
 
+        this.calcX = function(){
+            return (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
+        }
+
+        this.calcY = function(){
+            return GROUND_LEVEL+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
+        }
+        
+
         this.addSvg = function (x, y){
-
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
-
-            var group = svg.append("g");
-
+            var group = mergedRoom.append("g").attr("class", "eachRoom");
             var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
-            var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
+            var calcY = GROUND_LEVEL+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
 
-
-            var tunnel = group.append("line")
-                    .attr("x1", calcX)
-                    .attr("y1", calcY)
-                    .attr("x2", calcX)
-                    .attr("y2", groundLevel)
-                    .attr("stroke-width", 10)
-                    .attr("stroke", color)
-                    .attr("opacity",0);
+            var tunnel =    group.append("line")
+                            .attr("x1", calcX)
+                            .attr("y1", calcY)
+                            .attr("x2", calcX)
+                            .attr("y2", GROUND_LEVEL)
+                            .attr("stroke-width", 10)
+                            .attr("stroke", color)
+                            .attr("opacity",0);
 
             var roomSvg = group.append("ellipse")
-                .attr("cx", calcX)
-                .attr("cy", calcY)
-                .attr("rx", roomRx)
-                .attr("ry", roomRy)
-                .attr("fill",color)
-                .attr("opacity",0);
+                            .attr("cx", calcX)
+                            .attr("cy", calcY)
+                            .attr("rx", roomRx)
+                            .attr("ry", roomRy)
+                            .attr("fill",color)
+                            .attr("opacity",0);
 
             //var tunnelSvg =  svg.append("rect")
 
 
-            var name = group.append("text")
-            .attr("x", calcX)
-            .attr("y", calcY)
-            .text(file['fileName'])
-            .attr("stroke-width", 0.5)
-            .attr("stroke", "black")
-            .style("font-family", "Verdana")
-            .style("font-size", "12px")
-            .style("fill", "white")
-            .attr("opacity",0);
+            var name =  group.append("text")
+                        .attr("x", calcX)
+                        .attr("y", calcY)
+                        .text(file['fileName'])
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "12px")
+                        .style("fill", "white")
+                        .attr("opacity",0);
             
 
             if (y > 0) {
@@ -615,64 +766,51 @@ function ready(error, xml) {
                 .attr("stroke", color);
 
                 roomSvg.attr("fill", color);
+            }
 
-            } 
 
-            this.group = group
             this.nameLabel = name
-
             this.svg = roomSvg;
-
             this.tunnel = tunnel
-
+            this.group = group;
         }
         this.move = function (delay, i,j, ant){
-
+            var moveRoomDuration = TICK_DELAY/SPEED_CONTROLLER;
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
             //console.log("moving..."+this.name)
             var parentXcoor = newXCoor
             if (this.parents[0]){
                 parentXcoor = (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
-            }
-
-                
+            }                
                 
                 this.tunnel.transition()
                 .duration(200)
-                .delay((delay*i))
+                .delay((delay*(i-ant.lastMoveIndex)))
                 .attr("x1", newXCoor)
                 .attr("x2", parentXcoor)
                 this.svg.transition()
                 .duration(200)
-                .delay((delay*i))
+                .delay((delay*(i-ant.lastMoveIndex)))
                 .attr("cx", newXCoor)
                 
-
-                console.log(ant.name+" is going into "+this.name)
-                console.log(this.antsInside)
                 for (var singleAnt in this.antsInside) {
                     if (this.antsInside.hasOwnProperty(singleAnt)) {
-                            this.antsInside[singleAnt].group1.transition()
+                            var movingAnt = this.antsInside[singleAnt]
+
+                            movingAnt.group1.transition()
                             .duration(200)
-                            .delay((delay*i))
-                            .attr("transform", "translate(" + [newXCoor,this.svg[0][0].cy["baseVal"].value] + ")")
-                            this.antsInside[singleAnt].x = newXCoor
+                            .delay((delay*(i-ant.lastMoveIndex)))
+                            .attr("transform", "translate(" + [newXCoor,this.calcY()] + ")")
+                            movingAnt.x = newXCoor
                         
                     }
                 }
 
-                
-
-
-
                 this.nameLabel.transition()
                 .duration(200)
-                .delay((delay*i))
+                .delay((delay*(i-ant.lastMoveIndex)))
                 .attr("x",newXCoor)
                 .each("end",ant.runAllMove(i,j+1))
-                    
-
-                
         }
 
 
@@ -715,13 +853,11 @@ function ready(error, xml) {
             grid.push(this.x, this.y, this)
             this.addSvg(this.x, this.y)
 
-
         } else {
             //this room is a root room
             //50 is the ry 
             //25 is tunner distance
 
-            
             //console.log("rooms"+rooms);
             //console.log("numroot:"+numRootRooms);
             this.y = 0;
@@ -731,15 +867,94 @@ function ready(error, xml) {
 
 
             grid.pushingRoom = this
+
             grid.push(this.x, this.y, this)
 
             this.addSvg(this.x, this.y)
-
         }
 
        
+        //Tooltips for each room.
+        mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
+        /*
+        
+        dependencyArray = {}
+        console.log(dependencyData1)
+        console.log("data length")
+        for(i = 1; i < dependencyData1.length; i++){
+            console.log(dependencyData1[i]['fileName'])
+            if(dependencyData1[i]['fileName'] == this.name){
+                var dependencyArray = dependencyData1[i]["targetedBy"];
+            break;
+            }
+        }
+        depString = "";
+        if(dependencyArray != {}){
+            for(i = 0; i < dependencyArray.length; i++){
+                    depString = depString.concat(dependencyArray[i].concat("</br>"));
+                    console.log(depString)
+            }
+            temp = depString.trim()
+            if (!temp) {
+                depString = "none";
+            }
+            this.group.attr("dependency", function(d) {return depString});
+        }else
+            this.group.attr("dependency", function(d) {return "hellllllo"});
+        
+        */
+        this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
+        
+
+        //Mouseover function for each room, displays shortened tooltip
+        function mouseover()
+        {
+            var myRoom = d3.select(this);
+            myRoom.attr("class", "dataRoomSelected");
+            
+            tooltip.html(    //Populate tooltip text
+                         "Name: " + myRoom.attr("name") + "</br>" +                              // TEXT HERE 2
+                         "Dependency: " + myRoom.attr("dependency")
+                         
+                         
+                         )
+            .transition()
+            .delay(150)
+            //.duration(250)
+            .style("opacity", 1);
+        }
+        
+        
+        
 
     }
+    
+    
+    
+    function mousemove()
+    {    //Move tooltip to mouse location
+        return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+    }
+
+    function mouseout()
+    {
+        tooltip
+        .transition()
+        .delay(50)
+        .style("opacity", 0)    //Make tooltip invisible
+        
+        tooltipAnt
+        .transition()
+        .delay(50)
+        .style("opacity", 0)
+        
+        d3.select(this).attr("class", "dataRoom");
+        
+    }
+    
+    
 
     function countNumberRootRooms(){
         var count = 0;
@@ -758,16 +973,18 @@ function ready(error, xml) {
         return count;
     }
 
-       //Get path start point for placing marker
+
+    //Get path start point for placing marker
     function pathStartPoint(path) {
         var d = path.attr("d"),
         dsplitted = d.split(" ");
         return dsplitted[1].split(",");
     }
     
+
     function transition() {
         marker.transition()
-        .duration(1000)
+        .duration(TICK_DELAY)
         .attrTween("transform", translateAlong(path.node()))
         //.each("end", transition);// infinite loop
     }
@@ -786,7 +1003,7 @@ function ready(error, xml) {
         this.position = 0;
         this.direction = "left";
         this.name = newName        
-        this.lastMoveIndex = 1;
+        this.lastMoveIndex = -1;
         this.moveStack = []
         this.roomStack = []
         this.room
@@ -841,26 +1058,29 @@ function ready(error, xml) {
             .style("fill", "white")
 
             group1
-            .attr("transform", "translate(" + [7,groundLevel-height] + ")");
+            .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");
 
             return group1;
         }
 
         this.group1 = this.createAnt(canvas, height, color, position);
+        this.moveDuration = TICK_DELAY/SPEED_CONTROLLER;
+
 
         this.moveUpToGround = function(room){
             var tempRoom = room;
             while(tempRoom.parents[0]){
                 parentRoom = tempRoom.parents[0]
-                this.move(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
+                this.moveAnt(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
                 this.roomStack.push(parentRoom)
                 tempRoom = parentRoom
                 this.room = parentRoom
             }
-            this.move(this.room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.moveAnt(this.room.svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)
             this.roomStack.push(0)
             this.room = 0
         }
+
 
         this.moveDownToParent = function(room){
             var roomPath = []
@@ -871,12 +1091,11 @@ function ready(error, xml) {
                 roomPath.push(parentRoom)
                 tempRoom = parentRoom                
             }
-            this.move(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.moveAnt(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)
             this.roomStack.push(0)            
             for (var i = roomPath.length-1 ; i >=0 ; i--){
-                this.move(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
+                this.moveAnt(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
                 this.roomStack.push(roomPath[i])
-
             }
 
             //roomPath[0].antsInside.push({key:this.name, value:this})
@@ -884,39 +1103,85 @@ function ready(error, xml) {
 
 
         }
+        
+     
+
+
+        // original move function of ant
+        // function movePosition(ant, nextPos, tempTime) {
+        //     var pos = ant.position;
+        //     var direction = ant.direction;
+
+        //     if(direction == "rigth"){
+        //         if(pos < nextPos){
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //         else if(pos > nextPos){
+        //             ant.direction = "left";
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")" + "scale(" + [-1,1] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //     }else{
+        //         if(pos < nextPos){
+        //             ant.direction = "right";
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //         else if(pos > nextPos){
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")" + "scale(" + [-1,1] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //     }
+        //     ant.position = nextPos;
+        //     return ant;
 
         this.moveToRoom = function(room){
+
             if(this.room){
                 var tempCurrentRoom = this.room
-                this.moveUpToGround(this.room)
+                this.moveUpToGround(tempCurrentRoom)
                 delete tempCurrentRoom.antsInside[this.name]
             }
 
+            
             if(room.parents[0]){                
                 this.moveDownToParent(room)
                 //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
+
+
 
                 this.moveStack.push(room) 
                 this.roomStack.push(0)
 
 
-                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.moveAnt(room.svg[0][0].cx["baseVal"].value,room.svg[0][0].cy["baseVal"].value)
                 this.room = room                
                 this.roomStack.push(room)
 
                 //this.room.antsInside.push({key:this.name, value:this})
 
             }else{
-                //console.log(room.svg[0][0].cx["baseVal"].value)
-                
-                
-                this.move(room.svg[0][0].cx["baseVal"].value, groundLevel-55)//move to the correct x on upper ground
+                //console.log(room.svg[0][0].cx["baseVal"].value)     
+                this.moveAnt(room.svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)//move to the correct x on upper ground
                 this.roomStack.push(0)
 
                 this.moveStack.push(room)//creationg of room   
                 this.roomStack.push(0)
 
-                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value) //move to newly created room
+                this.moveAnt(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value) //move to newly created room
                 this.room = room
                 this.roomStack.push(room)
 
@@ -924,10 +1189,9 @@ function ready(error, xml) {
 
 
             }
-            
-
         }
 
+        //runs the moves stack in the moveStack array
         this.runAllMove = function(i, j){
             //console.log(this.moveStack.length)
             //console.log(i)
@@ -951,7 +1215,6 @@ function ready(error, xml) {
                                     break;
                                 }
                             }
-                            //console.log(this.roomStack[i-counter].name)
                             if(i - counter >= 0){
                                 delete this.roomStack[i-counter].antsInside[this.name]
                             }
@@ -960,24 +1223,19 @@ function ready(error, xml) {
 
                     this.group1.transition()
                     .duration(this.moveDuration)
-                    .delay(this.moveDuration*i)
+                    .delay(this.moveDuration*(i-this.lastMoveIndex))
                     .attr("transform", this.moveStack[i])
                     .each("end", this.runAllMove(i+1))
 
                     
                     
                 }else{
-                    //console.log(this.moveStack[i].name)
                     var currentRoom = this.moveStack[i]
-                    //console.log(currentRoom.moveStack)
                     if(currentRoom.moveStack.length > 0){
                         if(!j){
                             j = 0
                         }                        
                         if (j < currentRoom.moveStack.length  && j >= 0){
-                            if(currentRoom.moveStack[j].name=='tools'){
-                                console.log('kaz')
-                            }
                             currentRoom.moveStack[j].move(this.moveDuration, i,j,this)
                         }  else {
                             currentRoom.moveStack = []
@@ -987,9 +1245,19 @@ function ready(error, xml) {
                     currentRoom.showSvg(this.moveDuration, i, this)
                 }
             }
+            else{
+                    this.group1.transition()
+                    .delay(this.moveDuration*(i-this.lastMoveIndex))
+                     .each("end", function(){
+                         isPaused = false;
+                         resumeAnimeationFromCommit(universalHour);
+                     })
+            }
         }
 
-        this.move = function(x,y){
+
+        //add the next move into a moveStack 
+        this.moveAnt = function(x,y){
             var pos = this.position;
             var direction = this.direction;
             this.moveStack.push("translate(" + [x,y] + ")")
@@ -1015,23 +1283,81 @@ function ready(error, xml) {
         }
     }
 
+
+    function createAnt(canvas, height, color, position){
+         // Draw the Circle
+         var circleData = [
+                             { "cx": position+20, "cy": 20, "radius": 20, "color": color },
+                             { "cx": position+50, "cy": 20, "radius": 20, "color": color },
+                             { "cx": position+80, "cy": 20, "radius": 20, "color": color },
+                             { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
+                             { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
+
+        // put circles in group1
+
+        // original version
+        // var group1 = canvas.append("g");
+
+        // var circles =   group1.selectAll("circle")
+        //                 .data(circleData)
+        //                 .enter()
+        //                 .append("circle");
+        // =======
+        // bora version
+        var group1 = mergedRoom.append("g").attr("class", "eachAnt");
     
+        var circles =   group1.selectAll("circle")
+                        .data(circleData)
+                        .enter()
+                        .append("circle");
+        
+        
+        var circleAttributes =  circles
+                                .attr("cx", function (d) {return d.cx;})
+                                .attr("cy", function (d) {return d.cy;})
+                                .attr("r", function (d) {return d.radius;})
+                                .style("fill", function (d) {return d.color;});
+        
+        
+        // draw legs in group1
+        for(i = 0; i < 2; i++){
+            for(j = 0; j < 2; j++){
+                var line =  group1.append("line")
+                            .attr("x1", position+13+(j*12)+(i*47))
+                            .attr("y1", 20)
+                            .attr("x2", position+13+(j*12)+(i*47))
+                            .attr("y2", 55)
+                            .attr("stroke-width", 2)
+                            .attr("stroke", color);
+            }
+        }
+        
+        
+        
+        group1
+        .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");
+
+
+        return group1;
+    }
     
+
     function createBackground(canvas) {
 
-        
-        var sky = canvas.append("rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", window.innerWidth)
-        .attr("height", groundLevel)
-        .style("fill", "#0c1317");
+
+        var sky =   canvas.append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", window.innerWidth)
+                    .attr("height", GROUND_LEVEL)
+                    .style("fill", "#0c1317");
         
         
         
         return sky;
     }
     
+
     function createStars(canvas) {
         var starData = [
                         { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
@@ -1049,67 +1375,67 @@ function ready(error, xml) {
         
         var group2 = canvas.append("g");
         var stars = group2.selectAll("circle").data(starData).enter().append("circle");
-        var starAttributes = stars
-        .attr("cx", function (d) {return d.cx;})
-        .attr("cy", function (d) {return d.cy;})
-        .attr("r", function (d) {return d.radius;})
-        .style("fill", function (d) {return d.color;});
+        var starAttributes =    stars
+                                .attr("cx", function (d) {return d.cx;})
+                                .attr("cy", function (d) {return d.cy;})
+                                .attr("r", function (d) {return d.radius;})
+                                .style("fill", function (d) {return d.color;});
         
         return group2;
     }
 
-function starcolor(hours) {
-    var starcolor = 1;
-    switch (hours) {
-        case 0:
+
+    function starcolor(hours) {
+        var starcolor = 1;
+        switch (hours) {
+            case 0:
             starcolor = 0;
             break;
-        case 12:
+            case 12:
             starcolor = 1;
             break;
+        }
+        return starcolor;
     }
-    return starcolor;
-}
     
 
-    
     function skycolor(hours) {
         var skycolor = "blue"
         switch (hours) {
             case 0:
-                //console.log("its getting brighter");
                 skycolor = "#97ccf1";
                 
                 break;
-            case 12:
+                case 12:
                 skycolor = "#0c1317";
                 break;
-         
-        }
-        
-        return skycolor;
+
+            }
+
+            return skycolor;
     }
 
-    
+
     function orbit(initValue) {
-        
+
         return function(d, i, a) {
             return function(t) {
 
                 var t_x, t_y;
-                
+
                 var rotation_radius_x = (window.innerWidth/2)+80;
                 var rotation_radius_y = 200;
                 var t_angle = (2 * Math.PI) * (t+(initValue));
                 var t_x = rotation_radius_x * Math.cos(t_angle);
                 var t_y = rotation_radius_y * Math.sin(t_angle);
-                
-                
+
+
                 return "translate(" + ((window.innerWidth/2) + t_x) + "," + (200 + t_y) + ")";
             };
         };
     }
-    
+
+
     function translateAlong(path) {
         var l = path.getTotalLength();
         return function(i) {
@@ -1120,24 +1446,26 @@ function starcolor(hours) {
         }
     }
 
+
     function nextPosition() {
         return  Math.random()*500;
     }
 
+
     d3.selection.prototype.moveToFront = function() {
         return this.each(function(){
-        this[0][0].parentNode.appendChild(this[0][0]);
-    });
+            this[0][0].parentNode.appendChild(this[0][0]);
+        });
 
-//not yet customized to work
+    //not yet customized to work
     d3.selection.prototype.moveToBack = function() { 
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    }); 
-};
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        }); 
+    };
 
 };
 }
