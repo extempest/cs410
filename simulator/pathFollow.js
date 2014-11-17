@@ -327,8 +327,7 @@ function ready(error, xml) {
                                     author = {};
                                     author["contribution"] = 10;
                                     
-                                    var ant = new ants(svg);
-                                    ant.name = commit["author"];
+                                    var ant = new ants(svg, commit["author"]);
                                     author["antMarker"] = ant;
                                     
                                     //console.log(ant.group1); 
@@ -378,6 +377,7 @@ function ready(error, xml) {
                     //console.log(newRoom)
                     ant.moveToRoom(newRoom)
 
+
                 } else {
                     //room exist so modidfy that room
                 }
@@ -400,6 +400,7 @@ function ready(error, xml) {
 
     function Grid(){
         this.rooms = [[]];
+        this.pushingRoom;
 
         this.delete = function(x,y){
             this.rooms[y][x]=0
@@ -409,7 +410,10 @@ function ready(error, xml) {
             for(var i = parentRoom.childs.length-1; i >= 0 ;i--){
                 if(parentRoom.childs[i].svg){
                     grid.delete(parentRoom.childs[i].x,parentRoom.childs[i].y)
-                    parentRoom.childs[i].move(parentRoom.childs[i].x+1, parentRoom.childs[i].y)
+                    if (grid.pushingRoom){
+                        //grid.pushingRoom.moveStack.push(parentRoom.childs[i])
+                    }
+                    //parentRoom.childs[i].move(parentRoom.childs[i].x+1, parentRoom.childs[i].y)
                 }
                 parentRoom.childs[i].x = parentRoom.childs[i].x + 1     
                 var callback = grid.moveChildren                       
@@ -423,6 +427,9 @@ function ready(error, xml) {
             //console.log("pushing "+room.name+" to:( "+x+","+y+")")            
             //console.log("rooms.length:"+this.rooms.length)
             //console.log("y"+y)
+
+            
+
             if (y >= this.rooms.length) {
                 //need more depth
                 //console.log("PUSHING MORE DEPTH")
@@ -440,10 +447,11 @@ function ready(error, xml) {
             if (!this.rooms[y][x]) {
                 //if no room in the grid
                 
-                //console.log("undefined")
+                //console.log(room.name+" added")
 
                 this.rooms[y][x]=room
                 if(callback){
+                    this.pushingRoom.moveStack.push(room)
                     callback(room)
                 }
             }else {
@@ -456,9 +464,6 @@ function ready(error, xml) {
                 if (occupyingRoom.parents.length == 0 && !(room.svg)){
                     room.x = room.x + 1                    
                     this.push(x+1, y, room)
-                    if(room.svg){
-                        room.move(x+1, y)
-                    }
 
                 } else {
                     //console.log(occupyingRoom.parents[0].name)
@@ -496,11 +501,13 @@ function ready(error, xml) {
                         nextRoom.x = nextRoom.x + 1
                         var pushNextRoomChildren = this.moveChildren
                         this.push(nextRoom.x, nextRoom.y, nextRoom,pushNextRoomChildren)
-                        nextRoom.move(nextRoom.x , nextRoom.y)
+
+                        //nextRoom.move(nextRoom.x , nextRoom.y)
                     }
 
                     this.push(targetMove.x,targetMove.y,targetMove, pushChildren)
-                    targetMove.move(targetMove.x,targetMove.y)   
+                    //this.pushingRoom.moveStack.push(parentRoom.childs[i])                    
+                    //targetMove.move(targetMove.x,targetMove.y)   
                     if(!this.rooms[y][x]){
                         this.rooms[y][x]=room
                         if(callback){
@@ -529,6 +536,8 @@ function ready(error, xml) {
         this.name = file['fileName'];
         this.tunnel
         this.group
+        this.antsInside = {}
+        this.moveStack = [] 
 
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
@@ -617,9 +626,9 @@ function ready(error, xml) {
             this.tunnel = tunnel
 
         }
-        this.move = function (newx,newy){
+        this.move = function (delay, i,j, ant){
 
-            var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
+            var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
             //console.log("moving..."+this.name)
             var parentXcoor = newXCoor
             if (this.parents[0]){
@@ -629,18 +638,41 @@ function ready(error, xml) {
                 
                 
                 this.tunnel.transition()
-                .duration(500)
+                .duration(200)
+                .delay((delay*i))
                 .attr("x1", newXCoor)
                 .attr("x2", parentXcoor)
                 this.svg.transition()
-                .duration(500)
+                .duration(200)
+                .delay((delay*i))
                 .attr("cx", newXCoor)
+                
+
+                console.log(ant.name+" is going into "+this.name)
+                console.log(this.antsInside)
+                for (var singleAnt in this.antsInside) {
+                    if (this.antsInside.hasOwnProperty(singleAnt)) {
+                            this.antsInside[singleAnt].group1.transition()
+                            .duration(200)
+                            .delay((delay*i))
+                            .attr("transform", "translate(" + [newXCoor,this.svg[0][0].cy["baseVal"].value] + ")")
+                            this.antsInside[singleAnt].x = newXCoor
+                        
+                    }
+                }
+
+                
+
+
+
                 this.nameLabel.transition()
-                .duration(500)
+                .duration(200)
+                .delay((delay*i))
                 .attr("x",newXCoor)
+                .each("end",ant.runAllMove(i,j+1))
+                    
 
-
-
+                
         }
 
 
@@ -662,6 +694,7 @@ function ready(error, xml) {
 
             this.parents = [];
             this.childs = [];
+            grid.pushingRoom = this            
             this.parents.push(parentRoom);
             parentRoom.childs.push(this);
 
@@ -680,7 +713,6 @@ function ready(error, xml) {
             this.x = parentRoom.x + numParentKids
             this.y = parentRoom.y + 1;
             grid.push(this.x, this.y, this)
-            //ant.roomCreateStack.push(this)
             this.addSvg(this.x, this.y)
 
 
@@ -698,9 +730,8 @@ function ready(error, xml) {
             this.childs = [];
 
 
-
+            grid.pushingRoom = this
             grid.push(this.x, this.y, this)
-            //ant.roomCreateStack.push(this)
 
             this.addSvg(this.x, this.y)
 
@@ -741,7 +772,7 @@ function ready(error, xml) {
         //.each("end", transition);// infinite loop
     }
     
-    function ants(canvas) {
+    function ants(canvas, newName) {
         //initializing variable used inside
         //height of ant
         var height = 55;
@@ -754,23 +785,80 @@ function ready(error, xml) {
         this.color = color;
         this.position = 0;
         this.direction = "left";
-        this.group1 = createAnt(canvas, height, color, position);
+        this.name = newName        
         this.lastMoveIndex = 1;
         this.moveStack = []
-        this.roomCreateStack = []
-        this.name = ""
+        this.roomStack = []
         this.room
-        this.moveDuration = 500
+        this.moveDuration = 300
+
+        this.createAnt = function createAnt(canvas, height, color, position){
+             // Draw the Circle
+             var circleData = [
+             { "cx": position+20, "cy": 20, "radius": 20, "color": color },
+             { "cx": position+50, "cy": 20, "radius": 20, "color": color },
+             { "cx": position+80, "cy": 20, "radius": 20, "color": color },
+             { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
+             { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
+
+            // put circles in group1
+            var group1 = canvas.append("g");
+
+            var circles = group1.selectAll("circle")
+            .data(circleData)
+            .enter()
+            .append("circle");
+            
+            
+            var circleAttributes = circles
+            .attr("cx", function (d) {return d.cx;})
+            .attr("cy", function (d) {return d.cy;})
+            .attr("r", function (d) {return d.radius;})
+            .style("fill", function (d) {return d.color;});
+            
+            
+            // draw legs in group1
+            for(i = 0; i < 2; i++){
+                for(j = 0; j < 2; j++){
+                    var line = group1.append("line")
+                    .attr("x1", position+13+(j*12)+(i*47))
+                    .attr("y1", 20)
+                    .attr("x2", position+13+(j*12)+(i*47))
+                    .attr("y2", 55)
+                    .attr("stroke-width", 2)
+                    .attr("stroke", color);
+                }
+            }
+            
+            var name = group1.append("text")
+            .attr("x", position)
+            .attr("y", 5)
+            .text(this.name)
+            .attr("stroke-width", 0.5)
+            .attr("stroke", "black")
+            .style("font-family", "Verdana")
+            .style("font-size", "12px")
+            .style("fill", "white")
+
+            group1
+            .attr("transform", "translate(" + [7,groundLevel-height] + ")");
+
+            return group1;
+        }
+
+        this.group1 = this.createAnt(canvas, height, color, position);
 
         this.moveUpToGround = function(room){
             var tempRoom = room;
             while(tempRoom.parents[0]){
                 parentRoom = tempRoom.parents[0]
                 this.move(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
+                this.roomStack.push(parentRoom)
                 tempRoom = parentRoom
                 this.room = parentRoom
             }
             this.move(this.room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.roomStack.push(0)
             this.room = 0
         }
 
@@ -784,54 +872,119 @@ function ready(error, xml) {
                 tempRoom = parentRoom                
             }
             this.move(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.roomStack.push(0)            
             for (var i = roomPath.length-1 ; i >=0 ; i--){
                 this.move(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
+                this.roomStack.push(roomPath[i])
+
             }
+
+            //roomPath[0].antsInside.push({key:this.name, value:this})
+
+
+
         }
 
         this.moveToRoom = function(room){
-
             if(this.room){
+                var tempCurrentRoom = this.room
                 this.moveUpToGround(this.room)
+                delete tempCurrentRoom.antsInside[this.name]
             }
 
             if(room.parents[0]){                
                 this.moveDownToParent(room)
                 //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
-                this.moveStack.push(room)                
+
+                this.moveStack.push(room) 
+                this.roomStack.push(0)
+
+
                 this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
-                this.room = room
+                this.room = room                
+                this.roomStack.push(room)
+
+                //this.room.antsInside.push({key:this.name, value:this})
+
             }else{
                 //console.log(room.svg[0][0].cx["baseVal"].value)
                 
                 
-                this.move(room.svg[0][0].cx["baseVal"].value, groundLevel-55)
-                this.moveStack.push(room)                
-                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.move(room.svg[0][0].cx["baseVal"].value, groundLevel-55)//move to the correct x on upper ground
+                this.roomStack.push(0)
+
+                this.moveStack.push(room)//creationg of room   
+                this.roomStack.push(0)
+
+                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value) //move to newly created room
                 this.room = room
+                this.roomStack.push(room)
+
+                //this.room.antsInside.push({key:this.name, value:this})
+
 
             }
             
 
         }
 
-        this.runAllMove = function(i){
+        this.runAllMove = function(i, j){
             //console.log(this.moveStack.length)
             //console.log(i)
             if (i < this.moveStack.length && i >= 0){
 
                 if(!this.moveStack[i].svg){
-                    //console.log(this.moveStack[i])
+                    //console.log(i)
+                    //console.log(this.moveStack)
+                    //console.log(this.roomStack)
+
+                    if(this.roomStack[i]){
+                        console.log("at i: "+i+" "+this.name+" is inside "+this.roomStack[i].name)
+                        //console.log("roomstack at i: "+this.roomStack[i].name)
+
+                        this.roomStack[i].antsInside[this.name]= this
+                        if(i-1>=0){
+                            var counter = 1;
+                            while (!this.roomStack[i-counter].svg){
+                                counter++
+                                if(i - counter < 0){
+                                    break;
+                                }
+                            }
+                            //console.log(this.roomStack[i-counter].name)
+                            if(i - counter >= 0){
+                                delete this.roomStack[i-counter].antsInside[this.name]
+                            }
+                        }
+                    }
 
                     this.group1.transition()
                     .duration(this.moveDuration)
                     .delay(this.moveDuration*i)
                     .attr("transform", this.moveStack[i])
                     .each("end", this.runAllMove(i+1))
+
+                    
+                    
                 }else{
                     //console.log(this.moveStack[i].name)
+                    var currentRoom = this.moveStack[i]
+                    //console.log(currentRoom.moveStack)
+                    if(currentRoom.moveStack.length > 0){
+                        if(!j){
+                            j = 0
+                        }                        
+                        if (j < currentRoom.moveStack.length  && j >= 0){
+                            if(currentRoom.moveStack[j].name=='tools'){
+                                console.log('kaz')
+                            }
+                            currentRoom.moveStack[j].move(this.moveDuration, i,j,this)
+                        }  else {
+                            currentRoom.moveStack = []
+                        }
+                    }
 
-                    this.moveStack[i].showSvg(this.moveDuration, i, this)
+                    currentRoom.showSvg(this.moveDuration, i, this)
                 }
             }
         }
@@ -862,49 +1015,7 @@ function ready(error, xml) {
         }
     }
 
-    function createAnt(canvas, height, color, position){
-         // Draw the Circle
-        var circleData = [
-                          { "cx": position+20, "cy": 20, "radius": 20, "color": color },
-                          { "cx": position+50, "cy": 20, "radius": 20, "color": color },
-                          { "cx": position+80, "cy": 20, "radius": 20, "color": color },
-                          { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
-                          { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
-
-        // put circles in group1
-        var group1 = canvas.append("g");
     
-        var circles = group1.selectAll("circle")
-        .data(circleData)
-        .enter()
-        .append("circle");
-        
-        
-        var circleAttributes = circles
-        .attr("cx", function (d) {return d.cx;})
-        .attr("cy", function (d) {return d.cy;})
-        .attr("r", function (d) {return d.radius;})
-        .style("fill", function (d) {return d.color;});
-        
-        
-        // draw legs in group1
-        for(i = 0; i < 2; i++){
-            for(j = 0; j < 2; j++){
-                var line = group1.append("line")
-                .attr("x1", position+13+(j*12)+(i*47))
-                .attr("y1", 20)
-                .attr("x2", position+13+(j*12)+(i*47))
-                .attr("y2", 55)
-                .attr("stroke-width", 2)
-                .attr("stroke", color);
-            }
-        }
-        
-        group1
-        .attr("transform", "translate(" + [7,groundLevel-height] + ")");
-
-        return group1;
-    }
     
     function createBackground(canvas) {
 
