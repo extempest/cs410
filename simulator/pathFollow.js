@@ -7,6 +7,19 @@ function ready(error, xml) {
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
+//    console.log(realData);
+/*
+    for(var i = 0; i < realData.length; i++){
+//        console.log(realData[i]);
+        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+        if(realData[i].commits !== null){
+            for(var j = 0; j < realData[i].commits.length;j++){
+                var tempDate = realData[i]["commits"][j]["timestamp"];
+                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+            }
+        }
+    }
+    console.log(realData)*/
     var groundLevel = 200;
     var data = [
     {
@@ -154,17 +167,51 @@ function ready(error, xml) {
                                                         'filesModified': [],
                                                         'filesDeleted':[],
                                                         'relationshipModified':[]
-                                                    }    
+                                                    },    
+                                                    {
+                                                        'author':'Thompson',
+                                                        'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
+                                                        'filesAdded': 
+                                                        [
+                                                        {
+                                                            'fileName':'clothes',
+                                                            'parents':
+                                                            [
+                                                            ]
+                                                        },
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    },
+                                                    {
+                                                        'author':'Byung',
+                                                        'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
+                                                        'filesAdded': 
+                                                        [
+                                                        {
+                                                            'fileName':'pants',
+                                                            'parents':
+                                                            [
+                                                            'clothes'
+                                                            ]
+                                                        },
+                                                        ],
+                                                        'filesModified': [],
+                                                        'filesDeleted':[],
+                                                        'relationshipModified':[]
+                                                    }        
 
                                                     ]
                                                 }
                                                 ];
-
-                                                var authors = {}
-                                                var rooms = {}
-                                                var grid = new Grid()
-
-
+//    console.log(data)
+    //data = realData
+    var authors = {}
+    var rooms = {}
+    var grid = new Grid()
+    
+    
     //Adding our svg file to HTML document
     var importedNode = document.importNode(xml.documentElement, true);
     d3.select("#pathAnimation").node().appendChild(importedNode);
@@ -236,11 +283,21 @@ function simulateDay(index, lastIndex, iData){
             //console.log()
             var intervalId = setInterval(function() {
 
+                                        // ant.group1.transition()
+                                        // .duration(500)
+                                        // .attr("transform", "translate(" + [27,groundLevel-55] + ")")
+                                        // .transition()
+                                        // .duration(500)
+                                        // .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+                                        // .each("end", function(tempTime) {
+                                        //     isPaused = false;});
+
+
                 if(!isPaused){
                     todayLabel.text(today)
 
-                     //console.log(today.getTime());
-                     if (today.getTime() < tommorrow.getTime()){
+                    //console.log(today.getTime());
+                    if (today.getTime() < tommorrow.getTime()){
 
                         if(today.getHours()==0||today.getHours()==12){
                             sky.transition()
@@ -268,93 +325,82 @@ function simulateDay(index, lastIndex, iData){
                             .ease("in-out")
                             .attrTween("transform", orbit(3/4));
                         }
+                        
+                        if(commits !== null){
+                            commits.forEach(function(commit){
 
-
-                        resumeAnimeationFromCommit(today.getHours());
-
-                        commits.forEach(function(commit){
-
-                            if(!commit["processed"]){
+                                if(!commit["processed"]){
                                 //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
-                                if(today.getTime()>commit["timestamp"]){
-                                    isPaused = true;
-                                    today.setHours(today.getHours()-1);
-                                    pauseAnimationForCommit();
-                                    commit["processed"] = true;
-                                    var author = authors[commit["author"]];
-                                    // console.log(authors);
-                                    var nextPos = nextPosition();
-                                    var tempTime = today.getHours();
+                                    if(today.getTime()>commit["timestamp"]){
+                                        isPaused = true;
+                                        today.setHours(today.getHours()-1);
+                                        pauseAnimationForCommit();
+                                        commit["processed"] = true;
+                                        var author = authors[commit["author"]];
+                                        // console.log(authors);
+                                        var nextPos = nextPosition();
 
-                                    if(!author){
-                                        author = {};
-                                        author["contribution"] = 10;
+                                        if(!author){
+                                            author = {};
+                                            author["contribution"] = 10;
+                                            
+                                            var ant = new ants(svg);
+                                            ant.name = commit["author"];
+                                            author["antMarker"] = ant;
+                                            
+                                            //console.log(ant.group1); 
+                                            authors[commit["author"]] = author;
+                                            checkRoom(commit['filesAdded'], ant);
 
-                                        var ant = new ants(svg);
-                                        author["antMarker"] = ant;
-                                        
-                                        //console.log(ant.group1);
-                                        ant.group1.transition()
-                                        .duration(500)
-                                        .attr("transform", "translate(" + [27,groundLevel-55] + ")")
-                                        .transition()
-                                        .duration(500)
-                                        .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
-                                        .each("end", function(tempTime) {
-                                            isPaused = false;});
-                                        ant.position = nextPos;
+                                            
 
-                                        authors[commit["author"]] = author;
-                                        checkRoom(commit['filesAdded'], ant.group1);
-                                    } else {
-                                        author["contribution"]  += 1;
-                                        var ant = author["antMarker"]
+                                        } else {
+                                            author["contribution"]  += 1;
+                                            var ant = author["antMarker"]
 
-                                        ant = movePosition(ant, nextPos, tempTime);
-                                        checkRoom(commit['filesAdded'], ant.group1);
+                                            //ant = movePosition(ant, nextPos);
+                                            checkRoom(commit['filesAdded'], ant);
+                                        }
+
+                                    }else{
+                                    //console.log("ho")
                                     }
-
-                                    // checkSleep(5000);
                                 }
-                            }else{
-                                //console.log("ho")
-                            }
-                        })
-
-                        // commits.forEach(oneCommit(commit));
+                            })
+                        }
 
                         today.setHours(today.getHours()+1);
 
                         stopCounter++;
                         if(stopCounter == 2){
-                        //     // moon.transition()
-                        //     // .duration(0);
+                            //     // moon.transition()
+                            //     // .duration(0);
 
-                        //     // moon.transition()
-                        //     // .duration(24000)
-                        //     // .ease("in-out")
-                        //     // .attrTween("transform", orbit((18+today.getHours() - 1 )/24));
+                            //     // moon.transition()
+                            //     // .duration(24000)
+                            //     // .ease("in-out")
+                            //     // .attrTween("transform", orbit((18+today.getHours() - 1 )/24));
 
-                        //     // console.log(sky.style("Fill"));
-                        //     // moon.style("fill", sky.style("Fill"));
+                            //     // console.log(sky.style("Fill"));
+                            //     // moon.style("fill", sky.style("Fill"));
 
-                        //     pauseAnimationForCommit();
-                        //     resumeAnimeationFromCommit(today.getHours() - 1);
+                            //     pauseAnimationForCommit();
+                            //     resumeAnimeationFromCommit(today.getHours() - 1);
 
-                        console.log("check1");
-                        console.log(moon.style("fill"));
-                        console.log("check2");
-                        console.log(moon.transform);
-                    }
+                            console.log("check1");
+                            console.log(moon.style("fill"));
+                            console.log("check2");
+                            console.log(moon.transform);
+                        }
 
-                        // if(stopCounter == 2){
-                        //     pauseAnimationForCommit();
-                        //     // resumeAnimeationFromCommit(today.getHours() - 1);
-                        // }
-                        // if(stopCounter == 3){
-                        //     resumeAnimeationFromCommit(today.getHours() - 1);
-                        // }
+                            // if(stopCounter == 2){
+                            //     pauseAnimationForCommit();
+                            //     // resumeAnimeationFromCommit(today.getHours() - 1);
+                            // }
+                            // if(stopCounter == 3){
+                            //     resumeAnimeationFromCommit(today.getHours() - 1);
+                            // }
 
 
                     } else {
@@ -364,9 +410,9 @@ function simulateDay(index, lastIndex, iData){
                     }
                 }
             }, delay);
-} else {
-    todayLabel.text("Project ended")
-}
+    } else {
+        todayLabel.text("Project ended")
+    }
 }
 
 
@@ -478,15 +524,25 @@ function oneCommit(commit){
                 var existingFile = rooms[filename];
                 if(!existingFile){
                     //no room of this file... so create a new room
+
                     var newRoom = new Room(file)
                     rooms[filename] = newRoom; //creating an empty dictionary in the global "room" variable with the filename as the key
+                    //console.log(newRoom)
+                    ant.moveToRoom(newRoom)
 
                 } else {
                     //room exist so modidfy that room
                 }
 
             });
+            //console.log(ant.name)
+            //console.log(ant.moveStack)
+            var a  = d3.select(ant.group1);
+            //console.log()
+            a.moveToFront();            
 
+            ant.runAllMove(ant.lastMoveIndex-1);
+            ant.lastMoveIndex = ant.moveStack.length -1
             
 
         }
@@ -496,11 +552,27 @@ function oneCommit(commit){
 
     function Grid(){
         this.rooms = [[]];
-        this.push = function (x,y,room){
-            console.log("grid:")
-            console.log(this.rooms)
-            //console.log("inserted room:")            
-            //console.log(room)
+
+        this.delete = function(x,y){
+            this.rooms[y][x]=0
+        }
+
+        this.moveChildren = function(parentRoom){
+            for(var i = parentRoom.childs.length-1; i >= 0 ;i--){
+                if(parentRoom.childs[i].svg){
+                    grid.delete(parentRoom.childs[i].x,parentRoom.childs[i].y)
+                    parentRoom.childs[i].move(parentRoom.childs[i].x+1, parentRoom.childs[i].y)
+                }
+                parentRoom.childs[i].x = parentRoom.childs[i].x + 1     
+                var callback = grid.moveChildren                       
+                grid.push(parentRoom.childs[i].x, parentRoom.childs[i].y,parentRoom.childs[i],callback)
+            }  
+        }
+
+        this.push = function (x,y,room, callback){
+            //console.log("grid:")
+            //console.log(this.rooms)
+            //console.log("pushing "+room.name+" to:( "+x+","+y+")")            
             //console.log("rooms.length:"+this.rooms.length)
             //console.log("y"+y)
             if (y >= this.rooms.length) {
@@ -521,38 +593,79 @@ function oneCommit(commit){
                 //if no room in the grid
                 
                 //console.log("undefined")
+
                 this.rooms[y][x]=room
+                if(callback){
+                    callback(room)
+                }
             }else {
                 //theres room in grid
                 //console.log("defined")
                 var occupyingRoom = this.rooms[y][x]
-                if (occupyingRoom.parents.length == 0){
-                    room.x = room.x + 1
-                } else {
-                    //console.log(occupyingRoom.parents[0])
-                    //console.log(room.parents[0])
-                    if (occupyingRoom.parents[0].x < room.parents[0].x){
-                        //console.log("printing room:")
-                        //console.log(room)
-                        room.x = room.x+1
-                        this.push(x+1, y, room)                        
-                        room.move(x+1,y)
-                    } else {
-                        occupyingRoom.x = occupyingRoom.x + 1
 
-                        occupyingRoom.move(x+1,y)
-                        this.push(x+1,y, occupyingRoom)
-                        this.rooms[y][x] = room
+                //console.log("occupying room:"+occupyingRoom.name)
+
+                if (occupyingRoom.parents.length == 0 && !(room.svg)){
+                    room.x = room.x + 1                    
+                    this.push(x+1, y, room)
+                    if(room.svg){
+                        room.move(x+1, y)
                     }
+
+                } else {
+                    //console.log(occupyingRoom.parents[0].name)
+                    //console.log(room.parents[0].name)
+                    //search for the root and then movement
+                    occupyingRoomBranch = occupyingRoom
+                    while(occupyingRoomBranch.parents.length != 0){
+                        occupyingRoomBranch = occupyingRoomBranch.parents[0]
+                    }
+                    currentBranch = room
+                    while(currentBranch.parents.length != 0){
+                        currentBranch = currentBranch.parents[0]
+                    }
+                    
+                    var occupyingRoot = occupyingRoomBranch
+                    var currentRoot = currentBranch
+
+
+
+                    var targetMove
+                    if (currentRoot.x > occupyingRoot.x){
+                        targetMove = currentRoot                
+                    } else {
+                        targetMove = occupyingRoot 
+                    }
+                    this.delete(targetMove.x,targetMove.y)
+                    targetMove.x = targetMove.x + 1
+
+                    var pushChildren = this.moveChildren
+                    var nextRoom = this.rooms[targetMove.y][targetMove.x]
+                    if (nextRoom) {
+                        if (nextRoom.svg){
+                            this.delete(nextRoom.x, nextRoom.y)
+                        }
+                        nextRoom.x = nextRoom.x + 1
+                        var pushNextRoomChildren = this.moveChildren
+                        this.push(nextRoom.x, nextRoom.y, nextRoom,pushNextRoomChildren)
+                        nextRoom.move(nextRoom.x , nextRoom.y)
+                    }
+
+                    this.push(targetMove.x,targetMove.y,targetMove, pushChildren)
+                    targetMove.move(targetMove.x,targetMove.y)   
+                    if(!this.rooms[y][x]){
+                        this.rooms[y][x]=room
+                        if(callback){
+                            callback(room)
+                        }
+                    }
+
                 }
             }
         }
-
-
-
     }
 
-    function Room(file){
+    function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
         var roomRy = 50; //Ry means radius in y direction
         var distanceXBetweenRooms = 50;
@@ -567,96 +680,143 @@ function oneCommit(commit){
         this.childs = [];
         this.name = file['fileName'];
         this.tunnel
+        this.group
+
+        this.showSvg = function (delay, index, ant){
+            this.tunnel.transition()
+            .duration(200)
+            .delay((delay*index))
+            .attr("opacity", 1)
+
+            this.svg.transition()
+            .duration(200)
+            .delay((delay*index))            
+            .attr("opacity", 1)
+
+            this.nameLabel.transition()
+            .duration(200)
+            .delay((delay*index))            
+            .attr("opacity", 1)
+            .each("end", ant.runAllMove(index+1))
+
+            
+
+        }
+
+        this.addSvg = function (x, y){
+
+            var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
+
+            var group = svg.append("g");
+
+            var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
+            var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
+
+            var tunnel = group.append("line")
+            .attr("x1", calcX)
+            .attr("y1", calcY)
+            .attr("x2", calcX)
+            .attr("y2", groundLevel)
+            .attr("stroke-width", 10)
+            .attr("stroke", color)
+            .attr("opacity",0);
+
+            var roomSvg = group.append("ellipse")
+            .attr("cx", calcX)
+            .attr("cy", calcY)
+            .attr("rx", roomRx)
+            .attr("ry", roomRy)
+            .attr("fill",color)
+            .attr("opacity",0);
+
+            //var tunnelSvg =  svg.append("rect")
+
+
+            var name = group.append("text")
+            .attr("x", calcX)
+            .attr("y", calcY)
+            .text(file['fileName'])
+            .attr("stroke-width", 0.5)
+            .attr("stroke", "black")
+            .style("font-family", "Verdana")
+            .style("font-size", "12px")
+            .style("fill", "white")
+            .attr("opacity",0);
+            
+
+            if (y > 0) {
+                var parentRoom = this.parents[0]
+                var parentRoomSvg = this.parents[0].svg
+                var color = parentRoomSvg.attr('fill');
+
+
+                tunnel
+                .attr("x2", (roomRx*2 + distanceXBetweenRooms)*(parentRoom.x)+(roomRx+distanceToBorder))
+                .attr("y2", parentRoomSvg.attr('cy'))
+                .attr("stroke-width", 10)
+                .attr("stroke", color);
+
+                roomSvg.attr("fill", color);
+
+            } 
+
+            this.group = group
+            this.nameLabel = name
+
+            this.svg = roomSvg;
+
+            this.tunnel = tunnel
+
+        }
         this.move = function (newx,newy){
 
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
+            //console.log("moving..."+this.name)
+            var parentXcoor = newXCoor
+            if (this.parents[0]){
+                parentXcoor = (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
+            }
 
-            console.log("parent of "+this.name+" is "+this.parents[0].name)
-            console.log("parent x: "+this.parents[0].x)
-            var parentX =  (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
+
+
+            this.tunnel.transition()
+            .duration(500)
+            .attr("x1", newXCoor)
+            .attr("x2", parentXcoor)
             this.svg.transition()
             .duration(500)
             .attr("cx", newXCoor)
             this.nameLabel.transition()
             .duration(500)
             .attr("x",newXCoor)
-            this.tunnel.transition()
-            .duration(500)
-            .attr("x1", newXCoor)
-            .attr("x2", parentX)
 
-            if (this.name == "cat"){
-                console.log("cat x: "+this.x)
-            }
-
-            this.childs.forEach(function(child){
-                console.log("aaaaaaaaa")
-                console.log(child)
-                child.x = child.x + 1
-                grid.push(child.x, child.y, child)
-                grid.rooms[child.y][child.x] = 0
-                child.move(child.x, child.y)
-
-            })
 
 
         }
 
 
-
-        if(file['parents'].length > 0 ){
+        
+        if(rooms[file['parents']]){
             //this room is a child of some file
             //console.log("I HAVE A PARENT");
 
             var parentRoom = rooms[file['parents'][0]];
                 //var parentRoomSvg = parentRoom['roomSvg'];
-                var parentRoomSvg = parentRoom.svg;
+            //var parentRoomSvg = parentRoom.svg;
 
             //console.log("bbox:"+parentRoomSvg.attr('cx'));
             //console.log("printing a parent room:");
             //console.log(parentRoom)
             var numParentKids = parentRoom.childs.length;
-            var cx = parseInt(parentRoomSvg.attr('cx'));
-            var cy = parseInt(parentRoomSvg.attr('cy'));
-            this.x = parentRoom.x + numParentKids
-            this.y = parentRoom.y + 1;
+            //var cx = parseInt(parentRoomSvg.attr('cx'));
+            //var cy = parseInt(parentRoomSvg.attr('cy'));
+
             this.parents = [];
             this.childs = [];
             this.parents.push(parentRoom);
             parentRoom.childs.push(this);
 
-            var color = parentRoomSvg.attr('fill');
-            var roomSvg = svg.append("ellipse")
-            .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
-            .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
-            .attr("rx", roomRx)
-            .attr("ry", roomRy)
-            .attr("fill",color);
 
-            //var tunnelSvg =  svg.append("rect")
-            var tunnel = svg.append("line")
-            .attr("x1", roomSvg.attr('cx'))
-            .attr("y1", roomSvg.attr('cy'))
-            .attr("x2", parentRoomSvg.attr('cx'))
-            .attr("y2", parentRoomSvg.attr('cy'))
-            .attr("stroke-width", 10)
-            .attr("stroke", color);
-
-            var name = svg.append("text")
-            .attr("x", roomSvg.attr('cx'))
-            .attr("y", roomSvg.attr('cy'))
-            .text(file['fileName'])
-            .attr("stroke-width", 0.5)
-            .attr("stroke", "black")
-            .style("font-family", "Verdana")
-            .style("font-size", "12px")
-            .style("fill", "white");
-
-            this.nameLabel = name
-
-            this.svg = roomSvg;
-
-            this.tunnel = tunnel
             //rooms[file['fileName']] = {};
             //var newRootRoom = rooms[file['fileName']];
             //newRootRoom['roomSvg'] = roomSvg;
@@ -668,61 +828,30 @@ function oneCommit(commit){
             //newRootRoom['parents'].push(parentName);
             //newRootRoom['childs'] = [];                
             //parentRoom['childs'].push(file['fileName']);
-
+            this.x = parentRoom.x + numParentKids
+            this.y = parentRoom.y + 1;
             grid.push(this.x, this.y, this)
+            //ant.roomCreateStack.push(this)
+            this.addSvg(this.x, this.y)
 
 
         } else {
             //this room is a root room
             //50 is the ry 
             //25 is tunner distance
-            var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
 
-            var numRootRooms = countNumberRootRooms();
-
+            
             //console.log("rooms"+rooms);
             //console.log("numroot:"+numRootRooms);
             this.y = 0;
-            this.x = numRootRooms;
+            this.x = 0;
             this.parents = [];
             this.childs = [];
 
-            var roomSvg = svg.append("ellipse")
-            .attr("cx", (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder))
-            .attr("cy", groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2))))
-            .attr("rx", roomRx)
-            .attr("ry", roomRy)
-            .attr("fill",color);
-
-            var tunnel = svg.append("line")
-            .attr("x1", roomSvg.attr('cx'))
-            .attr("y1", roomSvg.attr('cy'))
-            .attr("x2", roomSvg.attr('cx'))
-            .attr("y2", groundLevel)
-            .attr("stroke-width", 10)
-            .attr("stroke", color);
-
-            this.tunnel = tunnel
-            //rooms[file['fileName']] = {}; //creating an empty dictionary in the global "room" variable with the filename as the key
-            //var newRootRoom = rooms[file['fileName']];
-            //newRootRoom['roomSvg'] = roomSvg;
-            //newRootRoom['parents'] = [];
-            //newRootRoom['childs'] = [];
-            var name = svg.append("text")
-            .attr("x", roomSvg.attr('cx'))
-            .attr("y", roomSvg.attr('cy'))
-            .text(file['fileName'])
-            .attr("stroke-width", 0.5)
-            .attr("stroke", "black")
-            .style("font-family", "Verdana")
-            .style("font-size", "12px")
-            .style("fill", "white");
-
-            this.nameLabel = name
-
-            this.svg = roomSvg;
-
             grid.push(this.x, this.y, this)
+            //ant.roomCreateStack.push(this)
+
+            this.addSvg(this.x, this.y)
 
         }
 
@@ -775,51 +904,155 @@ function oneCommit(commit){
         this.position = 0;
         this.direction = "left";
         this.group1 = createAnt(canvas, height, color, position);
-    }
+        this.lastMoveIndex = 1;
+        this.moveStack = []
+        this.roomCreateStack = []
+        this.name = ""
+        this.room
+        this.moveDuration = 500
 
-
-
-    function movePosition(ant, nextPos, tempTime) {
-        var pos = ant.position;
-        var direction = ant.direction;
-
-        if(direction == "rigth"){
-            if(pos < nextPos){
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
-                .each("end", function(tempTime) {
-                    isPaused = false;});
+        this.moveUpToGround = function(room){
+            var tempRoom = room;
+            while(tempRoom.parents[0]){
+                parentRoom = tempRoom.parents[0]
+                this.move(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
+                tempRoom = parentRoom
+                this.room = parentRoom
             }
-            else if(pos > nextPos){
-                ant.direction = "left";
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
-                .each("end", function(tempTime) {
-                    isPaused = false;});
+            this.move(this.room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.room = 0
+        }
+
+        this.moveDownToParent = function(room){
+            var roomPath = []
+            var tempRoom = room;
+
+            while(tempRoom.parents[0]){
+                parentRoom = tempRoom.parents[0]
+                roomPath.push(parentRoom)
+                tempRoom = parentRoom                
             }
-        }else{
-            if(pos < nextPos){
-                ant.direction = "right";
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
-                .each("end", function(tempTime) {
-                    isPaused = false;});
-            }
-            else if(pos > nextPos){
-                ant.group1.transition()
-                .duration(500)
-                .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
-                .each("end", function(tempTime) {
-                    isPaused = false;});
+            this.move(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, groundLevel-55)
+            for (var i = roomPath.length-1 ; i >=0 ; i--){
+                this.move(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
             }
         }
-        ant.position = nextPos;
-        return ant;
-    }
 
+
+    // original move function of ant
+    // function movePosition(ant, nextPos, tempTime) {
+    //     var pos = ant.position;
+    //     var direction = ant.direction;
+
+    //     if(direction == "rigth"){
+    //         if(pos < nextPos){
+    //             ant.group1.transition()
+    //             .duration(500)
+    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+    //             .each("end", function(tempTime) {
+    //                 isPaused = false;});
+    //         }
+    //         else if(pos > nextPos){
+    //             ant.direction = "left";
+    //             ant.group1.transition()
+    //             .duration(500)
+    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+    //             .each("end", function(tempTime) {
+    //                 isPaused = false;});
+    //         }
+    //     }else{
+    //         if(pos < nextPos){
+    //             ant.direction = "right";
+    //             ant.group1.transition()
+    //             .duration(500)
+    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+    //             .each("end", function(tempTime) {
+    //                 isPaused = false;});
+    //         }
+    //         else if(pos > nextPos){
+    //             ant.group1.transition()
+    //             .duration(500)
+    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+    //             .each("end", function(tempTime) {
+    //                 isPaused = false;});
+    //         }
+    //     }
+    //     ant.position = nextPos;
+    //     return ant;
+
+
+    this.moveToRoom = function(room){
+
+        if(this.room){
+            this.moveUpToGround(this.room)
+        }
+
+        if(room.parents[0]){                
+            this.moveDownToParent(room)
+                //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
+                this.moveStack.push(room)                
+                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.room = room
+            }else{
+                //console.log(room.svg[0][0].cx["baseVal"].value)
+                
+                
+                this.move(room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+                this.moveStack.push(room)                
+                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.room = room
+
+            }
+            
+
+        }
+
+        this.runAllMove = function(i){
+            //console.log(this.moveStack.length)
+            //console.log(i)
+            if (i < this.moveStack.length && i >= 0){
+
+                if(!this.moveStack[i].svg){
+                    //console.log(this.moveStack[i])
+
+                    this.group1.transition()
+                    .duration(this.moveDuration)
+                    .delay(this.moveDuration*i)
+                    .attr("transform", this.moveStack[i])
+                    .each("end", this.runAllMove(i+1))
+                }else{
+                    //console.log(this.moveStack[i].name)
+
+                    this.moveStack[i].showSvg(this.moveDuration, i, this)
+                }
+            }
+        }
+
+        this.move = function(x,y){
+            var pos = this.position;
+            var direction = this.direction;
+            this.moveStack.push("translate(" + [x,y] + ")")
+            /*
+            if(direction == "rigth"){
+                if(pos < x){
+                    this.moveStack.push("translate(" + [x,y] + ")")
+                }
+                else if(pos >= x){
+                    this.direction = "left";
+                    this.moveStack.push("translate(" + [x,y] + ")" + "scale(" + [-1,1] + ")")
+                }
+            }else{
+                if(pos < x){
+                    this.direction = "right";
+                    this.moveStack.push("translate(" + [x,y] + ")")
+                }
+                else if(pos >= x){
+                    this.moveStack.push("translate(" + [x,y] + ")" + "scale(" + [-1,1] + ")")
+                }
+            }*/
+            this.position = x;
+        }
+    }
 
     function createAnt(canvas, height, color, position){
          // Draw the Circle
@@ -971,4 +1204,21 @@ function oneCommit(commit){
     function nextPosition() {
         return  Math.random()*500;
     }
+
+    d3.selection.prototype.moveToFront = function() {
+        return this.each(function(){
+            this[0][0].parentNode.appendChild(this[0][0]);
+        });
+
+//not yet customized to work
+d3.selection.prototype.moveToBack = function() { 
+    return this.each(function() { 
+        var firstChild = this.parentNode.firstChild; 
+        if (firstChild) { 
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    }); 
+};
+
+};
 }
