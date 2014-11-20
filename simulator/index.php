@@ -15,7 +15,7 @@
                 position: absolute;
                 text-align: left;
                 padding: 8px;
-                font: 10px Verdana;
+                font: 15px Verdana;
                 background: lightsteelblue;
                 border: px;
                 border-radius: 8px;
@@ -110,7 +110,14 @@
         foreach($dependencyList as $dependency){
             array_push($fileList[$dependency['target']]['targetedBy'], $fileList[$dependency['source']]['fileName']);
         }
+//        $fileList = array_filter($fileList);
 //        print_r($fileList);
+//        $fileList[0] = $file
+        for($i = 0; $i < sizeof($fileList);$i++){
+            $fileList[$i] = $fileList[$i+1];
+            unset ($fileList[$i+1]);
+        }
+//        array_pop($fileList);
         return $fileList;
     }
     ?>
