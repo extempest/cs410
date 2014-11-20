@@ -192,7 +192,7 @@ function ready(error, xml) {
     .attr("x", 0)
     .attr("y", groundLevel)
     .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-groundLevel)
+    .attr("height", 99999)
     .style("fill", "#A9672E");
     
     
@@ -467,7 +467,18 @@ function ready(error, xml) {
             }
         }
     }
-    var mergedRoom = svg.append("g").attr("class", 'all').call(d3.behavior.drag().on("drag", move));
+    
+    var mergedRoom = svg.append('g').attr("class", 'all').call(d3.behavior.drag().origin(function() {
+                                                                                         var t = d3.select(this);
+                                                                                         return {x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
+                                                                                         y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
+                                                                                         })
+                                                               .on("drag", function(d,i) {
+                                                                   d3.select(this).attr("transform", function(d,i){
+                                                                                        return "translate(" + [ d3.event.x,0 ] + ")"
+                                                                                        })
+                                                                   }));
+
     
     function Room(file){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
@@ -764,15 +775,12 @@ function ready(error, xml) {
                           { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
         
         // put circles in group1
-        var group1 = svg.append("g");
+        var group1 = mergedRoom.append("g");
         
         var circles = group1.selectAll("circle")
         .data(circleData)
         .enter()
-        .append("circle");
-        
-        
-        var circleAttributes = circles
+        .append("circle")
         .attr("cx", function (d) {return d.cx;})
         .attr("cy", function (d) {return d.cy;})
         .attr("r", function (d) {return d.radius;})
@@ -906,10 +914,13 @@ function ready(error, xml) {
         return  Math.random()*500;
     }
     
-    function move() {
-        var x = d3.event.x - 300;
-        var y = 0;
-        d3.select(this)
-        .attr("transform", "translate(" + x + "," + y + ")");
+    function move(d, i) {
+        d.x += d3.event.dx;
+        d.y += d3.event.dy;
+        d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
+        
+        //var x = d3.event.x;
+        //var y = 0;
+        //d3.select(this).attr("transform", "translate(" + x + "," + y + ")");
     }
 }

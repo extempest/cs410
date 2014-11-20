@@ -25,10 +25,10 @@
             
             
                             //This is the accessor function we talked about above
-                            var lineFunction = d3.svg.line()
-                            .x(function(d) { return d.x; })
-                            .y(function(d) { return d.y; })
-                            .interpolate("linear");
+                            //var lineFunction = d3.svg.line()
+                            //.x(function(d) { return d.x; })
+                            //.y(function(d) { return d.y; })
+                            //.interpolate("linear");
                             
                             // Draw the Circle
                             var circleData = [
@@ -37,12 +37,31 @@
                                               { "cx": 180, "cy": 60, "radius": 30, "color": "black" },
                                               { "cx": 195, "cy": 55, "radius": 6, "color": "white"  },
                                               { "cx": 195, "cy": 55, "radius": 3, "color": "black"  } ];
-
+                                              
+                                              
+                                              var dragGroup = d3.behavior.drag()
+                                              .on('dragstart', function () {
+                                                  console.log('Start Dragging Group');
+                                                  })
+                                                  .on('drag', function (d, i) {
+                                                      d.x += d3.event.dx;
+                                                      d.y += d3.event.dy;
+                                                      d3.select(this).attr("transform", "translate(" + d.x + "," + d.y + ")");
+                                                      });
+                                                      
+                                                              var svg = d3.select('body').append('svg');
+                                                              var g = svg.selectAll('g').data([{
+                                                                                               x: 10,
+                                                                                               y: 10
+                                                                                               }])
+                                                                                               .enter().append('g').call(dragGroup);
+                                                                                           
+/*
                                               //The SVG Container
                                               var svgContainer = d3.select("body").append("svg")
                                               .attr("width",400)
                                               .attr("height", 400);
-                             
+                                           
                                            
                                               /*
                                               var circle = svgContainer.append("circle").attr("cx", 80).attr("cy", 80).attr("r", 30);
@@ -51,34 +70,40 @@
                                               var circle = svgContainer.append("circle").attr("cx", 180).attr("cy", 60).attr("r", 30);
                                                var circle = svgContainer.append("circle").attr("cx", 195).attr("cy", 55).attr("r", 6).attr("fill", "white");
                                                var circle = svgContainer.append("circle").attr("cx", 195).attr("cy", 55).attr("r", 3).attr("fill", "black");
-                                             */
+ 
+        
+        
         
                                             // put circles in group1
-                                              var group1 = svgContainer.append("g");
+                                              var group1 = svgContainer.append("g").call(d3.behavior.drag().on('drag',move));
+                                              
+                                              
                                               
                                               var circles = group1.selectAll("circle")
                                                                 .data(circleData)
                                                                 .enter()
-                                                                .append("circle");
+                                                                .append("circle")
+                                                                ;
 
 
                                               var circleAttributes = circles.
                                                                 attr("cx", function (d) {return d.cx;})
                                                                 .attr("cy", function (d) {return d.cy;})
                                                                 .attr("r", function (d) {return d.radius;})
-                                                                .style("fill", function (d) {return d.color;});
+                                                                .style("fill", function (d) {return d.color;})
+                                                                ;
                                              
-                                              
+                                   */
                                               
                                               // draw legs in group1
-                                              var line = group1.append("line")
+                                              var line = g.append("line")
                                                     .attr("x1", 80)
                                                     .attr("y1", 80)
                                                     .attr("x2", 70)
                                                     .attr("y2", 130)
                                                     .attr("stroke-width", 2)
                                                     .attr("stroke", "black");
-                                              var line = group1.append("line")
+                                              var line = g.append("line")
                                                     .attr("x1", 85)
                                                     .attr("y1", 80)
                                                     .attr("x2", 100)
@@ -99,9 +124,18 @@
                                                     .attr("y2", 120)
                                                     .attr("stroke-width", 2)
                                                     .attr("stroke", "black");
+                                                    
+                                                    function move(d) {
+                                                        
+                                                        var x = d3.event.x;
+                                                        var y = 0;
+                                                        d3.select(this)
+                                                        .attr("transform", "translate(" + x + "," + y + ")");
+                                                    }
                                             
                                             
 
+        
         </script>
         
         
