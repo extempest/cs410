@@ -512,6 +512,17 @@ function ready(error, xml) {
             }
         }
     }
+    
+    var mergedRoom = svg.append('g').call(d3.behavior.drag().origin(function() {
+                                                                                         var t = d3.select(this);
+                                                                                         return {x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
+                                                                                         y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
+                                                                                         })
+                                                               .on("drag", function(d,i) {
+                                                                   d3.select(this).attr("transform", function(d,i){
+                                                                                        return "translate(" + [ d3.event.x,0 ] + ")"
+                                                                                        })
+                                                                   }));
 
     function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
@@ -528,7 +539,8 @@ function ready(error, xml) {
         this.childs = [];
         this.name = file['fileName'];
         this.tunnel
-        this.group
+        //this.group
+        this.inviGround
 
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
@@ -555,13 +567,13 @@ function ready(error, xml) {
 
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
 
-            var group = svg.append("g");
+            //var group = svg.append("g");
 
             var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
             var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
 
 
-            var tunnel = group.append("line")
+            var tunnel = mergedRoom.append("line")
                     .attr("x1", calcX)
                     .attr("y1", calcY)
                     .attr("x2", calcX)
@@ -570,7 +582,7 @@ function ready(error, xml) {
                     .attr("stroke", color)
                     .attr("opacity",0);
 
-            var roomSvg = group.append("ellipse")
+            var roomSvg = mergedRoom.append("ellipse")
                 .attr("cx", calcX)
                 .attr("cy", calcY)
                 .attr("rx", roomRx)
@@ -581,7 +593,7 @@ function ready(error, xml) {
             //var tunnelSvg =  svg.append("rect")
 
 
-            var name = group.append("text")
+            var name = mergedRoom.append("text")
             .attr("x", calcX)
             .attr("y", calcY)
             .text(file['fileName'])
@@ -591,6 +603,14 @@ function ready(error, xml) {
             .style("font-size", "12px")
             .style("fill", "white")
             .attr("opacity",0);
+            
+            var inviGround = mergedRoom.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("width", 999999)
+            .attr("height", 999999)
+            .attr("opacity", 0);
+            
             
 
             if (y > 0) {
@@ -609,12 +629,14 @@ function ready(error, xml) {
 
             } 
 
-            this.group = group
+            //this.group = group
             this.nameLabel = name
 
             this.svg = roomSvg;
 
             this.tunnel = tunnel
+            
+            this.inviGround = inviGround;
 
         }
         this.move = function (newx,newy){
@@ -872,7 +894,7 @@ function ready(error, xml) {
                           { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
         // put circles in group1
-        var group1 = canvas.append("g");
+        var group1 = mergedRoom.append("g");
     
         var circles = group1.selectAll("circle")
         .data(circleData)
