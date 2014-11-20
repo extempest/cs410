@@ -8,20 +8,19 @@ function ready(error, xml) {
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
 //    console.log(realData);
-/*
-    for(var i = 0; i < realData.length; i++){
-//        console.log(realData[i]);
-        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
-        if(realData[i].commits !== null){
-            for(var j = 0; j < realData[i].commits.length;j++){
-                var tempDate = realData[i]["commits"][j]["timestamp"];
-                realData[i]["commits"][j]["timestamp"] =
-                 new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
-            }
-        }
-    }
-    console.log(realData)*/
-    var GROUND_LEVEL = 200;
+
+//     for(var i = 0; i < realData.length; i++){
+// //        console.log(realData[i]);
+//         realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+//         if(realData[i].commits !== null){
+//             for(var j = 0; j < realData[i].commits.length;j++){
+//                 var tempDate = realData[i]["commits"][j]["timestamp"];
+//                 realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+//             }
+//         }
+//     }
+//     console.log(realData)
+    console.log(dependencyData)
     var data = [
         {
             'date':new Date(2014, 0, 1, 0, 0, 0, 0),
@@ -207,7 +206,7 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    //data = realData
+    // data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -242,6 +241,10 @@ function ready(error, xml) {
 
     var isPaused = false;
     var universalHour;
+
+    // global constants
+    var TICK_DELAY = 1000;
+    var GROUND_LEVEL = 200;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -271,7 +274,6 @@ function ready(error, xml) {
     function simulateDay(index, lastIndex, iData){
         if (index < lastIndex) {
             var entry = iData[index];
-            var delay = 1000;
             var today = new Date(entry["date"]);
             var tommorrow = new Date(entry["date"]);
             tommorrow.setDate(tommorrow.getDate()+1);
@@ -300,30 +302,12 @@ function ready(error, xml) {
                     if (today.getTime() < tommorrow.getTime()){
 
                         if(today.getHours()==0||today.getHours()==12){
-                            sky.transition()
-                            .duration(12000)
-                            .style("fill", skycolor(today.getHours()));
-
-                            star.transition()
-                            .duration(12000)
-                            .style("opacity", starcolor(today.getHours()));
-
+                            initializeSky(today.getHours());
                         }
 
 
                         if(today.getHours()==0){
-
-                            sun
-                            .transition()
-                            .duration(24000)
-                            .ease("in-out")
-                            .attrTween("transform", orbit(1/4));
-
-                            moon
-                            .transition()
-                            .duration(24000)
-                            .ease("in-out")
-                            .attrTween("transform", orbit(3/4));
+                            initializeOrbits();
                         }
                         
                         if(commits !== null){
@@ -359,7 +343,6 @@ function ready(error, xml) {
                                             //ant = movePosition(ant, nextPos);
                                             checkRoom(commit['filesAdded'], ant);
                                         }
-                                        console.log("akiCheck2");
                                     }else{
                                     //console.log("ho")
                                     }
@@ -375,10 +358,41 @@ function ready(error, xml) {
                         simulateDay(index+1,lastIndex,iData)
                     }
                 }
-            }, delay);
+            }, TICK_DELAY);
         } else {
+            //after finishing all commits
             todayLabel.text("Project ended")
         }
+    }
+
+    //function to initialize sky
+    function initializeSky(time){
+        var durationTime = TICK_DELAY * 12:
+
+        sky.transition()
+        .duration(durationTime)
+        .style("fill", skycolor(time);
+
+        star.transition()
+        .duration(durationTime)
+        .style("opacity", starcolor(time);
+    }
+
+    //funcion to initialize sun and moon
+    function initializeOrbits(){
+        var durationTime = TICK_DELAY * 24;
+
+        sun
+        .transition()
+        .duration(durationTime)
+        .ease("in-out")
+        .attrTween("transform", orbit(1/4));
+
+        moon
+        .transition()
+        .duration(durationTime)
+        .ease("in-out")
+        .attrTween("transform", orbit(3/4));
     }
 
     //stopping the animation except the ants
@@ -453,7 +467,6 @@ function ready(error, xml) {
                 }
             });
 
-            console.log("akiCheck");
             //console.log(ant.name)
             //console.log(ant.moveStack)
             var a  = d3.select(ant.group1);
@@ -463,8 +476,6 @@ function ready(error, xml) {
             ant.moveUpToGround(ant.room)
             ant.runAllMove(ant.lastMoveIndex-1);
             ant.lastMoveIndex = ant.moveStack.length -1
-            
-
         }
 
     }
@@ -584,12 +595,36 @@ function ready(error, xml) {
             }
         }
     }
+    
+    
+    
+    var mergedRoom = svg.append('g')
+                        .call(d3.behavior.drag().origin(function() {
+                                                    var t = d3.select(this);
+                                                    return {    x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
+                                                                y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
+                                                })
+                                                .on("drag", function(d,i) {
+                                                    d3.select(this).attr("transform", function(d,i){
+                                                        return "translate(" + [ d3.event.x,0 ] + ")"
+                                                    })
+                                                })
+                        )
+
+
+    var inviGround = mergedRoom.append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 999999)
+    .attr("height", 999999)
+    .attr("opacity", 0);
+    
 
     function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
         var roomRy = 50; //Ry means radius in y direction
         var distanceXBetweenRooms = 50;
-        var distanceYBetweenRooms = 25;        
+        var distanceYBetweenRooms = 25;
         var distanceToBorder = 20;
         var distanceToGround = 25;
         this.x = -1; //Coordinates in respect to grid
@@ -601,6 +636,7 @@ function ready(error, xml) {
         this.name = file['fileName'];
         this.tunnel
         this.group
+        //this.inviGround
 
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
@@ -622,13 +658,11 @@ function ready(error, xml) {
             
 
         }
+        
 
         this.addSvg = function (x, y){
-
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
-
-            var group = svg.append("g");
-
+            var group = mergedRoom.append("g").attr("class", "eachRoom");
             var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
             var calcY = GROUND_LEVEL+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
 
@@ -677,15 +711,13 @@ function ready(error, xml) {
                 .attr("stroke", color);
 
                 roomSvg.attr("fill", color);
+            }
 
-            } 
 
-            this.group = group
             this.nameLabel = name
-
             this.svg = roomSvg;
-
             this.tunnel = tunnel
+            this.group = group;
         }
 
 
@@ -750,13 +782,11 @@ function ready(error, xml) {
             //ant.roomCreateStack.push(this)
             this.addSvg(this.x, this.y)
 
-
         } else {
             //this room is a root room
             //50 is the ry 
             //25 is tunner distance
 
-            
             //console.log("rooms"+rooms);
             //console.log("numroot:"+numRootRooms);
             this.y = 0;
@@ -768,12 +798,76 @@ function ready(error, xml) {
             //ant.roomCreateStack.push(this)
 
             this.addSvg(this.x, this.y)
+        }
 
+       
+        
+        mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
+        
+        this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
+        
+        
+        var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+        
+        //mergedRoom.select('.eachRoom').on("mouseover", mouseover)
+        //.on("mousemove", mousemove)
+        //.on("mouseout", mouseout);
+        
+        
+        
+        function mousemove()
+        {    //Move tooltip to mouse location
+            return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+        }
+        
+
+        function mouseout()
+        {
+            //d3.select(this)
+            //.attr("color", "aliceblue");
+            
+            tooltip
+            .transition()
+            .delay(50)
+            .style("opacity", 0)    //Make tooltip invisible
+            
+            //svg.selectAll("circle")
+            //.transition()
+            //.style("opacity", 1);       //
+            
+            d3.select(this).attr("class", "dataRoom");
+        }
+        
+
+        //Mouseover function for each room, displays shortened tooltip
+        function mouseover()
+        {
+            var myRoom = d3.select(this);
+            myRoom.attr("class", "dataRoomSelected");
+            
+            tooltip.html(    //Populate tooltip text
+                         "Name: " + d3.select(this).attr("name")                               // TEXT HERE 2
+                         //"Session ID: " + d3.select(this).attr("sessionid") + "<br/>" +
+                         //"Impact CPU: " + d3.select(this).attr("impact")
+                         )
+            .transition()
+            .delay(150)
+            //.duration(250)
+            .style("opacity", 1);
         }
 
 
-
     }
+    
+    
+    
+    
+    
+    
 
     function countNumberRootRooms(){
         var count = 0;
@@ -792,13 +886,15 @@ function ready(error, xml) {
         return count;
     }
 
-       //Get path start point for placing marker
-       function pathStartPoint(path) {
+
+    //Get path start point for placing marker
+    function pathStartPoint(path) {
         var d = path.attr("d"),
         dsplitted = d.split(" ");
         return dsplitted[1].split(",");
     }
     
+
     function transition() {
         marker.transition()
         .duration(1000)
@@ -806,6 +902,7 @@ function ready(error, xml) {
         //.each("end", transition);// infinite loop
     }
     
+
     function ants(canvas) {
         //initializing variable used inside
         //height of ant
@@ -827,6 +924,7 @@ function ready(error, xml) {
         this.room
         this.moveDuration = 500
 
+
         this.moveUpToGround = function(room){
             var tempRoom = room;
             while(tempRoom.parents[0]){
@@ -834,11 +932,11 @@ function ready(error, xml) {
                 this.moveAnt(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
                 tempRoom = parentRoom
                 this.room = parentRoom
-                console.log("akiCheckGround");
             }
             this.moveAnt(this.room.svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)
             this.room = 0
         }
+
 
         this.moveDownToParent = function(room){
             var roomPath = []
@@ -899,15 +997,8 @@ function ready(error, xml) {
 
 
         this.moveToRoom = function(room){
-            console.log("akiCheckRoom1");
-            console.log(room);
-            console.log(this.room);
-
             if(this.room){
-                console.log("akiCheckRoom2");
-                console.log(this.room);
                 this.moveUpToGround(this.room)
-                console.log("akiCheck3");
             }
 
             if(room.parents[0]){                
@@ -928,6 +1019,8 @@ function ready(error, xml) {
             }
         }
 
+
+        //runs the moves stack in the moveStack array
         this.runAllMove = function(i){
             //console.log(this.moveStack.length)
             //console.log(i)
@@ -957,6 +1050,8 @@ function ready(error, xml) {
             }
         }
 
+
+        //add the next move into a moveStack 
         this.moveAnt = function(x,y){
             var pos = this.position;
             var direction = this.direction;
@@ -983,6 +1078,7 @@ function ready(error, xml) {
         }
     }
 
+
     function createAnt(canvas, height, color, position){
          // Draw the Circle
          var circleData = [
@@ -993,8 +1089,18 @@ function ready(error, xml) {
                              { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
         // put circles in group1
-        var group1 = canvas.append("g");
 
+        // original version
+        // var group1 = canvas.append("g");
+
+        // var circles =   group1.selectAll("circle")
+        //                 .data(circleData)
+        //                 .enter()
+        //                 .append("circle");
+        // =======
+        // bora version
+        var group1 = mergedRoom.append("g");
+    
         var circles =   group1.selectAll("circle")
                         .data(circleData)
                         .enter()
@@ -1027,6 +1133,7 @@ function ready(error, xml) {
         return group1;
     }
     
+
     function createBackground(canvas) {
 
 
@@ -1042,6 +1149,7 @@ function ready(error, xml) {
         return sky;
     }
     
+
     function createStars(canvas) {
         var starData = [
                         { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
@@ -1068,6 +1176,7 @@ function ready(error, xml) {
         return group2;
     }
 
+
     function starcolor(hours) {
         var starcolor = 1;
         switch (hours) {
@@ -1082,7 +1191,6 @@ function ready(error, xml) {
     }
     
 
-    
     function skycolor(hours) {
         var skycolor = "blue"
         switch (hours) {
@@ -1120,6 +1228,7 @@ function ready(error, xml) {
         };
     }
 
+
     function translateAlong(path) {
         var l = path.getTotalLength();
         return function(i) {
@@ -1130,24 +1239,26 @@ function ready(error, xml) {
         }
     }
 
+
     function nextPosition() {
         return  Math.random()*500;
     }
+
 
     d3.selection.prototype.moveToFront = function() {
         return this.each(function(){
             this[0][0].parentNode.appendChild(this[0][0]);
         });
 
-//not yet customized to work
-d3.selection.prototype.moveToBack = function() { 
-    return this.each(function() { 
-        var firstChild = this.parentNode.firstChild; 
-        if (firstChild) { 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    }); 
-};
+    //not yet customized to work
+    d3.selection.prototype.moveToBack = function() { 
+        return this.each(function() { 
+            var firstChild = this.parentNode.firstChild; 
+            if (firstChild) { 
+                this.parentNode.insertBefore(this, firstChild); 
+            } 
+        }); 
+    };
 
 };
 }
