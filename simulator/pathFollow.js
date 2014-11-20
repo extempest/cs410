@@ -220,24 +220,10 @@ function ready(error, xml) {
                 .attr("width",window.innerWidth)
                 .attr("height",window.innerHeight);
     
-    var sky = createBackground(svg);
-    
-    var star = createStars(svg);
-    
-    var sun =   svg.append("circle")
-                .attr("r", 40)
-                .style("fill", "yellow");
-    var moon =  svg.append("circle")
-                .attr("r", 30)
-                .style("fill", "white");
 
     
-    var ground =    svg.append("rect")
-                    .attr("x", 0)
-                    .attr("y", GROUND_LEVEL)
-                    .attr("width", window.innerWidth)
-                    .attr("height", window.innerHeight-GROUND_LEVEL)
-                    .style("fill", "#A9672E");
+
+
 
     var isPaused = false;
     var universalHour;
@@ -258,15 +244,7 @@ function ready(error, xml) {
            })
     transition();*/
 
-    var todayLabel =    svg.append("text")
-                        .attr("x", 0)
-                        .attr("y", 20)
-                        .text("Welcome to Git-Java Source Code Analyzer")
-                        .attr("stroke-width", 1)
-                        .attr("stroke", "black")
-                        .style("font-family", "Verdana")
-                        .style("font-size", "20px")
-                        .style("fill", "white");
+
 
     simulateDay(0, data.length, data)
 
@@ -367,15 +345,15 @@ function ready(error, xml) {
 
     //function to initialize sky
     function initializeSky(time){
-        var durationTime = TICK_DELAY * 12:
+        var durationTime = TICK_DELAY * 12;
 
         sky.transition()
         .duration(durationTime)
-        .style("fill", skycolor(time);
+        .style("fill", skycolor(time));
 
         star.transition()
         .duration(durationTime)
-        .style("opacity", starcolor(time);
+        .style("opacity", starcolor(time));
     }
 
     //funcion to initialize sun and moon
@@ -446,8 +424,35 @@ function ready(error, xml) {
         // depending on the time, calculates the angle
         return ((18+time)%24)/24;
     }
+ 
+    var sky = createBackground(svg);
     
-
+    var star = createStars(svg);
+    
+    var sun =   svg.append("circle")
+    .attr("r", 40)
+    .style("fill", "yellow");
+    var moon =  svg.append("circle")
+    .attr("r", 30)
+    .style("fill", "white");
+    
+    var ground =    svg.append("rect")
+    .attr("x", 0)
+    .attr("y", GROUND_LEVEL)
+    .attr("width", window.innerWidth)
+    .attr("height", window.innerHeight-GROUND_LEVEL)
+    .style("fill", "#A9672E");
+    
+    var todayLabel =    svg.append("text")
+    .attr("x", 0)
+    .attr("y", 20)
+    .text("Welcome to Git-Java Source Code Analyzer")
+    .attr("stroke-width", 1)
+    .attr("stroke", "black")
+    .style("font-family", "Verdana")
+    .style("font-size", "20px")
+    .style("fill", "white");
+    
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
