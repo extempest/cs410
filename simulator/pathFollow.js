@@ -8,18 +8,19 @@ function ready(error, xml) {
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
 //    console.log(realData);
-/*
-    for(var i = 0; i < realData.length; i++){
-//        console.log(realData[i]);
-        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
-        if(realData[i].commits !== null){
-            for(var j = 0; j < realData[i].commits.length;j++){
-                var tempDate = realData[i]["commits"][j]["timestamp"];
-                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
-            }
-        }
-    }
-    console.log(realData)*/
+
+//    for(var i = 0; i < realData.length; i++){
+////        console.log(realData[i]);
+//        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+//        if(realData[i].commits !== null){
+//            for(var j = 0; j < realData[i].commits.length;j++){
+//                var tempDate = realData[i]["commits"][j]["timestamp"];
+//                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+//            }
+//        }
+//    }
+//    console.log(realData)
+    console.log(dependencyData)
     var groundLevel = 200;
     var data = [
         {
@@ -206,7 +207,7 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    //data = realData
+//    data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()

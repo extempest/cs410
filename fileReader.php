@@ -73,23 +73,81 @@ $(document).ready(function() {
 ////        echo "<br/>";
 ////    }
 //    ?>
-<?php
-    echo printRealData();
-    ?>
-<?php
-    function printRealData(){
-        $commitList = parse();
-        $newArray = sortCommits($commitList);
-        return convertJsArray($newArray);
-    }
-    ?>
+//<?php
+//    echo printRealData();
+//    ?>
+//<?php
+//    function printRealData(){
+//        $commitList = parse();
+//        $newArray = sortCommits($commitList);
+//        return convertJsArray($newArray);
+//    }
+//    ?>
 
+<?php
+    echo "hello";
+//    readXML('CPSC304CoolTeam.xml');
+    echo "<br/>";
+    echo convertJsArray(readXML('scribe-java.xml'));
+    echo "bye";
+    ?>
 </div>
 <br/>
 
 <div>output from js:</div>
 <div id="outputjs1"></div>
 <div id="outputjs2"></div>
+
+
+<?php
+    function readXML($xmlFile){
+        $fileList = array();
+        $dependencyList = array();
+        $isSource = false;
+        $isTarget = false;
+        
+        $classDiagram = simplexml_load_file($xmlFile);
+        
+        foreach($classDiagram as $object){
+//            print_r($object);
+            $className = str_word_count($object['name'],1);
+            if(!empty($className) && $object['language'] == "java"){//the object is about class info
+                $directory = "";
+                for($i = 0; $i < sizeof($className)-1; $i++){
+                    if($i == 0)
+                        $directory = $directory.$className[$i];
+                    else
+                        $directory = $directory.".".$className[$i];
+                }
+                $fileList[(int)$object['id']] =  array('id' => (int)$object['id'], 'fileName' => $className[sizeof($className)-1], 'directory' => $directory,'targetedBy' => array());
+            }
+            if($object['id'] && !$object['name']){//the object is about dependency info
+                foreach($object as $end){
+                    if($end['type'] == "SOURCE"){
+                        $isSource = true;
+                        $source = $end['refId'];
+                    }
+                    if($end['type'] == "TARGET"){
+                        $isTarget = true;
+                        $target = $end[refId];
+                    }
+                    if($isSource && $isTarget){
+                        array_push($dependencyList, array('source' => (int)$source, 'target' => (int)$target));
+                        $isSource = false;
+                        $isTarget = false;
+                    }
+                }
+            }
+        }
+        // Reading is Done. fileList contains name of files in the project. Dependency List contains the dependency Relation.
+        
+        foreach($dependencyList as $dependency){
+            array_push($fileList[$dependency['target']]['targetedBy'], $fileList[$dependency['source']]['fileName']);
+        }
+//        print_r($fileList);
+        return $fileList;
+    }
+?>
 
 <?php
     function sortCommits($commitArray){

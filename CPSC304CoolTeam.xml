@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.1.6" icons="false" always-add-relationships="false" generalizations="false" 
+  realizations="false" associations="false" dependencies="true" nesting-relationships="false">  
+  <class id="1" language="java" name="users.BorrowerUser" project="Project Part III" 
+    file="/Project Part III/src/users/BorrowerUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="56" y="146"/>    
+    <display autosize="false" stereotype="false" package="false" initial-value="false" signature="false" 
+      accessors="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="users.ClerkUser" project="Project Part III" 
+    file="/Project Part III/src/users/ClerkUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="391" y="224"/>    
+    <display autosize="false" stereotype="false" package="false" initial-value="false" signature="false" 
+      accessors="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="users.LibrarianUser" project="Project Part III" 
+    file="/Project Part III/src/users/LibrarianUser.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="268" y="51"/>    
+    <display autosize="false" stereotype="false" package="false" initial-value="false" signature="false" 
+      accessors="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="gui.Main" project="Project Part III" file="/Project Part III/src/gui/Main.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="199" y="393"/>    
+    <display autosize="false" stereotype="false" package="false" initial-value="false" signature="false" 
+      accessors="true" visibility="false">      
+      <attributes public="false" package="false" protected="false" private="false" static="false"/>      
+      <operations public="false" package="false" protected="false" private="false" static="false"/>    
+    </display>  
+  </class>  
+  <dependency id="5">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="6">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="7">    
+    <bendpoint x="164" y="112"/>    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="8">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <classifier-display autosize="false" stereotype="false" package="false" initial-value="false" signature="false" 
+    accessors="true" visibility="false">    
+    <attributes public="false" package="false" protected="false" private="false" static="false"/>    
+    <operations public="false" package="false" protected="false" private="false" static="false"/>  
+  </classifier-display>  
+  <association-display labels="false" multiplicity="false"/>
+</class-diagram>
