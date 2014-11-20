@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="utf-8">
-<head>
-<title>SVG path animation</title>
-<link href="style.css" rel="stylesheet">
-<script src="http://d3js.org/d3.v3.min.js"></script>
-<script src="http://d3js.org/queue.v1.min.js"></script>
-<script>
-    var realData = <?php echo printRealData();?>;
-    var dependencyData = <?php echo printDependency(); ?>;
-</script>
+    <meta charset="utf-8">
+        <head>
+            <title>SVG path animation</title>
+            <link href="style.css" rel="stylesheet">
+                <script src="http://d3js.org/d3.v3.min.js"></script>
+                <script src="http://d3js.org/queue.v1.min.js"></script>
+                <script>
+                    //var realData = <?php echo printRealData();?>;
+                    var dependencyData = <?php echo printDependency(); ?>;
+                </script>
+            <style type="text/css">
+                div.tooltip {
+                position: absolute;
+                text-align: left;
+                padding: 8px;
+                font: 10px Verdana;
+                background: lightsteelblue;
+                border: px;
+                border-radius: 8px;
+                    pointer-events: none;
+                }
 
-</head>
-<body>
-<!-- start -->
-<div id="pathAnimation">
-<script src="pathFollow.js"></script>
-</div>
-<!-- end -->
-</body>
+            .dataRoomSelected{
+            stroke: white;
+                stroke-width: 100px
+            fill: springgreen;
+            }
+        .dataRoom {
+        stroke: none;
+            fill: lightblue;
+            }
+            </style>
+        </head>
+        <body>
+            <!-- start -->
+            <div id="pathAnimation">
+                <script src="pathFollow.js"></script>
+            </div>
+            <!-- end -->
+        </body>
 
 <?php
     function helloworld(){
