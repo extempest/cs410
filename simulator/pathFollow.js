@@ -21,7 +21,7 @@ function ready(error, xml) {
         }
     }
     console.log(realData)*/
-    var groundLevel = 200;
+    var GROUND_LEVEL = 200;
     var data = [
         {
             'date':new Date(2014, 0, 1, 0, 0, 0, 0),
@@ -217,30 +217,29 @@ function ready(error, xml) {
     var importedNode = document.importNode(xml.documentElement, true);
     d3.select("#pathAnimation").node().appendChild(importedNode);
     
-    var svg = d3.select("svg")
-    .attr("width",window.innerWidth)
-    .attr("height",window.innerHeight);
+    var svg =   d3.select("svg")
+                .attr("width",window.innerWidth)
+                .attr("height",window.innerHeight);
     
     var sky = createBackground(svg);
     
     var star = createStars(svg);
     
-    var sun = svg.append("circle")
-    .attr("r", 40)
-    .style("fill", "yellow");
-    var moon = svg.append("circle")
-    .attr("r", 30)
-    .style("fill", "white");
+    var sun =   svg.append("circle")
+                .attr("r", 40)
+                .style("fill", "yellow");
+    var moon =  svg.append("circle")
+                .attr("r", 30)
+                .style("fill", "white");
 
     
-    var ground = svg.append("rect")
-    .attr("x", 0)
-    .attr("y", groundLevel)
-    .attr("width", window.innerWidth)
-    .attr("height", window.innerHeight-groundLevel)
-    .style("fill", "#A9672E");
+    var ground =    svg.append("rect")
+                    .attr("x", 0)
+                    .attr("y", GROUND_LEVEL)
+                    .attr("width", window.innerWidth)
+                    .attr("height", window.innerHeight-GROUND_LEVEL)
+                    .style("fill", "#A9672E");
 
-    var stopCounter = 0;
     var isPaused = false;
     var universalHour;
     
@@ -254,32 +253,32 @@ function ready(error, xml) {
     .style("fill",function() {
            return "hsl(" + Math.random() * 360 + ",100%,50%)";
            })
-transition();*/
+    transition();*/
 
-var todayLabel = svg.append("text")
-.attr("x", 0)
-.attr("y", 20)
-.text("Welcome to Git-Java Source Code Analyzer")
-.attr("stroke-width", 1)
-.attr("stroke", "black")
-.style("font-family", "Verdana")
-.style("font-size", "20px")
-.style("fill", "white");
+    var todayLabel =    svg.append("text")
+                        .attr("x", 0)
+                        .attr("y", 20)
+                        .text("Welcome to Git-Java Source Code Analyzer")
+                        .attr("stroke-width", 1)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "20px")
+                        .style("fill", "white");
 
-simulateDay(0, data.length, data)
-
-
-function simulateDay(index, lastIndex, iData){
-    if (index < lastIndex) {
-        var entry = iData[index];
-        var delay = 1000;
-        var today = new Date(entry["date"]);
-        var tommorrow = new Date(entry["date"]);
-        tommorrow.setDate(tommorrow.getDate()+1);
+    simulateDay(0, data.length, data)
 
 
+    function simulateDay(index, lastIndex, iData){
+        if (index < lastIndex) {
+            var entry = iData[index];
+            var delay = 1000;
+            var today = new Date(entry["date"]);
+            var tommorrow = new Date(entry["date"]);
+            tommorrow.setDate(tommorrow.getDate()+1);
 
-        var commits = entry["commits"];
+
+
+            var commits = entry["commits"];
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
             //console.log()
@@ -287,16 +286,15 @@ function simulateDay(index, lastIndex, iData){
 
                                         // ant.group1.transition()
                                         // .duration(500)
-                                        // .attr("transform", "translate(" + [27,groundLevel-55] + ")")
+                                        // .attr("transform", "translate(" + [27,GROUND_LEVEL-55] + ")")
                                         // .transition()
                                         // .duration(500)
-                                        // .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+                                        // .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
                                         // .each("end", function(tempTime) {
                                         //     isPaused = false;});
 
-
-if(!isPaused){
-    todayLabel.text(today)
+                if(!isPaused){
+                    todayLabel.text(today)
 
                     //console.log(today.getTime());
                     if (today.getTime() < tommorrow.getTime()){
@@ -330,11 +328,10 @@ if(!isPaused){
                         
                         if(commits !== null){
                             commits.forEach(function(commit){
-
                                 if(!commit["processed"]){
                                 //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
-                                if(today.getTime()>commit["timestamp"]){
+                                    if(today.getTime()>commit["timestamp"]){
                                         isPaused = true;
                                         universalHour = today.getHours();
                                         pauseAnimationForCommit();
@@ -355,8 +352,6 @@ if(!isPaused){
                                             authors[commit["author"]] = author;
                                             checkRoom(commit['filesAdded'], ant);
 
-                                            
-
                                         } else {
                                             author["contribution"]  += 1;
                                             var ant = author["antMarker"]
@@ -367,113 +362,24 @@ if(!isPaused){
                                         console.log("akiCheck2");
                                     }else{
                                     //console.log("ho")
+                                    }
                                 }
-                            }
-                        })
-}
-
-today.setHours(today.getHours()+1);
-
-stopCounter++;
-if(stopCounter == 2){
-                            //     // moon.transition()
-                            //     // .duration(0);
-
-                            //     // moon.transition()
-                            //     // .duration(24000)
-                            //     // .ease("in-out")
-                            //     // .attrTween("transform", orbit((18+today.getHours() - 1 )/24));
-
-                            //     // console.log(sky.style("Fill"));
-                            //     // moon.style("fill", sky.style("Fill"));
-
-                            //     pauseAnimationForCommit();
-                            //     resumeAnimeationFromCommit(today.getHours() - 1);
-
-                            console.log("check1");
-                            console.log(moon.style("fill"));
-                            console.log("check2");
-                            console.log(moon.transform);
+                            })
                         }
 
-                            // if(stopCounter == 2){
-                            //     pauseAnimationForCommit();
-                            //     // resumeAnimeationFromCommit(today.getHours() - 1);
-                            // }
-                            // if(stopCounter == 3){
-                            //     resumeAnimeationFromCommit(today.getHours() - 1);
-                            // }
+                        today.setHours(today.getHours()+1);
 
-
-                        } else {
-                            pauseAnimationForCommit();
-                            clearInterval(intervalId)
-                            simulateDay(index+1,lastIndex,iData)
-                        }
+                    } else {
+                        pauseAnimationForCommit();
+                        clearInterval(intervalId)
+                        simulateDay(index+1,lastIndex,iData)
                     }
-                }, delay);
-} else {
-    todayLabel.text("Project ended")
-}
-}
-
-    // main function not used anymore
-    // function oneCommit(commit){
-
-    //     if(!commit["processed"]){
-    //         //console.log("now:"+today+" timestamp:"+commit["timestamp"])
-
-    //         if(today.getTime()>commit["timestamp"]){
-    //             commit["processed"] = true;
-    //             var author = authors[commit["author"]];
-    //             // console.log(authors);
-    //             var nextPos = nextPosition();
-
-    //             if(!author){
-    //                 author = {};
-    //                 author["contribution"] = 10;
-
-    //                 var ant = new ants(svg);
-    //                 author["antMarker"] = ant;
-
-    //                 //console.log(ant.group1);
-    //                 ant.group1.transition()
-    //                 .duration(500)
-    //                 .attr("transform", "translate(" + [27,groundLevel-55] + ")")
-    //                 .transition()
-    //                 .duration(500)
-    //                 .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
-    //                 ant.position = nextPos;
-
-    //                 authors[commit["author"]] = author;
-    //                 checkRoom(commit['filesAdded'], ant.group1);
-    //             } else {
-    //                 author["contribution"]  += 1;
-    //                 var ant = author["antMarker"]
-
-    //                 ant = movePosition(ant, nextPos);
-    //                 checkRoom(commit['filesAdded'], ant.group1);
-    //             }
-    //         }
-    //     }else{
-    //         //console.log("ho")
-    //     }
-    // }
-
-    // sleepfunction not used anymore since it stops the animattion as well
-    // function sleep(delay) {
-    //     var start = new Date().getTime();
-    //     while (new Date().getTime() < start + delay);
-    // }
-
-    // function checkSleep(time){
-    //     console.log("sleeping");
-    //     sleep(time);
-    //     console.log("awake");
-    // }
-
-
-
+                }
+            }, delay);
+        } else {
+            todayLabel.text("Project ended")
+        }
+    }
 
     //stopping the animation except the ants
     function pauseAnimationForCommit(){
@@ -724,38 +630,38 @@ if(stopCounter == 2){
             var group = svg.append("g");
 
             var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
-            var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
+            var calcY = GROUND_LEVEL+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
 
-            var tunnel = group.append("line")
-            .attr("x1", calcX)
-            .attr("y1", calcY)
-            .attr("x2", calcX)
-            .attr("y2", groundLevel)
-            .attr("stroke-width", 10)
-            .attr("stroke", color)
-            .attr("opacity",0);
+            var tunnel =    group.append("line")
+                            .attr("x1", calcX)
+                            .attr("y1", calcY)
+                            .attr("x2", calcX)
+                            .attr("y2", GROUND_LEVEL)
+                            .attr("stroke-width", 10)
+                            .attr("stroke", color)
+                            .attr("opacity",0);
 
             var roomSvg = group.append("ellipse")
-            .attr("cx", calcX)
-            .attr("cy", calcY)
-            .attr("rx", roomRx)
-            .attr("ry", roomRy)
-            .attr("fill",color)
-            .attr("opacity",0);
+                            .attr("cx", calcX)
+                            .attr("cy", calcY)
+                            .attr("rx", roomRx)
+                            .attr("ry", roomRy)
+                            .attr("fill",color)
+                            .attr("opacity",0);
 
             //var tunnelSvg =  svg.append("rect")
 
 
-            var name = group.append("text")
-            .attr("x", calcX)
-            .attr("y", calcY)
-            .text(file['fileName'])
-            .attr("stroke-width", 0.5)
-            .attr("stroke", "black")
-            .style("font-family", "Verdana")
-            .style("font-size", "12px")
-            .style("fill", "white")
-            .attr("opacity",0);
+            var name =  group.append("text")
+                        .attr("x", calcX)
+                        .attr("y", calcY)
+                        .text(file['fileName'])
+                        .attr("stroke-width", 0.5)
+                        .attr("stroke", "black")
+                        .style("font-family", "Verdana")
+                        .style("font-size", "12px")
+                        .style("fill", "white")
+                        .attr("opacity",0);
             
 
             if (y > 0) {
@@ -925,12 +831,12 @@ if(stopCounter == 2){
             var tempRoom = room;
             while(tempRoom.parents[0]){
                 parentRoom = tempRoom.parents[0]
-                this.move(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
+                this.moveAnt(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
                 tempRoom = parentRoom
                 this.room = parentRoom
                 console.log("akiCheckGround");
             }
-            this.move(this.room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.moveAnt(this.room.svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)
             this.room = 0
         }
 
@@ -943,9 +849,9 @@ if(stopCounter == 2){
                 roomPath.push(parentRoom)
                 tempRoom = parentRoom                
             }
-            this.move(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, groundLevel-55)
+            this.moveAnt(roomPath[roomPath.length-1].svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)
             for (var i = roomPath.length-1 ; i >=0 ; i--){
-                this.move(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
+                this.moveAnt(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
             }
         }
 
@@ -959,7 +865,7 @@ if(stopCounter == 2){
         //         if(pos < nextPos){
         //             ant.group1.transition()
         //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
         //             .each("end", function(tempTime) {
         //                 isPaused = false;});
         //         }
@@ -967,7 +873,7 @@ if(stopCounter == 2){
         //             ant.direction = "left";
         //             ant.group1.transition()
         //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")" + "scale(" + [-1,1] + ")")
         //             .each("end", function(tempTime) {
         //                 isPaused = false;});
         //         }
@@ -976,14 +882,14 @@ if(stopCounter == 2){
         //             ant.direction = "right";
         //             ant.group1.transition()
         //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
         //             .each("end", function(tempTime) {
         //                 isPaused = false;});
         //         }
         //         else if(pos > nextPos){
         //             ant.group1.transition()
         //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")" + "scale(" + [-1,1] + ")")
         //             .each("end", function(tempTime) {
         //                 isPaused = false;});
         //         }
@@ -1008,15 +914,15 @@ if(stopCounter == 2){
                 this.moveDownToParent(room)
                     //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
                     this.moveStack.push(room)                
-                    this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                    this.moveAnt(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
                     this.room = room
             }else{
                 //console.log(room.svg[0][0].cx["baseVal"].value)
                 
                 
-                this.move(room.svg[0][0].cx["baseVal"].value, groundLevel-55)
+                this.moveAnt(room.svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)
                 this.moveStack.push(room)                
-                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                this.moveAnt(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
                 this.room = room
 
             }
@@ -1051,7 +957,7 @@ if(stopCounter == 2){
             }
         }
 
-        this.move = function(x,y){
+        this.moveAnt = function(x,y){
             var pos = this.position;
             var direction = this.direction;
             this.moveStack.push("translate(" + [x,y] + ")")
@@ -1080,43 +986,43 @@ if(stopCounter == 2){
     function createAnt(canvas, height, color, position){
          // Draw the Circle
          var circleData = [
-         { "cx": position+20, "cy": 20, "radius": 20, "color": color },
-         { "cx": position+50, "cy": 20, "radius": 20, "color": color },
-         { "cx": position+80, "cy": 20, "radius": 20, "color": color },
-         { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
-         { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
+                             { "cx": position+20, "cy": 20, "radius": 20, "color": color },
+                             { "cx": position+50, "cy": 20, "radius": 20, "color": color },
+                             { "cx": position+80, "cy": 20, "radius": 20, "color": color },
+                             { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
+                             { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
         // put circles in group1
         var group1 = canvas.append("g");
 
-        var circles = group1.selectAll("circle")
-        .data(circleData)
-        .enter()
-        .append("circle");
+        var circles =   group1.selectAll("circle")
+                        .data(circleData)
+                        .enter()
+                        .append("circle");
         
         
-        var circleAttributes = circles
-        .attr("cx", function (d) {return d.cx;})
-        .attr("cy", function (d) {return d.cy;})
-        .attr("r", function (d) {return d.radius;})
-        .style("fill", function (d) {return d.color;});
+        var circleAttributes =  circles
+                                .attr("cx", function (d) {return d.cx;})
+                                .attr("cy", function (d) {return d.cy;})
+                                .attr("r", function (d) {return d.radius;})
+                                .style("fill", function (d) {return d.color;});
         
         
         // draw legs in group1
         for(i = 0; i < 2; i++){
             for(j = 0; j < 2; j++){
-                var line = group1.append("line")
-                .attr("x1", position+13+(j*12)+(i*47))
-                .attr("y1", 20)
-                .attr("x2", position+13+(j*12)+(i*47))
-                .attr("y2", 55)
-                .attr("stroke-width", 2)
-                .attr("stroke", color);
+                var line =  group1.append("line")
+                            .attr("x1", position+13+(j*12)+(i*47))
+                            .attr("y1", 20)
+                            .attr("x2", position+13+(j*12)+(i*47))
+                            .attr("y2", 55)
+                            .attr("stroke-width", 2)
+                            .attr("stroke", color);
             }
         }
         
         group1
-        .attr("transform", "translate(" + [7,groundLevel-height] + ")");
+        .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");
 
         return group1;
     }
@@ -1124,12 +1030,12 @@ if(stopCounter == 2){
     function createBackground(canvas) {
 
 
-        var sky = canvas.append("rect")
-        .attr("x", 0)
-        .attr("y", 0)
-        .attr("width", window.innerWidth)
-        .attr("height", groundLevel)
-        .style("fill", "#0c1317");
+        var sky =   canvas.append("rect")
+                    .attr("x", 0)
+                    .attr("y", 0)
+                    .attr("width", window.innerWidth)
+                    .attr("height", GROUND_LEVEL)
+                    .style("fill", "#0c1317");
         
         
         
@@ -1138,26 +1044,26 @@ if(stopCounter == 2){
     
     function createStars(canvas) {
         var starData = [
-        { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
-        { "cx": 2*window.innerWidth/3, "cy": 40, "radius": 2, "color": "white" },
-        { "cx": window.innerWidth/4, "cy": 40, "radius": 2, "color": "white" },
-        { "cx": 5*window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"},
-        { "cx": window.innerWidth/3, "cy": 80, "radius": 2, "color": "white"  },
-        { "cx": window.innerWidth/2, "cy": 90, "radius": 1, "color": "white"  },
-        { "cx": window.innerWidth/20, "cy": 50, "radius": 2, "color": "white"  },
-        { "cx": window.innerWidth/15, "cy": 120, "radius": 1, "color": "white"  },
-        { "cx": 18*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
-        { "cx": 15*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
-        { "cx": 13*window.innerWidth/20, "cy": 160, "radius": 2, "color": "white"  },
-        { "cx": 2*window.innerWidth/5, "cy": 170, "radius": 2, "color": "white"  }];
+                        { "cx": window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"  },
+                        { "cx": 2*window.innerWidth/3, "cy": 40, "radius": 2, "color": "white" },
+                        { "cx": window.innerWidth/4, "cy": 40, "radius": 2, "color": "white" },
+                        { "cx": 5*window.innerWidth/6, "cy": 80, "radius": 1, "color": "white"},
+                        { "cx": window.innerWidth/3, "cy": 80, "radius": 2, "color": "white"  },
+                        { "cx": window.innerWidth/2, "cy": 90, "radius": 1, "color": "white"  },
+                        { "cx": window.innerWidth/20, "cy": 50, "radius": 2, "color": "white"  },
+                        { "cx": window.innerWidth/15, "cy": 120, "radius": 1, "color": "white"  },
+                        { "cx": 18*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+                        { "cx": 15*window.innerWidth/20, "cy": 120, "radius": 2, "color": "white"  },
+                        { "cx": 13*window.innerWidth/20, "cy": 160, "radius": 2, "color": "white"  },
+                        { "cx": 2*window.innerWidth/5, "cy": 170, "radius": 2, "color": "white"  }];
         
         var group2 = canvas.append("g");
         var stars = group2.selectAll("circle").data(starData).enter().append("circle");
-        var starAttributes = stars
-        .attr("cx", function (d) {return d.cx;})
-        .attr("cy", function (d) {return d.cy;})
-        .attr("r", function (d) {return d.radius;})
-        .style("fill", function (d) {return d.color;});
+        var starAttributes =    stars
+                                .attr("cx", function (d) {return d.cx;})
+                                .attr("cy", function (d) {return d.cy;})
+                                .attr("r", function (d) {return d.radius;})
+                                .style("fill", function (d) {return d.color;});
         
         return group2;
     }
@@ -1192,33 +1098,33 @@ if(stopCounter == 2){
             }
 
             return skycolor;
-        }
+    }
 
 
-        function orbit(initValue) {
+    function orbit(initValue) {
 
-            return function(d, i, a) {
-                return function(t) {
+        return function(d, i, a) {
+            return function(t) {
 
-                    var t_x, t_y;
+                var t_x, t_y;
 
-                    var rotation_radius_x = (window.innerWidth/2)+80;
-                    var rotation_radius_y = 200;
-                    var t_angle = (2 * Math.PI) * (t+(initValue));
-                    var t_x = rotation_radius_x * Math.cos(t_angle);
-                    var t_y = rotation_radius_y * Math.sin(t_angle);
+                var rotation_radius_x = (window.innerWidth/2)+80;
+                var rotation_radius_y = 200;
+                var t_angle = (2 * Math.PI) * (t+(initValue));
+                var t_x = rotation_radius_x * Math.cos(t_angle);
+                var t_y = rotation_radius_y * Math.sin(t_angle);
 
 
-                    return "translate(" + ((window.innerWidth/2) + t_x) + "," + (200 + t_y) + ")";
-                };
+                return "translate(" + ((window.innerWidth/2) + t_x) + "," + (200 + t_y) + ")";
             };
-        }
+        };
+    }
 
-        function translateAlong(path) {
-            var l = path.getTotalLength();
-            return function(i) {
-                return function(t) {
-                    var p = path.getPointAtLength(t * l);
+    function translateAlong(path) {
+        var l = path.getTotalLength();
+        return function(i) {
+            return function(t) {
+                var p = path.getPointAtLength(t * l);
                 return "translate(" + p.x + "," + p.y + ")";//Move marker
             }
         }
