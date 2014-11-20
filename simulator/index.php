@@ -50,14 +50,20 @@
 
 <?php
     function printRealData(){
-        $commitList = parse("mockByengProject.txt"); //"mockTest.txt","mockByengProject.txt","RxJavaCommits.txt" etc
+        // mock data
+        $commitList = parse("mockByengProject.txt"); //"mockTest.txt","mockByengProject.txt","RxJavaCommits.txt" etc　scribe-javaCommits.txt
+        // real data
+        // $commitList = parse("scribe-javaCommits.txt");
         $newArray = sortCommits($commitList);
         return convertJsArray($newArray);
     }
     ?>
 <?php
     function printDependency(){
+        // mock data
         $php_array = readXML("CPSC304CoolTeam.xml");
+        // real data
+        // $php_array = readXML("scribe-java.xml");
         return convertJsArray($php_array);
     }
     ?>

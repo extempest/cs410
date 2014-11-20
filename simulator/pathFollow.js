@@ -9,18 +9,27 @@ function ready(error, xml) {
     
 //    console.log(realData);
 
-//     for(var i = 0; i < realData.length; i++){
-// //        console.log(realData[i]);
-//         realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
-//         if(realData[i].commits !== null){
-//             for(var j = 0; j < realData[i].commits.length;j++){
-//                 var tempDate = realData[i]["commits"][j]["timestamp"];
-//                 realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
-//             }
-//         }
-//     }
-//     console.log(realData)
-    console.log(dependencyData)
+    // global constants
+    var REAL_DATA = false;
+    var TICK_DELAY = 1000;
+    var GROUND_LEVEL = 200;
+    var SPEED_CONTROLLER = 2;
+
+    if(REAL_DATA){
+        for(var i = 0; i < realData.length; i++){
+    //        console.log(realData[i]);
+            realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+            if(realData[i].commits !== null){
+                for(var j = 0; j < realData[i].commits.length;j++){
+                    var tempDate = realData[i]["commits"][j]["timestamp"];
+                    realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+                }
+            }
+        }
+
+        console.log(realData)
+        console.log(dependencyData)
+    }
     var data = [
         {
             'date':new Date(2014, 0, 1, 0, 0, 0, 0),
@@ -206,7 +215,10 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    // data = realData
+    if(REAL_DATA){
+        data = realData
+    }
+
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -227,10 +239,6 @@ function ready(error, xml) {
 
     var isPaused = false;
     var universalHour;
-
-    // global constants
-    var TICK_DELAY = 1000;
-    var GROUND_LEVEL = 200;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -294,9 +302,9 @@ function ready(error, xml) {
                                 //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
                                     if(today.getTime()>commit["timestamp"]){
-                                        isPaused = true;
+                                        // isPaused = true;
                                         universalHour = today.getHours();
-                                        pauseAnimationForCommit();
+                                        // pauseAnimationForCommit();
                                         commit["processed"] = true;
                                         var author = authors[commit["author"]];
                                         // console.log(authors);
@@ -384,15 +392,18 @@ function ready(error, xml) {
     //resuming the animation of the background
     function resumeAnimeationFromCommit(time){
         var tweleveTime = (time % 12);
-        sky.transition().duration((12 - tweleveTime)*1000)
+        var skyDuration = (12 - tweleveTime)*TICK_DELAY;
+        var orbitDuration = 24 * TICK_DELAY;
+
+        sky.transition().duration(skyDuration)
         .style("fill", resumeSkyColor(time));
-        star.transition().duration((12 - tweleveTime)*1000)
+        star.transition().duration(skyDuration)
         .style("opacity", resumeStarColor(time));
 
-        sun.transition().duration(24000)
+        sun.transition().duration(orbitDuration)
         .ease("in-out")
         .attrTween("transform", orbit(sunPosition(time)));
-        moon.transition().duration(24000)
+        moon.transition().duration(orbitDuration)
         .ease("in-out")
         .attrTween("transform", orbit(moonPosition(time)));
     }
@@ -478,7 +489,10 @@ function ready(error, xml) {
             //console.log()
             a.moveToFront();            
 
-            ant.moveUpToGround(ant.room)
+            if(ant.room){
+                ant.moveUpToGround(ant.room)
+            }
+
             ant.runAllMove(ant.lastMoveIndex-1);
             ant.lastMoveIndex = ant.moveStack.length -1
         }
@@ -632,6 +646,9 @@ function ready(error, xml) {
         var distanceYBetweenRooms = 25;
         var distanceToBorder = 20;
         var distanceToGround = 25;
+
+        var ROOM_DELAY = TICK_DELAY/(SPEED_CONTROLLER*2.5);
+
         this.x = -1; //Coordinates in respect to grid
         this.y = -1;
         this.nameLabel
@@ -645,17 +662,17 @@ function ready(error, xml) {
 
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
-            .duration(200)
+            .duration(ROOM_DELAY)
             .delay((delay*index))
             .attr("opacity", 1)
 
             this.svg.transition()
-            .duration(200)
+            .duration(ROOM_DELAY)
             .delay((delay*index))            
             .attr("opacity", 1)
 
             this.nameLabel.transition()
-            .duration(200)
+            .duration(ROOM_DELAY)
             .delay((delay*index))            
             .attr("opacity", 1)
             .each("end", ant.runAllMove(index+1))
@@ -678,7 +695,7 @@ function ready(error, xml) {
                             .attr("y2", GROUND_LEVEL)
                             .attr("stroke-width", 10)
                             .attr("stroke", color)
-                            .attr("opacity",0);
+                            .attr("opacity",1);
 
             var roomSvg = group.append("ellipse")
                             .attr("cx", calcX)
@@ -686,7 +703,7 @@ function ready(error, xml) {
                             .attr("rx", roomRx)
                             .attr("ry", roomRy)
                             .attr("fill",color)
-                            .attr("opacity",0);
+                            .attr("opacity",1);
 
             //var tunnelSvg =  svg.append("rect")
 
@@ -700,7 +717,7 @@ function ready(error, xml) {
                         .style("font-family", "Verdana")
                         .style("font-size", "12px")
                         .style("fill", "white")
-                        .attr("opacity",0);
+                        .attr("opacity",1);
             
 
             if (y > 0) {
@@ -727,6 +744,7 @@ function ready(error, xml) {
 
 
         this.move = function (newx,newy){
+            var moveRoomDuration = TICK_DELAY/SPEED_CONTROLLER;
 
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
             //console.log("moving..."+this.name)
@@ -736,14 +754,14 @@ function ready(error, xml) {
             }
 
             this.tunnel.transition()
-            .duration(500)
+            .duration(moveRoomDuration)
             .attr("x1", newXCoor)
             .attr("x2", parentXcoor)
             this.svg.transition()
-            .duration(500)
+            .duration(moveRoomDuration)
             .attr("cx", newXCoor)
             this.nameLabel.transition()
-            .duration(500)
+            .duration(moveRoomDuration)
             .attr("x",newXCoor)
         }
 
@@ -902,7 +920,7 @@ function ready(error, xml) {
 
     function transition() {
         marker.transition()
-        .duration(1000)
+        .duration(TICK_DELAY)
         .attrTween("transform", translateAlong(path.node()))
         //.each("end", transition);// infinite loop
     }
@@ -927,7 +945,7 @@ function ready(error, xml) {
         this.roomCreateStack = []
         this.name = ""
         this.room
-        this.moveDuration = 500
+        this.moveDuration = TICK_DELAY/SPEED_CONTROLLER;
 
 
         this.moveUpToGround = function(room){
@@ -1048,10 +1066,10 @@ function ready(error, xml) {
             else{
                     this.group1.transition()
                     .delay(this.moveDuration*i)
-                    .each("end", function(){
-                        isPaused = false;
-                        resumeAnimeationFromCommit(universalHour);
-                    })
+                    // .each("end", function(){
+                    //     isPaused = false;
+                    //     resumeAnimeationFromCommit(universalHour);
+                    // })
             }
         }
 
