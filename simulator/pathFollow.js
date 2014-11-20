@@ -15,196 +15,197 @@ function ready(error, xml) {
         if(realData[i].commits !== null){
             for(var j = 0; j < realData[i].commits.length;j++){
                 var tempDate = realData[i]["commits"][j]["timestamp"];
-                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+                realData[i]["commits"][j]["timestamp"] =
+                 new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
             }
         }
     }
     console.log(realData)*/
     var groundLevel = 200;
     var data = [
-    {
-        'date':new Date(2014, 0, 1, 0, 0, 0, 0),
+        {
+            'date':new Date(2014, 0, 1, 0, 0, 0, 0),
             'commits'://this is already sorted chronologically
             [
-            {
-                'author':'Thompson',
-                'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
-                'filesAdded': 
-                [
                 {
-                    'fileName':'fruits',
-                    'parents':
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 1, 1 , 1, 1),
+                    'filesAdded': 
                     [
-                                                            //to add if exist
-                                                            ]
-                                                        } ,
-                                                        {
-                                                            'fileName':'tools',
-                                                            'parents':
-                                                            [
-                                                            ]
-                                                        }
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    },
-                                                    {
-                                                        'author':'Byung',
-                                                        'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'animals',
-                                                            'parents':
-                                                            [
-                                                            //to add if exist
-                                                            ]
-                                                        },
-                                                        {
-                                                            'fileName':'cat',
-                                                            'parents':
-                                                            [
-                                                            'animals'
-                                                            ]
-                                                        }  
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    },
-                                                    {
-                                                        'author':'Thompson',
-                                                        'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'apple',
-                                                            'parents':
-                                                            [
-                                                            'fruits'
-                                                            ]
-                                                        },
-                                                        {
-                                                            'fileName':'oranges',
-                                                            'parents':
-                                                            [
-                                                            'fruits'
-                                                            ]
-                                                        } 
-                                                        ],                   
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    },
-                                                    {
-                                                        'author':'Thompson',
-                                                        'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'persian',
-                                                            'parents':
-                                                            [
-                                                            'cat'
-                                                            ]
-                                                        },
-                                                        {
-                                                            'fileName':'dog',
-                                                            'parents':
-                                                            [
-                                                            'animals'
-                                                            ]
-                                                        } 
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    }
-                                                    ]
-                                                },
-                                                {
-                                                    'date':new Date(2014, 0, 2, 0, 0, 0, 0),
-                                                    'commits':
-                                                    [
-                                                    {
-                                                        'author':'Aki',
-                                                        'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'mandarin',
-                                                            'parents':
-                                                            [
-                                                            'oranges'
-                                                            ]
-                                                        },
-                                                        {
-                                                            'fileName':'hammer',
-                                                            'parents': 
-                                                            [
-                                                            'tools'
-                                                            ]
-                                                        }
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    },
-                                                    {
-                                                        'author':'Thompson',
-                                                        'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'banana',
-                                                            'parents':
-                                                            [
-                                                            'fruits'
-                                                            ]
-                                                        },
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    },    
-                                                    {
-                                                        'author':'Thompson',
-                                                        'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'clothes',
-                                                            'parents':
-                                                            [
-                                                            ]
-                                                        },
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    },
-                                                    {
-                                                        'author':'Byung',
-                                                        'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
-                                                        'filesAdded': 
-                                                        [
-                                                        {
-                                                            'fileName':'pants',
-                                                            'parents':
-                                                            [
-                                                            'clothes'
-                                                            ]
-                                                        },
-                                                        ],
-                                                        'filesModified': [],
-                                                        'filesDeleted':[],
-                                                        'relationshipModified':[]
-                                                    }        
-
-                                                    ]
-                                                }
-                                                ];
+                        {
+                            'fileName':'fruits',
+                            'parents':
+                            [
+                                        //to add if exist
+                            ]
+                        },
+                        {
+                            'fileName':'tools',
+                            'parents':
+                            [
+                            ]
+                        }
+                    ],
+                    
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                },
+                {
+                    'author':'Byung',
+                    'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'animals',
+                        'parents':
+                        [
+                        //to add if exist
+                        ]
+                    },
+                    {
+                        'fileName':'cat',
+                        'parents':
+                        [
+                        'animals'
+                        ]
+                    }  
+                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                },
+                {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'apple',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    },
+                    {
+                        'fileName':'oranges',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    } 
+                    ],                   
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                },
+                {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'persian',
+                        'parents':
+                        [
+                        'cat'
+                        ]
+                    },
+                    {
+                        'fileName':'dog',
+                        'parents':
+                        [
+                        'animals'
+                        ]
+                    } 
+                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                }
+            ]
+        },
+        {
+            'date':new Date(2014, 0, 2, 0, 0, 0, 0),
+            'commits':
+            [
+                {
+                    'author':'Aki',
+                    'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'mandarin',
+                        'parents':
+                        [
+                        'oranges'
+                        ]
+                    },
+                    {
+                        'fileName':'hammer',
+                        'parents': 
+                        [
+                        'tools'
+                        ]
+                    }
+                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                },
+                {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'banana',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    },
+                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                },    
+                {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'clothes',
+                        'parents':
+                        [
+                        ]
+                    },
+                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                },
+                {
+                    'author':'Byung',
+                    'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'pants',
+                        'parents':
+                        [
+                        'clothes'
+                        ]
+                    },
+                    ],
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                }
+            ]
+        }
+    ];
 //    console.log(data)
     //data = realData
     var authors = {}
@@ -241,6 +242,7 @@ function ready(error, xml) {
 
     var stopCounter = 0;
     var isPaused = false;
+    var universalHour;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -293,8 +295,8 @@ function simulateDay(index, lastIndex, iData){
                                         //     isPaused = false;});
 
 
-                if(!isPaused){
-                    todayLabel.text(today)
+if(!isPaused){
+    todayLabel.text(today)
 
                     //console.log(today.getTime());
                     if (today.getTime() < tommorrow.getTime()){
@@ -332,9 +334,9 @@ function simulateDay(index, lastIndex, iData){
                                 if(!commit["processed"]){
                                 //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
-                                    if(today.getTime()>commit["timestamp"]){
+                                if(today.getTime()>commit["timestamp"]){
                                         isPaused = true;
-                                        today.setHours(today.getHours()-1);
+                                        universalHour = today.getHours();
                                         pauseAnimationForCommit();
                                         commit["processed"] = true;
                                         var author = authors[commit["author"]];
@@ -362,18 +364,18 @@ function simulateDay(index, lastIndex, iData){
                                             //ant = movePosition(ant, nextPos);
                                             checkRoom(commit['filesAdded'], ant);
                                         }
-
+                                        console.log("akiCheck2");
                                     }else{
                                     //console.log("ho")
-                                    }
                                 }
-                            })
-                        }
+                            }
+                        })
+}
 
-                        today.setHours(today.getHours()+1);
+today.setHours(today.getHours()+1);
 
-                        stopCounter++;
-                        if(stopCounter == 2){
+stopCounter++;
+if(stopCounter == 2){
                             //     // moon.transition()
                             //     // .duration(0);
 
@@ -403,71 +405,75 @@ function simulateDay(index, lastIndex, iData){
                             // }
 
 
-                    } else {
-                        pauseAnimationForCommit();
-                        clearInterval(intervalId)
-                        simulateDay(index+1,lastIndex,iData)
+                        } else {
+                            pauseAnimationForCommit();
+                            clearInterval(intervalId)
+                            simulateDay(index+1,lastIndex,iData)
+                        }
                     }
-                }
-            }, delay);
-    } else {
-        todayLabel.text("Project ended")
-    }
+                }, delay);
+} else {
+    todayLabel.text("Project ended")
+}
 }
 
+    // main function not used anymore
+    // function oneCommit(commit){
 
-function oneCommit(commit){
+    //     if(!commit["processed"]){
+    //         //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
-    if(!commit["processed"]){
-            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
+    //         if(today.getTime()>commit["timestamp"]){
+    //             commit["processed"] = true;
+    //             var author = authors[commit["author"]];
+    //             // console.log(authors);
+    //             var nextPos = nextPosition();
 
-            if(today.getTime()>commit["timestamp"]){
-                commit["processed"] = true;
-                var author = authors[commit["author"]];
-                // console.log(authors);
-                var nextPos = nextPosition();
+    //             if(!author){
+    //                 author = {};
+    //                 author["contribution"] = 10;
 
-                if(!author){
-                    author = {};
-                    author["contribution"] = 10;
+    //                 var ant = new ants(svg);
+    //                 author["antMarker"] = ant;
 
-                    var ant = new ants(svg);
-                    author["antMarker"] = ant;
-                    
-                    //console.log(ant.group1);
-                    ant.group1.transition()
-                    .duration(500)
-                    .attr("transform", "translate(" + [27,groundLevel-55] + ")")
-                    .transition()
-                    .duration(500)
-                    .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
-                    ant.position = nextPos;
+    //                 //console.log(ant.group1);
+    //                 ant.group1.transition()
+    //                 .duration(500)
+    //                 .attr("transform", "translate(" + [27,groundLevel-55] + ")")
+    //                 .transition()
+    //                 .duration(500)
+    //                 .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")");
+    //                 ant.position = nextPos;
 
-                    authors[commit["author"]] = author;
-                    checkRoom(commit['filesAdded'], ant.group1);
-                } else {
-                    author["contribution"]  += 1;
-                    var ant = author["antMarker"]
+    //                 authors[commit["author"]] = author;
+    //                 checkRoom(commit['filesAdded'], ant.group1);
+    //             } else {
+    //                 author["contribution"]  += 1;
+    //                 var ant = author["antMarker"]
 
-                    ant = movePosition(ant, nextPos);
-                    checkRoom(commit['filesAdded'], ant.group1);
-                }
-            }
-        }else{
-            //console.log("ho")
-        }
-    }
+    //                 ant = movePosition(ant, nextPos);
+    //                 checkRoom(commit['filesAdded'], ant.group1);
+    //             }
+    //         }
+    //     }else{
+    //         //console.log("ho")
+    //     }
+    // }
 
-    function sleep(delay) {
-        var start = new Date().getTime();
-        while (new Date().getTime() < start + delay);
-    }
+    // sleepfunction not used anymore since it stops the animattion as well
+    // function sleep(delay) {
+    //     var start = new Date().getTime();
+    //     while (new Date().getTime() < start + delay);
+    // }
 
-    function checkSleep(time){
-        console.log("sleeping");
-        sleep(time);
-        console.log("awake");
-    }
+    // function checkSleep(time){
+    //     console.log("sleeping");
+    //     sleep(time);
+    //     console.log("awake");
+    // }
+
+
+
 
     //stopping the animation except the ants
     function pauseAnimationForCommit(){
@@ -493,6 +499,7 @@ function oneCommit(commit){
         .attrTween("transform", orbit(moonPosition(time)));
     }
 
+    // retrieves the color of sky
     function resumeSkyColor(time){
         if(time < 12)
             return skycolor(0);
@@ -500,6 +507,7 @@ function oneCommit(commit){
             return skycolor(12);
     }
 
+    // retrieves the color of stars
     function resumeStarColor(time){
         if(time < 12)
             return starcolor(0);
@@ -507,11 +515,15 @@ function oneCommit(commit){
             return starcolor(12);
     }
 
+    // retruns the position of sun
     function sunPosition(time){
+        // depending on the time, calculates the angle
         return ((6+time)%24)/24;
     }
 
+    // returns the positon of moon
     function moonPosition(time){
+        // depending on the time, calculates the angle
         return ((18+time)%24)/24;
     }
     
@@ -527,20 +539,22 @@ function oneCommit(commit){
 
                     var newRoom = new Room(file)
                     rooms[filename] = newRoom; //creating an empty dictionary in the global "room" variable with the filename as the key
-                    //console.log(newRoom)
+                    console.log(newRoom)
                     ant.moveToRoom(newRoom)
 
                 } else {
                     //room exist so modidfy that room
                 }
-
             });
+
+            console.log("akiCheck");
             //console.log(ant.name)
             //console.log(ant.moveStack)
             var a  = d3.select(ant.group1);
             //console.log()
             a.moveToFront();            
 
+            ant.moveUpToGround(ant.room)
             ant.runAllMove(ant.lastMoveIndex-1);
             ant.lastMoveIndex = ant.moveStack.length -1
             
@@ -766,8 +780,9 @@ function oneCommit(commit){
             this.svg = roomSvg;
 
             this.tunnel = tunnel
-
         }
+
+
         this.move = function (newx,newy){
 
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
@@ -776,8 +791,6 @@ function oneCommit(commit){
             if (this.parents[0]){
                 parentXcoor = (roomRx*2 + distanceXBetweenRooms)*(this.parents[0].x)+(roomRx+distanceToBorder)
             }
-
-
 
             this.tunnel.transition()
             .duration(500)
@@ -789,9 +802,6 @@ function oneCommit(commit){
             this.nameLabel.transition()
             .duration(500)
             .attr("x",newXCoor)
-
-
-
         }
 
 
@@ -918,6 +928,7 @@ function oneCommit(commit){
                 this.move(parentRoom.svg[0][0].cx["baseVal"].value, parentRoom.svg[0][0].cy["baseVal"].value )
                 tempRoom = parentRoom
                 this.room = parentRoom
+                console.log("akiCheckGround");
             }
             this.move(this.room.svg[0][0].cx["baseVal"].value, groundLevel-55)
             this.room = 0
@@ -939,60 +950,66 @@ function oneCommit(commit){
         }
 
 
-    // original move function of ant
-    // function movePosition(ant, nextPos, tempTime) {
-    //     var pos = ant.position;
-    //     var direction = ant.direction;
+        // original move function of ant
+        // function movePosition(ant, nextPos, tempTime) {
+        //     var pos = ant.position;
+        //     var direction = ant.direction;
 
-    //     if(direction == "rigth"){
-    //         if(pos < nextPos){
-    //             ant.group1.transition()
-    //             .duration(500)
-    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
-    //             .each("end", function(tempTime) {
-    //                 isPaused = false;});
-    //         }
-    //         else if(pos > nextPos){
-    //             ant.direction = "left";
-    //             ant.group1.transition()
-    //             .duration(500)
-    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
-    //             .each("end", function(tempTime) {
-    //                 isPaused = false;});
-    //         }
-    //     }else{
-    //         if(pos < nextPos){
-    //             ant.direction = "right";
-    //             ant.group1.transition()
-    //             .duration(500)
-    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
-    //             .each("end", function(tempTime) {
-    //                 isPaused = false;});
-    //         }
-    //         else if(pos > nextPos){
-    //             ant.group1.transition()
-    //             .duration(500)
-    //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
-    //             .each("end", function(tempTime) {
-    //                 isPaused = false;});
-    //         }
-    //     }
-    //     ant.position = nextPos;
-    //     return ant;
+        //     if(direction == "rigth"){
+        //         if(pos < nextPos){
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //         else if(pos > nextPos){
+        //             ant.direction = "left";
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //     }else{
+        //         if(pos < nextPos){
+        //             ant.direction = "right";
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //         else if(pos > nextPos){
+        //             ant.group1.transition()
+        //             .duration(500)
+        //             .attr("transform", "translate(" + [nextPos,groundLevel-55] + ")" + "scale(" + [-1,1] + ")")
+        //             .each("end", function(tempTime) {
+        //                 isPaused = false;});
+        //         }
+        //     }
+        //     ant.position = nextPos;
+        //     return ant;
 
 
-    this.moveToRoom = function(room){
+        this.moveToRoom = function(room){
+            console.log("akiCheckRoom1");
+            console.log(room);
+            console.log(this.room);
 
-        if(this.room){
-            this.moveUpToGround(this.room)
-        }
+            if(this.room){
+                console.log("akiCheckRoom2");
+                console.log(this.room);
+                this.moveUpToGround(this.room)
+                console.log("akiCheck3");
+            }
 
-        if(room.parents[0]){                
-            this.moveDownToParent(room)
-                //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
-                this.moveStack.push(room)                
-                this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
-                this.room = room
+            if(room.parents[0]){                
+                this.moveDownToParent(room)
+                    //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
+                    this.moveStack.push(room)                
+                    this.move(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value)
+                    this.room = room
             }else{
                 //console.log(room.svg[0][0].cx["baseVal"].value)
                 
@@ -1003,8 +1020,6 @@ function oneCommit(commit){
                 this.room = room
 
             }
-            
-
         }
 
         this.runAllMove = function(i){
@@ -1025,6 +1040,14 @@ function oneCommit(commit){
 
                     this.moveStack[i].showSvg(this.moveDuration, i, this)
                 }
+            }
+            else{
+                    this.group1.transition()
+                    .delay(this.moveDuration*i)
+                    .each("end", function(){
+                        isPaused = false;
+                        resumeAnimeationFromCommit(universalHour);
+                    })
             }
         }
 
