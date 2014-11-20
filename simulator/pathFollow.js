@@ -8,18 +8,19 @@ function ready(error, xml) {
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
 //    console.log(realData);
-/*
-    for(var i = 0; i < realData.length; i++){
-//        console.log(realData[i]);
-        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
-        if(realData[i].commits !== null){
-            for(var j = 0; j < realData[i].commits.length;j++){
-                var tempDate = realData[i]["commits"][j]["timestamp"];
-                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
-            }
-        }
-    }
-    console.log(realData)*/
+
+//    for(var i = 0; i < realData.length; i++){
+////        console.log(realData[i]);
+//        realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
+//        if(realData[i].commits !== null){
+//            for(var j = 0; j < realData[i].commits.length;j++){
+//                var tempDate = realData[i]["commits"][j]["timestamp"];
+//                realData[i]["commits"][j]["timestamp"] = new Date(tempDate["year"],tempDate["month"],tempDate["day"],tempDate["hour"],tempDate["minute"],tempDate["second"])  // array
+//            }
+//        }
+//    }
+//    console.log(realData)
+    console.log(dependencyData)
     var groundLevel = 200;
     var data = [
         {
@@ -206,7 +207,7 @@ function ready(error, xml) {
         }
     ];
 //    console.log(data)
-    //data = realData
+//    data = realData
     var authors = {}
     var rooms = {}
     var grid = new Grid()
@@ -512,12 +513,33 @@ function ready(error, xml) {
             }
         }
     }
+    
+    
+    
+    var mergedRoom = svg.append('g').call(d3.behavior.drag().origin(function() {
+                                                                                         var t = d3.select(this);
+                                                                                         return {x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
+                                                                                         y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
+                                                                                })
+                                                        .on("drag", function(d,i) {
+                                                                   d3.select(this).attr("transform", function(d,i){
+                                                                                        return "translate(" + [ d3.event.x,0 ] + ")"
+                                                                                        })
+                                                            }))
+    var inviGround = mergedRoom.append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 999999)
+    .attr("height", 999999)
+    .attr("opacity", 0);
+    
+    
 
     function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
         var roomRy = 50; //Ry means radius in y direction
         var distanceXBetweenRooms = 50;
-        var distanceYBetweenRooms = 25;        
+        var distanceYBetweenRooms = 25;
         var distanceToBorder = 20;
         var distanceToGround = 25;
         this.x = -1; //Coordinates in respect to grid
@@ -529,6 +551,7 @@ function ready(error, xml) {
         this.name = file['fileName'];
         this.tunnel
         this.group
+        //this.inviGround
 
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
@@ -550,16 +573,18 @@ function ready(error, xml) {
             
 
         }
+        
+        
 
         this.addSvg = function (x, y){
 
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
 
-            var group = svg.append("g");
+            var group = mergedRoom.append("g").attr("class", "eachRoom");
+
 
             var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
             var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
-
 
             var tunnel = group.append("line")
                     .attr("x1", calcX)
@@ -592,6 +617,9 @@ function ready(error, xml) {
             .style("fill", "white")
             .attr("opacity",0);
             
+            
+            
+            
 
             if (y > 0) {
                 var parentRoom = this.parents[0]
@@ -606,17 +634,27 @@ function ready(error, xml) {
                 .attr("stroke", color);
 
                 roomSvg.attr("fill", color);
+                
+                
 
-            } 
+            }
 
-            this.group = group
+
             this.nameLabel = name
 
             this.svg = roomSvg;
 
             this.tunnel = tunnel
-
-        }
+            
+            
+            this.group = group;
+            
+            
+            
+            
+            
+            
+                 }
         this.move = function (newx,newy){
 
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
@@ -707,8 +745,74 @@ function ready(error, xml) {
         }
 
        
+        
+        mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
+        
+        this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
+        
+        
+        var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+        
+        //mergedRoom.select('.eachRoom').on("mouseover", mouseover)
+        //.on("mousemove", mousemove)
+        //.on("mouseout", mouseout);
+        
+        
+        
+        function mousemove()
+        {    //Move tooltip to mouse location
+            return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+        }
+        
+        function mouseout()
+        {
+            //d3.select(this)
+            //.attr("color", "aliceblue");
+            
+            tooltip
+            .transition()
+            .delay(50)
+            .style("opacity", 0)    //Make tooltip invisible
+            
+            //svg.selectAll("circle")
+            //.transition()
+            //.style("opacity", 1);       //
+            
+            d3.select(this).attr("class", "dataRoom");
+        }
+        
+        //Mouseover function for each room, displays shortened tooltip
+        function mouseover()
+        {
+            var myRoom = d3.select(this);
+            myRoom.attr("class", "dataRoomSelected");
+            
+            tooltip.html(    //Populate tooltip text
+                         "Name: " + d3.select(this).attr("name")                               // TEXT HERE 2
+                         //"Session ID: " + d3.select(this).attr("sessionid") + "<br/>" +
+                         //"Impact CPU: " + d3.select(this).attr("impact")
+                         )
+            .transition()
+            .delay(150)
+            //.duration(250)
+            .style("opacity", 1);
+            
+            
+            
+        }
+
 
     }
+    
+    
+    
+    
+    
+    
 
     function countNumberRootRooms(){
         var count = 0;
@@ -872,7 +976,7 @@ function ready(error, xml) {
                           { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
         // put circles in group1
-        var group1 = canvas.append("g");
+        var group1 = mergedRoom.append("g");
     
         var circles = group1.selectAll("circle")
         .data(circleData)

@@ -9,6 +9,16 @@
                 width: 100%;
                 height:100%
             }
+        div.tooltip {
+            position: absolute;
+            text-align: left;
+            padding: 8px;
+            font: 10px Verdana;
+            background: lightsteelblue;
+            border: px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
         
             </style>
         
@@ -40,18 +50,13 @@
 
                                               //The SVG Container
                                               var svgContainer = d3.select("body").append("svg")
-                                              .attr("width",400)
-                                              .attr("height", 400);
+                                              .attr("width",window.innerWidth)
+                                              .attr("height", window.innerHeight);
                              
                                            
-                                              /*
-                                              var circle = svgContainer.append("circle").attr("cx", 80).attr("cy", 80).attr("r", 30);
-                                              
-                                              var circle = svgContainer.append("circle").attr("cx", 130).attr("cy", 75).attr("r", 30);
-                                              var circle = svgContainer.append("circle").attr("cx", 180).attr("cy", 60).attr("r", 30);
-                                               var circle = svgContainer.append("circle").attr("cx", 195).attr("cy", 55).attr("r", 6).attr("fill", "white");
-                                               var circle = svgContainer.append("circle").attr("cx", 195).attr("cy", 55).attr("r", 3).attr("fill", "black");
-                                             */
+                                           
+                                           
+                                             
         
                                             // put circles in group1
                                               var group1 = svgContainer.append("g");
@@ -68,37 +73,101 @@
                                                                 .attr("r", function (d) {return d.radius;})
                                                                 .style("fill", function (d) {return d.color;});
                                              
-                                              
-                                              
+                                             var group2 = group1.append("g").attr("class", "hover");
+                                             var group3 = group1.append("g").attr("class", "hover");
+                                             
                                               // draw legs in group1
-                                              var line = group1.append("line")
+                                              var line = group2.append("line")
                                                     .attr("x1", 80)
                                                     .attr("y1", 80)
                                                     .attr("x2", 70)
                                                     .attr("y2", 130)
                                                     .attr("stroke-width", 2)
                                                     .attr("stroke", "black");
-                                              var line = group1.append("line")
+                                              var line = group2.append("line")
                                                     .attr("x1", 85)
                                                     .attr("y1", 80)
                                                     .attr("x2", 100)
                                                     .attr("y2", 130)
                                                     .attr("stroke-width", 2)
                                                     .attr("stroke", "black");
-                                              var line = group1.append("line")
+                                              var line = group2.append("line")
                                                     .attr("x1", 145)
                                                     .attr("y1", 70)
                                                     .attr("x2", 175)
                                                     .attr("y2", 110)
                                                     .attr("stroke-width", 2)
                                                     .attr("stroke", "black");
-                                              var line = group1.append("line")
+                                              var line = group2.append("line")
                                                     .attr("x1", 140)
                                                     .attr("y1", 70)
                                                     .attr("x2", 160)
                                                     .attr("y2", 120)
                                                     .attr("stroke-width", 2)
                                                     .attr("stroke", "black");
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    var circle = group3.append("circle").attr("cx", 500).attr("cy", 80).attr("r", 30);
+                                                    
+                                                    var circle = group3.append("circle").attr("cx", 700).attr("cy", 75).attr("r", 30);
+                                                    var circle = group3.append("circle").attr("cx", 800).attr("cy", 60).attr("r", 30);
+                                                    var circle = group3.append("circle").attr("cx", 900).attr("cy", 55).attr("r", 6).attr("fill", "white");
+                                                    var circle = group3.append("circle").attr("cx", 950).attr("cy", 55).attr("r", 3).attr("fill", "black");
+                                                    
+                                                    
+                                                    
+                                                    var tooltip = d3.select("body").append("div")
+                                                    .attr("class", "tooltip")
+                                                    .style("opacity", 0);
+                                            
+                                           // group1.on("mouseover", function() {d3.select(this).style("opacity", "0.5")}).on("mouseout", function() {d3.select(this).style("opacity", "1")});
+                                            
+                                         
+                                         group1.selectAll('.hover').on("mouseover", mouseover)
+                                         .on("mousemove", mousemove)
+                                         .on("mouseout", mouseout);
+                                         
+       function mousemove()
+         {    //Move tooltip to mouse location
+              return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+            }
+        
+        function mouseout()
+        {
+            d3.select(this)
+            .attr("color", "aliceblue"); //Recolor circle steel blue
+            
+            tooltip.transition()
+            .delay(100)
+            .style("opacity", 0)    //Make tooltip invisible
+            
+            svgContainer.selectAll("circle")
+            .transition()
+            .style("opacity", 1);       //
+            
+            d3.select(this).style("opacity", "1")
+        }
+        
+        //Mouseover function for circles, displays shortened tooltip and causes other circles to become opaque
+        function mouseover()
+        {
+            var myRoom = d3.select(this);
+            
+            tooltip.html(    //Populate tooltip text
+                         "Username: " + "hello"
+                         //"Session ID: " + d3.select(this).attr("sessionid") + "<br/>" +
+                         //"Impact CPU: " + d3.select(this).attr("impact")
+                         )
+                         .transition()
+                         .duration(250)
+                         .style("opacity", 1);
+                        
+                        myRoom.style("opacity", "0.5");
+                                 
+        }
+                                         
                                             
                                             
 
