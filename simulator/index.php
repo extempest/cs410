@@ -9,6 +9,28 @@
                 <script>
                     //var realData = <?php //echo printRealData();?>;
                 </script>
+            <style type="text/css">
+                div.tooltip {
+                position: absolute;
+                text-align: left;
+                padding: 8px;
+                font: 10px Verdana;
+                background: lightsteelblue;
+                border: px;
+                border-radius: 8px;
+                    pointer-events: none;
+                }
+
+            .dataRoomSelected{
+            stroke: white;
+                stroke-width: 100px
+            fill: springgreen;
+            }
+        .dataRoom {
+        stroke: none;
+            fill: lightblue;
+            }
+            </style>
         </head>
         <body>
             <!-- start -->

@@ -513,22 +513,32 @@ function ready(error, xml) {
         }
     }
     
+    
+    
     var mergedRoom = svg.append('g').call(d3.behavior.drag().origin(function() {
                                                                                          var t = d3.select(this);
                                                                                          return {x: t.attr("x") + d3.transform(t.attr("transform")).translate[0],
                                                                                          y: t.attr("y") + d3.transform(t.attr("transform")).translate[1]};
-                                                                                         })
-                                                               .on("drag", function(d,i) {
+                                                                                })
+                                                        .on("drag", function(d,i) {
                                                                    d3.select(this).attr("transform", function(d,i){
                                                                                         return "translate(" + [ d3.event.x,0 ] + ")"
                                                                                         })
-                                                                   }));
+                                                            }))
+    var inviGround = mergedRoom.append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 999999)
+    .attr("height", 999999)
+    .attr("opacity", 0);
+    
+    
 
     function Room(file, ant){
         var roomRx = 80; //Rx means radius in x direction since the room is ellipse
         var roomRy = 50; //Ry means radius in y direction
         var distanceXBetweenRooms = 50;
-        var distanceYBetweenRooms = 25;        
+        var distanceYBetweenRooms = 25;
         var distanceToBorder = 20;
         var distanceToGround = 25;
         this.x = -1; //Coordinates in respect to grid
@@ -539,8 +549,8 @@ function ready(error, xml) {
         this.childs = [];
         this.name = file['fileName'];
         this.tunnel
-        //this.group
-        this.inviGround
+        this.group
+        //this.inviGround
 
         this.showSvg = function (delay, index, ant){
             this.tunnel.transition()
@@ -562,18 +572,20 @@ function ready(error, xml) {
             
 
         }
+        
+        
 
         this.addSvg = function (x, y){
 
             var color = "hsl(" + Math.random() * 360 + ",100%,50%)";
 
-            //var group = svg.append("g");
+            var group = mergedRoom.append("g").attr("class", "eachRoom");
+
 
             var calcX = (roomRx*2 + distanceXBetweenRooms)*(this.x)+(roomRx+distanceToBorder)
             var calcY = groundLevel+distanceToGround+roomRy+(this.y * (distanceYBetweenRooms + (roomRy*2)))
 
-
-            var tunnel = mergedRoom.append("line")
+            var tunnel = group.append("line")
                     .attr("x1", calcX)
                     .attr("y1", calcY)
                     .attr("x2", calcX)
@@ -582,7 +594,7 @@ function ready(error, xml) {
                     .attr("stroke", color)
                     .attr("opacity",0);
 
-            var roomSvg = mergedRoom.append("ellipse")
+            var roomSvg = group.append("ellipse")
                 .attr("cx", calcX)
                 .attr("cy", calcY)
                 .attr("rx", roomRx)
@@ -593,7 +605,7 @@ function ready(error, xml) {
             //var tunnelSvg =  svg.append("rect")
 
 
-            var name = mergedRoom.append("text")
+            var name = group.append("text")
             .attr("x", calcX)
             .attr("y", calcY)
             .text(file['fileName'])
@@ -604,12 +616,7 @@ function ready(error, xml) {
             .style("fill", "white")
             .attr("opacity",0);
             
-            var inviGround = mergedRoom.append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", 999999)
-            .attr("height", 999999)
-            .attr("opacity", 0);
+            
             
             
 
@@ -626,19 +633,27 @@ function ready(error, xml) {
                 .attr("stroke", color);
 
                 roomSvg.attr("fill", color);
+                
+                
 
-            } 
+            }
 
-            //this.group = group
+
             this.nameLabel = name
 
             this.svg = roomSvg;
 
             this.tunnel = tunnel
             
-            this.inviGround = inviGround;
-
-        }
+            
+            this.group = group;
+            
+            
+            
+            
+            
+            
+                 }
         this.move = function (newx,newy){
 
             var newXCoor = (roomRx*2 + distanceXBetweenRooms)*(newx)+(roomRx+distanceToBorder)
@@ -729,8 +744,74 @@ function ready(error, xml) {
         }
 
        
+        
+        mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseout", mouseout);
+        
+        this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
+        
+        
+        var tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+        
+        //mergedRoom.select('.eachRoom').on("mouseover", mouseover)
+        //.on("mousemove", mousemove)
+        //.on("mouseout", mouseout);
+        
+        
+        
+        function mousemove()
+        {    //Move tooltip to mouse location
+            return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+        }
+        
+        function mouseout()
+        {
+            //d3.select(this)
+            //.attr("color", "aliceblue");
+            
+            tooltip
+            .transition()
+            .delay(50)
+            .style("opacity", 0)    //Make tooltip invisible
+            
+            //svg.selectAll("circle")
+            //.transition()
+            //.style("opacity", 1);       //
+            
+            d3.select(this).attr("class", "dataRoom");
+        }
+        
+        //Mouseover function for each room, displays shortened tooltip
+        function mouseover()
+        {
+            var myRoom = d3.select(this);
+            myRoom.attr("class", "dataRoomSelected");
+            
+            tooltip.html(    //Populate tooltip text
+                         "Name: " + d3.select(this).attr("name")                               // TEXT HERE 2
+                         //"Session ID: " + d3.select(this).attr("sessionid") + "<br/>" +
+                         //"Impact CPU: " + d3.select(this).attr("impact")
+                         )
+            .transition()
+            .delay(150)
+            //.duration(250)
+            .style("opacity", 1);
+            
+            
+            
+        }
+
 
     }
+    
+    
+    
+    
+    
+    
 
     function countNumberRootRooms(){
         var count = 0;
