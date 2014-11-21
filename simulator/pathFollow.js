@@ -1019,7 +1019,7 @@ function ready(error, xml) {
              { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
             // put circles in group1
-            var group1 = canvas.append("g");
+            var group1 = mergedRoom.append("g");
 
             var circles = group1.selectAll("circle")
             .data(circleData)
