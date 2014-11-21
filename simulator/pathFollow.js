@@ -757,7 +757,7 @@ function ready(error, xml) {
                         .attr("x", calcX)
                         .attr("y", calcY)
                         .text(file['fileName'])
-                        .attr("stroke-width", 0.5)
+                        .attr("stroke-width", 1)
                         .attr("stroke", "black")
                         .style("font-family", "Verdana")
                         .style("font-size", "12px")
@@ -1063,11 +1063,11 @@ function ready(error, xml) {
             .attr("x", position)
             .attr("y", 5)
             .text(this.name)
-            .attr("stroke-width", 0.5)
-            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke", "white")
             .style("font-family", "Verdana")
-            .style("font-size", "12px")
-            .style("fill", "white")
+            .style("font-size", "15px")
+            .style("fill", "black");
 
             group1
             .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");
