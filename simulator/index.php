@@ -60,10 +60,20 @@ stroke: black;
 <?php
     function printRealData(){
         // mock data
-        $commitList = parse("mockTest.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
+        $commitList = parse("CPSC304CoolTeam.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
         // real data
         // $commitList = parse("scribe-javaCommits.txt");
-        $newArray = sortCommits($commitList);
+        $new_array = array();
+//        print_r(count($commitList));
+//        print_r("BYENGGGGGG");
+        foreach($commitList as $commit){
+            if(!(empty($commit['filesAdded']) && empty($commit['filesModified']) && empty($commit['filesDeleted']) && empty($commit['relationshipModified']))){
+                array_push($new_array, $commit);
+            }
+        }
+//        array_filter($commitList);
+//        print_r(count($new_array));
+        $newArray = sortCommits($new_array);
         return convertJsArray($newArray);
     }
     ?>
