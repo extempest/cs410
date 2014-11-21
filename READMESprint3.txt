@@ -1,33 +1,31 @@
+INSTRUCTION
+
+This project is not automated. In order to retrieve codebase through our visualization, you have to prepare txt file from git log (git log -p --reverse > filename.txt) and get xml dependency file from Eclipse plugin called object-aid. 
+By putting them in the simulator folder, this program can access the data. 
+Also, you have to run your own local server to run this by typing (php -S localhost:8000) then type "localhost:8000/simulator/index.php" on the browser to actually run our code.
+As soon as the URL is accepted, the code will run in the browser. 
+
+
 Summary of Unit testing and Integration testing
 for sprint 3.
 
 Parser Components:
 
+1. Checking all output of class hierarchy array information and dependency array information are successfully converted to json format from php array (Manual testing)
+Input: php array
+Output: json array in string format
+Test: Regardless of data, javascript file was successfully read the string of JSON array from php.
 
-1. 
-Input: 
-Output: 
-Test:  
+2. Dependency Parser in php (Unit testing, manual)
+Input: xml file that has file dependency information
+Output: List of object that contains filename and its dependent files information in php
+Test: using mock input made by us, Junit test passed through the parser
 
-2. 
-Input: 
-Output: 
-Test:  
+3. Connecting the parsed array to visualization (Integration testing)
+Input: JSON array of class hierarchy
+Output: visualization
+Test: Making mock github project in github to visually retrieve small amount of changes, and connected this data into visualization. We were able to look at right amount of files, developers, movement of developers on the browser successfully depending on the commits.
 
-3. 
-Input: 
-Output: 
-Test:  
-
-4. 
-Input: 
-Output: 
-Test:  
-
-5.
-Input: 
-Output: 
-Test:  
 
 JavaScript Parser Components:
 
