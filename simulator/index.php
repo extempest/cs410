@@ -60,7 +60,7 @@ stroke: black;
 <?php
     function printRealData(){
         // mock data
-        $commitList = parse("mockTest.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
+        $commitList = parse("CPSC304CoolTeam.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
         // real data
         // $commitList = parse("scribe-javaCommits.txt");
         $newArray = sortCommits($commitList);

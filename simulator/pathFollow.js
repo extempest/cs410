@@ -11,7 +11,7 @@ function ready(error, xml) {
 
     // global constants
     var REAL_DATA = true;
-    var TICK_DELAY = 1000;
+    var TICK_DELAY = 100;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
     
