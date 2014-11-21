@@ -60,7 +60,7 @@ stroke: black;
 <?php
     function printRealData(){
         // mock data
-        $commitList = parse("mockByengProject.txt"); //"mockTest.txt","mockByengProject.txt","RxJavaCommits.txt" etc　scribe-javaCommits.txt
+        $commitList = parse("mockTest.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
         // real data
         // $commitList = parse("scribe-javaCommits.txt");
         $newArray = sortCommits($commitList);
@@ -70,14 +70,12 @@ stroke: black;
 <?php
     function printDependency(){
         // mock data
-        $php_array = readXML("CPSC304CoolTeam.xml");
+        $php_array = readXML("CPSC304CoolTeam.xml"); //"scribe-java.xml", "CPSC304CoolTeam.xml"
         // real data
         // $php_array = readXML("scribe-java.xml");
         return convertJsArray($php_array);
     }
     ?>
-
-
 
 <?php
     // inputting XML file that informs about dependency relations, outputting list of files and what each file is being targeted by.
@@ -357,13 +355,6 @@ stroke: black;
         return $parentClass;
     }
     ?>
-
-//<?php
-//    function commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $added, $modified, $parentsAdded, $parentsModified, $deleted){
-//        $date = convertdatetoJsstr($commitYear, $commitMonth, $commitDay, $commitTime);
-//        return array("author" => $author, "Email" => $email, "timestamp" => $date, "filesAdded" => $added, "filesModified" => $modified, "ParentsAdded" => $parentsAdded, "ParentsModified" => $parentsModified, "filesDeleted" => $deleted);
-//    }
-//    ?>
 
 <?php
     function commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $added, $modified, $relationsModified, $deleted){

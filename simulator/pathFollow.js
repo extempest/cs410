@@ -14,7 +14,12 @@ function ready(error, xml) {
     var TICK_DELAY = 1000;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
-
+    
+//    var realDataForRelationsChange = [{"date":{"year":2014,"month":10,"day":24,"hour":0,"minute":0,"second":0},"commits":[{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":39,"second":9},"filesAdded":[{"fileName":"A","parents":["D"]},{"fileName":"B","parents":["A"]},{"fileName":"C","parents":["A"]},{"fileName":"D","parents":[]},{"fileName":"E","parents":["D"]}],"filesModified":[],"relationshipModified":[],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":52,"second":29},"filesAdded":[],"filesModified":["C","E"],"relationshipModified":[{"fileName":"C","parents":["B"]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":53,"second":23},"filesAdded":[],"filesModified":["A","E"],"relationshipModified":[{"fileName":"A","parents":[]},{"fileName":"E","parents":["A"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":55,"second":0},"filesAdded":[],"filesModified":["B","C"],"relationshipModified":[{"fileName":"B","parents":["D"]},{"fileName":"C","parents":["D"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":20,"second":25},"filesAdded":[{"fileName":"F","parents":[]}],"filesModified":["B","C","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","E","D","F"]},{"fileName":"C","parents":[]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":21,"second":25},"filesAdded":[],"filesModified":["B","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","D","F"]},{"fileName":"E","parents":["F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":21},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["D","F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":53},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["A","C","E"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":39,"second":9},"filesAdded":[],"filesModified":[],"relationshipModified":[],"filesDeleted":["A","B"]}]}];
+    
+    
+//    var dependencyData = [{"id":1,"fileName":"BorrowerUser","directory":"users","targetedBy":[]},{"id":2,"fileName":"ClerkUser","directory":"users","targetedBy":["LibrarianUser"]},{"id":3,"fileName":"LibrarianUser","directory":"users","targetedBy":[]},{"id":4,"fileName":"Main","directory":"gui","targetedBy":["ClerkUser","BorrowerUser","LibrarianUser"]}];
+    
     if(REAL_DATA){
         for(var i = 0; i < realData.length; i++){
     //        console.log(realData[i]);
@@ -83,6 +88,56 @@ function ready(error, xml) {
                     'filesDeleted':[],
                     'relationshipModified':[]
                 },
+/*
+                {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
+                    'filesAdded': 
+                    [
+                    {
+                        'fileName':'apple',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    },
+                    {
+                        'fileName':'oranges',
+                        'parents':
+                        [
+                        'fruits'
+                        ]
+                    } 
+                    ],                   
+                    'filesModified': [],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+             },
+             {
+                    'author':'Thompson',
+                    'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
+                    'filesAdded':
+                    [
+                    {
+                        'fileName':'persian',
+                        'parents':
+                        [
+                        'cat'
+                        ]
+                    },
+                    {
+                        'fileName':'dog',
+                        'parents':
+                        [
+                        'animals'
+                        ]
+                    } 
+                    ],
+                    'filesModified': ['animals','oranges','persian', 'tools'],
+                    'filesDeleted':[],
+                    'relationshipModified':[]
+                }
+*/
             ]
         },
     ];
@@ -209,14 +264,14 @@ function ready(error, xml) {
                         
                         //console.log(ant.group1); 
                         authors[commit["author"]] = author;
-                        checkRoom(commit['filesAdded'], ant);
+                        checkRoom(commit, ant);
 
                     } else {
                         author["contribution"]  += 1;
                         var ant = author["antMarker"]
 
                         //ant = movePosition(ant, nextPos);
-                        checkRoom(commit['filesAdded'], ant);
+                        checkRoom(commit, ant);
                     }
                         
                         //Tooltip for each ant
@@ -364,9 +419,8 @@ function ready(error, xml) {
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
-
-
-            files.forEach(function(file){
+            filesAdded = files['filesAdded']
+            filesAdded.forEach(function(file){
                 var filename = file['fileName'];
                 var existingFile = rooms[filename];
                 if(!existingFile){
@@ -384,6 +438,11 @@ function ready(error, xml) {
             
 
             });
+            filesModified = files['filesModified']
+            filesModified.forEach(function(file){
+                                  var existingRoom = rooms[file];
+                                  ant.moveToRoom(existingRoom)
+                                  })
 
             var a  = d3.select(ant.group1);
             //console.log()
@@ -629,7 +688,7 @@ function ready(error, xml) {
                         .attr("x", calcX)
                         .attr("y", calcY)
                         .text(file['fileName'])
-                        .attr("stroke-width", 0.5)
+                        .attr("stroke-width", 1)
                         .attr("stroke", "black")
                         .style("font-family", "Verdana")
                         .style("font-size", "12px")
@@ -903,7 +962,7 @@ function ready(error, xml) {
              { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
             // put circles in group1
-            var group1 = canvas.append("g");
+            var group1 = mergedRoom.append("g");
 
             var circles = group1.selectAll("circle")
             .data(circleData)
@@ -935,11 +994,11 @@ function ready(error, xml) {
             .attr("x", position)
             .attr("y", 5)
             .text(this.name)
-            .attr("stroke-width", 0.5)
-            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke", "white")
             .style("font-family", "Verdana")
-            .style("font-size", "12px")
-            .style("fill", "white")
+            .style("font-size", "15px")
+            .style("fill", "black");
 
             group1
             .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");

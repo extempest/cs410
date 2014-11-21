@@ -334,3 +334,32 @@ index f648089..28cec67 100644
 +public class B extends A,C,E{
  
  }
+
+commit 870fe9ba06ce0c5ac74d6d3db63c87b1f55ac357
+Author: BoRa Choi <boradori_@hotmail.com>
+Date:   Thu Nov 20 20:28:33 2014 -0800
+
+    hi
+
+diff --git a/childParentTest/src/childParent/A.java b/childParentTest/src/childParent/A.java
+deleted file mode 100644
+index 020298f..0000000
+--- a/childParentTest/src/childParent/A.java
++++ /dev/null
+@@ -1,5 +0,0 @@
+-package childParent;
+-
+-public abstract class A {
+-
+-}
+diff --git a/childParentTest/src/childParent/B.java b/childParentTest/src/childParent/B.java
+deleted file mode 100644
+index 28cec67..0000000
+--- a/childParentTest/src/childParent/B.java
++++ /dev/null
+@@ -1,5 +0,0 @@
+-package childParent;
+-
+-public class B extends A,C,E{
+-
+-}
