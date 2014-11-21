@@ -384,7 +384,7 @@ function ready(error, xml) {
             }, TICK_DELAY);
         } else {
             //after finishing all commits
-            todayLabel.text("Project ended")
+            // todayLabel.text("Project ended")
         }
     }
 
@@ -1354,6 +1354,7 @@ function ready(error, xml) {
     }
 
     function slowFunction(){
+        pauseAnimationForCommit();
         console.log("slower");
         SPEED_COUNTER--;
     }
