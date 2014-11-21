@@ -465,23 +465,6 @@ function ready(error, xml) {
     .style("font-size", "20px")
     .style("fill", "white");
 
-    function createBtn(){
-       
-        return btn;
-    }
-
-    //var resumeBtn = createBtn();
- var btn = svg.append("rect")
-        .attr("x", window.innerWidth - 30)
-        .attr("y", 10)
-        .attr("width", 20)
-        .attr("height", 10)
-        .style("fill", "#A9672E")
-        .on("click", resumeFunction);
-    
-    function resumeFunction(){
-        alert("btnnnnn");
-    }
 
     function checkRoom(files, ant){
         if (ant != null){
@@ -517,6 +500,10 @@ function ready(error, xml) {
         }
 
     }
+    
+    
+    
+ 
     
 
     function Grid(){
@@ -1141,6 +1128,26 @@ function ready(error, xml) {
         }
     }
 
+    
+    function createBtn(){
+        
+        return btn;
+    }
+    
+    //var resumeBtn = createBtn();
+    var btn = svg.append("rect")
+    .attr("x", window.innerWidth - 30)
+    .attr("y", 10)
+    .attr("width", 20)
+    .attr("height", 10)
+    .style("fill", "#A9672E")
+    .on("click", resumeFunction);
+    
+    function resumeFunction(){
+        console.log("hi");
+        alert("btnnnnn");
+    }
+    
 
     function createAnt(canvas, height, color, position){
          // Draw the Circle
