@@ -60,7 +60,7 @@ stroke: black;
 <?php
     function printRealData(){
         // mock data
-        $commitList = parse("mockByengProject.txt"); //"mockTest.txt","mockByengProject.txt","RxJavaCommits.txt" etc　scribe-javaCommits.txt
+        $commitList = parse("mockTest.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
         // real data
         // $commitList = parse("scribe-javaCommits.txt");
         $newArray = sortCommits($commitList);
@@ -70,7 +70,7 @@ stroke: black;
 <?php
     function printDependency(){
         // mock data
-        $php_array = readXML("CPSC304CoolTeam.xml");
+        $php_array = readXML("CPSC304CoolTeam.xml"); //"scribe-java.xml", "CPSC304CoolTeam.xml"
         // real data
         // $php_array = readXML("scribe-java.xml");
         return convertJsArray($php_array);

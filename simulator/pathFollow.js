@@ -10,11 +10,16 @@ function ready(error, xml) {
 //    console.log(realData);
 
     // global constants
-    var REAL_DATA = false;
+    var REAL_DATA = true;
     var TICK_DELAY = 1000;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
-
+    
+//    var realDataForRelationsChange = [{"date":{"year":2014,"month":10,"day":24,"hour":0,"minute":0,"second":0},"commits":[{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":39,"second":9},"filesAdded":[{"fileName":"A","parents":["D"]},{"fileName":"B","parents":["A"]},{"fileName":"C","parents":["A"]},{"fileName":"D","parents":[]},{"fileName":"E","parents":["D"]}],"filesModified":[],"relationshipModified":[],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":52,"second":29},"filesAdded":[],"filesModified":["C","E"],"relationshipModified":[{"fileName":"C","parents":["B"]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":53,"second":23},"filesAdded":[],"filesModified":["A","E"],"relationshipModified":[{"fileName":"A","parents":[]},{"fileName":"E","parents":["A"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":55,"second":0},"filesAdded":[],"filesModified":["B","C"],"relationshipModified":[{"fileName":"B","parents":["D"]},{"fileName":"C","parents":["D"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":20,"second":25},"filesAdded":[{"fileName":"F","parents":[]}],"filesModified":["B","C","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","E","D","F"]},{"fileName":"C","parents":[]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":21,"second":25},"filesAdded":[],"filesModified":["B","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","D","F"]},{"fileName":"E","parents":["F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":21},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["D","F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":53},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["A","C","E"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":39,"second":9},"filesAdded":[],"filesModified":[],"relationshipModified":[],"filesDeleted":["A","B"]}]}];
+    
+    
+//    var dependencyData = [{"id":1,"fileName":"BorrowerUser","directory":"users","targetedBy":[]},{"id":2,"fileName":"ClerkUser","directory":"users","targetedBy":["LibrarianUser"]},{"id":3,"fileName":"LibrarianUser","directory":"users","targetedBy":[]},{"id":4,"fileName":"Main","directory":"gui","targetedBy":["ClerkUser","BorrowerUser","LibrarianUser"]}];
+    
     if(REAL_DATA){
         for(var i = 0; i < realData.length; i++){
     //        console.log(realData[i]);
