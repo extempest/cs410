@@ -3,7 +3,8 @@ queue()
 .await(ready);
 
 function ready(error, xml) {
-   //var dependencyData1 = dependencyData
+    //read deoendency data
+   var dependencyData1 = dependencyData
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
@@ -263,7 +264,7 @@ function ready(error, xml) {
            return "hsl(" + Math.random() * 360 + ",100%,50%)";
            })
     transition();*/
-
+    var intervalId;
 
     simulateDay(0, data.length, data)
 
@@ -281,7 +282,7 @@ function ready(error, xml) {
             var commits = entry["commits"];
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
-            var intervalId = setInterval(function() {
+            intervalId = setInterval(function() {
 
                 if(!isPaused){
                     todayLabel.text(today)
@@ -305,7 +306,7 @@ function ready(error, xml) {
 
                                     if(today.getTime()>commit["timestamp"]){
                                         isPaused = true;
-                                        universalHour = today.getHours() - 1;
+                                        universalHour = today.getHours();
                                         pauseAnimationForCommit();
                                         commit["processed"] = true;
                                         var author = authors[commit["author"]];
@@ -384,7 +385,7 @@ function ready(error, xml) {
             }, TICK_DELAY);
         } else {
             //after finishing all commits
-            // todayLabel.text("Project ended")
+            todayLabel.text("Project ended")
         }
     }
 
@@ -910,7 +911,7 @@ function ready(error, xml) {
         mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseout", mouseout);
-        /*
+        
         
         dependencyArray = {}
         console.log(dependencyData1)
@@ -936,7 +937,7 @@ function ready(error, xml) {
         }else
             this.group.attr("dependency", function(d) {return "hellllllo"});
         
-        */
+        
         this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
         
 
@@ -1344,6 +1345,9 @@ function ready(error, xml) {
     .on("click", slowFunction);
 
     function resumeFunction(){
+        // pauseAnimationForCommit();
+        // clearInterval(intervalId)
+        // todayLabel.text("Project ended")
         console.log("resume");
         speedFlag = true;
     }
@@ -1354,7 +1358,6 @@ function ready(error, xml) {
     }
 
     function slowFunction(){
-        pauseAnimationForCommit();
         console.log("slower");
         SPEED_COUNTER--;
     }
