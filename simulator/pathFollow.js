@@ -3,7 +3,7 @@ queue()
 .await(ready);
 
 function ready(error, xml) {
-
+    var dependencyData1 = dependencyData
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
@@ -302,9 +302,9 @@ function ready(error, xml) {
                                 //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
                                     if(today.getTime()>commit["timestamp"]){
-                                        // isPaused = true;
-                                        universalHour = today.getHours();
-                                        // pauseAnimationForCommit();
+//                                        isPaused = true;
+//                                        universalHour = today.getHours();
+//                                        pauseAnimationForCommit();
                                         commit["processed"] = true;
                                         var author = authors[commit["author"]];
                                         // console.log(authors);
@@ -829,16 +829,39 @@ function ready(error, xml) {
         .on("mousemove", mousemove)
         .on("mouseout", mouseout);
         
-        this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
         
+        dependencyArray = {}
+        console.log(dependencyData1)
+        console.log("data length")
+        for(i = 1; i < dependencyData1.length; i++){
+            console.log(dependencyData1[i]['fileName'])
+            if(dependencyData1[i]['fileName'] == this.name){
+                var dependencyArray = dependencyData1[i]["targetedBy"];
+            break;
+            }
+        }
+        depString = "";
+        if(dependencyArray != {}){
+            for(i = 0; i < dependencyArray.length; i++){
+                    depString = depString.concat(dependencyArray[i].concat("</br>"));
+                    console.log(depString)
+            }
+            temp = depString.trim()
+            if (!temp) {
+                depString = "none";
+            }
+            this.group.attr("dependency", function(d) {return depString});
+        }else
+            this.group.attr("dependency", function(d) {return "hellllllo"});
+        
+        
+        this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
         
         var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .style("opacity", 0);
         
-        //mergedRoom.select('.eachRoom').on("mouseover", mouseover)
-        //.on("mousemove", mousemove)
-        //.on("mouseout", mouseout);
+        
         
         
         
@@ -850,17 +873,14 @@ function ready(error, xml) {
 
         function mouseout()
         {
-            //d3.select(this)
-            //.attr("color", "aliceblue");
+            
             
             tooltip
             .transition()
             .delay(50)
             .style("opacity", 0)    //Make tooltip invisible
             
-            //svg.selectAll("circle")
-            //.transition()
-            //.style("opacity", 1);       //
+           
             
             d3.select(this).attr("class", "dataRoom");
         }
@@ -873,9 +893,10 @@ function ready(error, xml) {
             myRoom.attr("class", "dataRoomSelected");
             
             tooltip.html(    //Populate tooltip text
-                         "Name: " + d3.select(this).attr("name")                               // TEXT HERE 2
-                         //"Session ID: " + d3.select(this).attr("sessionid") + "<br/>" +
-                         //"Impact CPU: " + d3.select(this).attr("impact")
+                         "Name: " + d3.select(this).attr("name") + "</br>" +                              // TEXT HERE 2
+                         "Dependency: " + d3.select(this).attr("dependency")
+                         
+                         
                          )
             .transition()
             .delay(150)
