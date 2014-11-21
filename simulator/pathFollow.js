@@ -65,31 +65,6 @@ function ready(error, xml) {
                     'relationshipModified':[]
                 },
                 {
-                    'author':'Byung',
-                    'timestamp': new Date(2014, 0, 1, 1, 30 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'animals',
-                        'parents':
-                        [
-                        //to add if exist
-                        ]
-                    },
-                    {
-                        'fileName':'cat',
-                        'parents':
-                        [
-                        'animals'
-                        ]
-                    }  
-                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                },
-/*
-                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
                     'filesAdded': 
@@ -137,7 +112,6 @@ function ready(error, xml) {
                     'filesDeleted':[],
                     'relationshipModified':[]
                 }
-*/
             ]
         },
     ];
@@ -169,9 +143,8 @@ function ready(error, xml) {
 
     var isPaused = false;
     var universalHour;
-    var today;
     var commits;
-    var commitsIndex;
+    var commitsIndex = 0;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -207,7 +180,7 @@ function ready(error, xml) {
                 if(!isPaused){
                     todayLabel.text(today)
 
-                    //console.log(today.getTime());
+                    console.log(today.getTime());
                     if (today.getTime() < tommorrow.getTime()){
 
                         if(today.getHours()==0||today.getHours()==12){
@@ -220,7 +193,6 @@ function ready(error, xml) {
                         }
                         
                         if(commits !== null){
-                            commitsIndex = 0
                             iterateCommit(today,commits, commitsIndex)
                         }
 
@@ -228,6 +200,7 @@ function ready(error, xml) {
 
                     } else {
                         pauseAnimationForCommit();
+                        commitsIndex = 0
                         clearInterval(intervalId)
                         simulateDay(index+1,lastIndex,iData)
                     }
@@ -243,9 +216,10 @@ function ready(error, xml) {
         if(index < commits.length){
             var commit = commits[index]
             if(!commit["processed"]){
-            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
-
+            console.log("now:"+today+" timestamp:"+commit["timestamp"])
+            console.log(commit['filesAdded'][0]['fileName'])
                 if(today.getTime()>commit["timestamp"]){
+                    console.log("asdf")
                    isPaused = true;
                    universalHour = today.getHours();
                    pauseAnimationForCommit();
@@ -297,7 +271,13 @@ function ready(error, xml) {
                         }
                         
                 }else{
-                //console.log("ho")
+                    console.log("ho")
+                    if(isPaused){
+                        console.log("hE")                        
+                        isPaused = false;
+                        universalHour = today.getHours();
+                        resumeAnimeationFromCommit(universalHour);
+                    }
                 }
             }            
         }
