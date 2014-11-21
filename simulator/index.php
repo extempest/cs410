@@ -22,11 +22,20 @@
                     pointer-events: none;
                 }
 
+
             .dataRoomSelected{
             stroke: white;
-                stroke-width: 100px
+                stroke-width: 10px
             fill: springgreen;
             }
+
+.dataAntSelected{
+stroke: black;
+    stroke-width: 2px
+
+}
+
+
         .dataRoom {
         stroke: none;
             fill: lightblue;

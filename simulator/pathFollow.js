@@ -232,10 +232,13 @@ function ready(error, xml) {
                 .attr("width",window.innerWidth)
                 .attr("height",window.innerHeight);
     
-
+    var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
     
-
-
+    var tooltipAnt = d3.select("body").append("div")
+    .attr("class", "tooltipAnt")
+    .style("opacity", 0);
 
     var isPaused = false;
     var universalHour;
@@ -329,6 +332,29 @@ function ready(error, xml) {
                                             //ant = movePosition(ant, nextPos);
                                             checkRoom(commit['filesAdded'], ant);
                                         }
+                                            
+                                            //Tooltip for each ant
+                                            mergedRoom.selectAll('.eachAnt').on("mouseover", mouseoverAnt)
+                                            .on("mousemove", mousemove)
+                                            .on("mouseout", mouseout)
+                                            .attr("author", function(d) { return commit['author']});
+                                            
+                                            function mouseoverAnt()
+                                            {
+                                            var myAnt = d3.select(this);
+                                            
+                                            
+                                            myAnt.attr("class", "dataAntSelected").style("fill", "white");
+                                            
+                                            tooltip.html(    //Populate tooltip text
+                                                         "Name: " + myAnt.attr("author")
+                                                         )
+                                            .transition()
+                                            .delay(150)
+                                            //.duration(250)
+                                            .style("opacity", 1);
+                                            }
+                                            
                                     }else{
                                     //console.log("ho")
                                     }
@@ -824,7 +850,7 @@ function ready(error, xml) {
         }
 
        
-        
+        //Tooltips for each room.
         mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseout", mouseout);
@@ -857,34 +883,6 @@ function ready(error, xml) {
         
         this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
         
-        var tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-        
-        
-        
-        
-        
-        function mousemove()
-        {    //Move tooltip to mouse location
-            return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
-        }
-        
-
-        function mouseout()
-        {
-            
-            
-            tooltip
-            .transition()
-            .delay(50)
-            .style("opacity", 0)    //Make tooltip invisible
-            
-           
-            
-            d3.select(this).attr("class", "dataRoom");
-        }
-        
 
         //Mouseover function for each room, displays shortened tooltip
         function mouseover()
@@ -893,8 +891,8 @@ function ready(error, xml) {
             myRoom.attr("class", "dataRoomSelected");
             
             tooltip.html(    //Populate tooltip text
-                         "Name: " + d3.select(this).attr("name") + "</br>" +                              // TEXT HERE 2
-                         "Dependency: " + d3.select(this).attr("dependency")
+                         "Name: " + myRoom.attr("name") + "</br>" +                              // TEXT HERE 2
+                         "Dependency: " + myRoom.attr("dependency")
                          
                          
                          )
@@ -903,13 +901,34 @@ function ready(error, xml) {
             //.duration(250)
             .style("opacity", 1);
         }
-
+        
+        
+        
 
     }
     
     
     
-    
+    function mousemove()
+    {    //Move tooltip to mouse location
+        return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+    }
+
+    function mouseout()
+    {
+        tooltip
+        .transition()
+        .delay(50)
+        .style("opacity", 0)    //Make tooltip invisible
+        
+        tooltipAnt
+        .transition()
+        .delay(50)
+        .style("opacity", 0)
+        
+        d3.select(this).attr("class", "dataRoom");
+        
+    }
     
     
 
@@ -996,6 +1015,8 @@ function ready(error, xml) {
                 this.moveAnt(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
             }
         }
+        
+     
 
 
         // original move function of ant
@@ -1143,7 +1164,7 @@ function ready(error, xml) {
         //                 .append("circle");
         // =======
         // bora version
-        var group1 = mergedRoom.append("g");
+        var group1 = mergedRoom.append("g").attr("class", "eachAnt");
     
         var circles =   group1.selectAll("circle")
                         .data(circleData)
@@ -1171,8 +1192,11 @@ function ready(error, xml) {
             }
         }
         
+        
+        
         group1
         .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");
+
 
         return group1;
     }
