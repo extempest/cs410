@@ -11,7 +11,9 @@ function ready(error, xml) {
 
     // global constants
     var REAL_DATA = false;
-    var TICK_DELAY = 1000;
+    var ONE_TICK = 1000;
+    var TICK_DELAY = ONE_TICK;
+    var SPEED_COUNTER = 0;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
     
@@ -115,6 +117,7 @@ function ready(error, xml) {
             ]
         },
     ];
+
 //    console.log(data)
     if(REAL_DATA){
         data = realData
@@ -145,6 +148,7 @@ function ready(error, xml) {
     var universalHour;
     var commits;
     var commitsIndex = 0;
+    var speedFlag = false;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -159,11 +163,11 @@ function ready(error, xml) {
     transition();*/
 
 
-
     simulateDay(0, data.length, data)
 
 
     function simulateDay(index, lastIndex, iData){
+        console.log("check1");
         if (index < lastIndex) {
             var entry = iData[index];
             today = new Date(entry["date"]);
@@ -202,6 +206,17 @@ function ready(error, xml) {
                         pauseAnimationForCommit();
                         commitsIndex = 0
                         clearInterval(intervalId)
+                        if(speedFlag){
+                            TICK_DELAY = ONE_TICK;
+                            speedFlag = false;
+                        }
+                        else{
+                            console.log(Math.pow(2,SPEED_COUNTER))
+                            console.log(SPEED_COUNTER)
+                            TICK_DELAY = TICK_DELAY / Math.pow(2,SPEED_COUNTER);
+                            SPEED_COUNTER = 0;
+                        }
+
                         simulateDay(index+1,lastIndex,iData)
                     }
                 }
@@ -221,7 +236,7 @@ function ready(error, xml) {
                 if(today.getTime()>commit["timestamp"]){
                     console.log("asdf")
                    isPaused = true;
-                   universalHour = today.getHours();
+                   universalHour = today.getHours() - 1;
                    pauseAnimationForCommit();
                     commit["processed"] = true;
                     var author = authors[commit["author"]];
@@ -395,7 +410,8 @@ function ready(error, xml) {
     .style("font-family", "Verdana")
     .style("font-size", "20px")
     .style("fill", "white");
-    
+
+
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
@@ -436,6 +452,10 @@ function ready(error, xml) {
             ant.lastMoveIndex = ant.moveStack.length -1
         }
     }
+    
+    
+    
+ 
     
 
     function Grid(){
@@ -1186,7 +1206,6 @@ function ready(error, xml) {
                          resumeAnimeationFromCommit(universalHour);
                      })
                 }
-
             }
         }
 
@@ -1216,6 +1235,49 @@ function ready(error, xml) {
             }*/
             this.position = x;
         }
+    }
+
+    
+    //buttons for changing speed
+    var resumeBtn = svg.append("rect")
+    .attr("x", window.innerWidth - 100)
+    .attr("y", 10)
+    .attr("width", 30)
+    .attr("height", 20)
+    .style("fill", "green")
+    .on("click", resumeFunction);
+    
+
+    var fastBtn = svg.append("rect")
+    .attr("x", window.innerWidth - 50)
+    .attr("y", 10)
+    .attr("width", 30)
+    .attr("height", 20)
+    .style("fill", "blue")
+    .on("click", fastFunction);
+
+
+    var slowBtn = svg.append("rect")
+    .attr("x", window.innerWidth - 50)
+    .attr("y", 40)
+    .attr("width", 30)
+    .attr("height", 20)
+    .style("fill", "red")
+    .on("click", slowFunction);
+
+    function resumeFunction(){
+        console.log("resume");
+        speedFlag = true;
+    }
+
+    function fastFunction(){
+        console.log("fastFoward");
+        SPEED_COUNTER++;
+    }
+
+    function slowFunction(){
+        console.log("slower");
+        SPEED_COUNTER--;
     }
 
 
@@ -1392,15 +1454,15 @@ function ready(error, xml) {
             this[0][0].parentNode.appendChild(this[0][0]);
         });
 
-    //not yet customized to work
-    d3.selection.prototype.moveToBack = function() { 
-        return this.each(function() { 
-            var firstChild = this.parentNode.firstChild; 
-            if (firstChild) { 
-                this.parentNode.insertBefore(this, firstChild); 
-            } 
-        }); 
-    };
+        //not yet customized to work
+        d3.selection.prototype.moveToBack = function() { 
+            return this.each(function() { 
+                var firstChild = this.parentNode.firstChild; 
+                if (firstChild) { 
+                    this.parentNode.insertBefore(this, firstChild); 
+                } 
+            }); 
+        };
 
-};
+    };
 }

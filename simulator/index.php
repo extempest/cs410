@@ -45,7 +45,7 @@ stroke: black;
         <body>
             <!-- start -->
             <div id="pathAnimation">
-                <script src="pathFollow.js"></script>
+                <script type="text/javascript" src="pathFollow.js"></script>
             </div>
             <!-- end -->
         </body>
