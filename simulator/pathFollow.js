@@ -11,7 +11,7 @@ function ready(error, xml) {
 
     // global constants
     var REAL_DATA = false;
-    var TICK_DELAY = 1000;
+    var TICK_DELAY = 100;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
     
@@ -247,7 +247,7 @@ function ready(error, xml) {
 
                 if(today.getTime()>commit["timestamp"]){
                    isPaused = true;
-                   universalHour = today.getHours();
+                   universalHour = today.getHours() - 1;
                    pauseAnimationForCommit();
                     commit["processed"] = true;
                     var author = authors[commit["author"]];
