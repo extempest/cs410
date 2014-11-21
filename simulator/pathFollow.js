@@ -10,7 +10,7 @@ function ready(error, xml) {
 //    console.log(realData);
 
     // global constants
-    var REAL_DATA = false;
+    var REAL_DATA = true;
     var TICK_DELAY = 1000;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
@@ -214,6 +214,7 @@ function ready(error, xml) {
             ]
         }
     ];
+
 //    console.log(data)
     if(REAL_DATA){
         data = realData
@@ -302,9 +303,9 @@ function ready(error, xml) {
                                 //console.log("now:"+today+" timestamp:"+commit["timestamp"])
 
                                     if(today.getTime()>commit["timestamp"]){
-//                                        isPaused = true;
-//                                        universalHour = today.getHours();
-//                                        pauseAnimationForCommit();
+                                        isPaused = true;
+                                        universalHour = today.getHours();
+                                        pauseAnimationForCommit();
                                         commit["processed"] = true;
                                         var author = authors[commit["author"]];
                                         // console.log(authors);
@@ -463,7 +464,25 @@ function ready(error, xml) {
     .style("font-family", "Verdana")
     .style("font-size", "20px")
     .style("fill", "white");
+
+    function createBtn(){
+       
+        return btn;
+    }
+
+    //var resumeBtn = createBtn();
+ var btn = svg.append("rect")
+        .attr("x", window.innerWidth - 30)
+        .attr("y", 10)
+        .attr("width", 20)
+        .attr("height", 10)
+        .style("fill", "#A9672E")
+        .on("click", resumeFunction);
     
+    function resumeFunction(){
+        alert("btnnnnn");
+    }
+
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
@@ -1087,10 +1106,10 @@ function ready(error, xml) {
             else{
                     this.group1.transition()
                     .delay(this.moveDuration*i)
-                    // .each("end", function(){
-                    //     isPaused = false;
-                    //     resumeAnimeationFromCommit(universalHour);
-                    // })
+                    .each("end", function(){
+                        isPaused = false;
+                        resumeAnimeationFromCommit(universalHour);
+                    })
             }
         }
 
@@ -1294,15 +1313,15 @@ function ready(error, xml) {
             this[0][0].parentNode.appendChild(this[0][0]);
         });
 
-    //not yet customized to work
-    d3.selection.prototype.moveToBack = function() { 
-        return this.each(function() { 
-            var firstChild = this.parentNode.firstChild; 
-            if (firstChild) { 
-                this.parentNode.insertBefore(this, firstChild); 
-            } 
-        }); 
-    };
+        //not yet customized to work
+        d3.selection.prototype.moveToBack = function() { 
+            return this.each(function() { 
+                var firstChild = this.parentNode.firstChild; 
+                if (firstChild) { 
+                    this.parentNode.insertBefore(this, firstChild); 
+                } 
+            }); 
+        };
 
-};
+    };
 }
