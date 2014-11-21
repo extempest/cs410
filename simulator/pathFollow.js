@@ -3,7 +3,7 @@ queue()
 .await(ready);
 
 function ready(error, xml) {
-   //var dependencyData1 = dependencyData
+    var dependencyData1 = dependencyData
     //mockData
     //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
     
@@ -11,7 +11,7 @@ function ready(error, xml) {
 
     // global constants
     var REAL_DATA = true;
-    var ONE_TICK = 1000;
+    var ONE_TICK = 300;
     var TICK_DELAY = ONE_TICK;
     var SPEED_COUNTER = 0;
     var GROUND_LEVEL = 200;
@@ -335,12 +335,12 @@ function ready(error, xml) {
         if(index < commits.length){
             var commit = commits[index]
             if(!commit["processed"]){
-            console.log("now:"+today+" timestamp:"+commit["timestamp"])
-            console.log(commit['filesAdded'][0]['fileName'])
+            // console.log("now:"+today+" timestamp:"+commit["timestamp"])
+            // console.log(commit['filesAdded'][0]['fileName'])
                 if(today.getTime()>commit["timestamp"]){
                     console.log("asdf")
                    isPaused = true;
-                   universalHour = today.getHours() - 1;
+                   universalHour = today.getHours();
                    pauseAnimationForCommit();
                     commit["processed"] = true;
                     var author = authors[commit["author"]];
@@ -925,7 +925,7 @@ function ready(error, xml) {
         mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseout", mouseout);
-        /*
+        
         
         dependencyArray = {}
         console.log(dependencyData1)
@@ -951,7 +951,6 @@ function ready(error, xml) {
         }else
             this.group.attr("dependency", function(d) {return "hellllllo"});
         
-        */
         this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
         
 
