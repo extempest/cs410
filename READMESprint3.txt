@@ -29,7 +29,28 @@ Input:
 Output: 
 Test:  
 
+JavaScript Parser Components:
 
+1. Make days depending on the size of php out
+Input: php outputs size X in length
+Outputs: X days is generated
+
+2. Room Grid Auto Adujusting System
+Input: php data array have overlapping room
+Output: move room so it wont overlap
+Test: 1st file: animal, 2nd file: tools, 3rd file: cat, 4th file: dog, 5th file: hammer. After the 5th file inputted the 'tools' branch should move
+
+3. Room Creation System
+Input: an array of files added in length X
+Output: rooms of X array created, room grid
+Test: with the given files, creats a room grid 
+
+4. Ant movement creation
+Input: array of filesModified, filesCreated
+Output: ants moving to a room, ore creating a new room if the room does not exists
+Test:  check if the ants move to the desired room, where depending on the structure of the room, move to the modified and created room
+
+ 
 
 Visualization Components:
 
@@ -53,22 +74,27 @@ Input: the data file that contains the names of contributors, and groups of ant 
 Output: a visualization of each ant with its contributor name attached on the body. 
 Test: check if the correct contributor name appears for each ant. 
 
-5.
-Input: 
-Output: 
-Test:  
+5. visualizing the ant movement
+Input: ants modified files
+Output: a visualization of ants moving in and out of the rooms, creating a new if it does not exist
+Test: giving the the files that have been modified, check if the ants move/crate rooms
 
-6.
-Input: 
-Output: 
-Test:  
+6. visualizing creating the room
+Input: files added
+Output: a visualization of new room
+Test:  give a data of commits including filese added, and creating a room with svg
 
-7.
-Input: 
-Output: 
-Test:  
+7. visualizing with global delay variable
+Input: delay time
+Output: speed of animation change
+Test:  set a delay variable, and use it through the code and check if all the animation changes speed
 
-8. 
-Input: 
-Output: 
-Test:  
+8. pause and resume function
+Input: commits
+Output: stop while ants moving through the commits, and resume when its done
+Test: let the ant move for the commits, and while ant is moving, stop all the animation and time counting, and then resume after the move is done
+
+9. fastfoward, slow and resume fuction
+Input: fastfoward, slow and resume buttons
+Output: chnage in animation speed
+Test: implemet a fastfoward, slow and resume buttons and as buttons are clicked, check if the animation changes the speed. also check if the moements are correctly animated even the speed changes
