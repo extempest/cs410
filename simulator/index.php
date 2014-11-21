@@ -77,8 +77,6 @@ stroke: black;
     }
     ?>
 
-
-
 <?php
     // inputting XML file that informs about dependency relations, outputting list of files and what each file is being targeted by.
     function readXML($xmlFile){
@@ -357,13 +355,6 @@ stroke: black;
         return $parentClass;
     }
     ?>
-
-//<?php
-//    function commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $added, $modified, $parentsAdded, $parentsModified, $deleted){
-//        $date = convertdatetoJsstr($commitYear, $commitMonth, $commitDay, $commitTime);
-//        return array("author" => $author, "Email" => $email, "timestamp" => $date, "filesAdded" => $added, "filesModified" => $modified, "ParentsAdded" => $parentsAdded, "ParentsModified" => $parentsModified, "filesDeleted" => $deleted);
-//    }
-//    ?>
 
 <?php
     function commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $added, $modified, $relationsModified, $deleted){

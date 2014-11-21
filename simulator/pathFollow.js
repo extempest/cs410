@@ -106,11 +106,22 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-                },
+             },{
+             'author':'Thompson',
+             'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
+             'filesAdded':
+             [],
+             'filesModified': [ 'animals','fruits', 'tools'],
+             'filesDeleted':[],
+             'relationshipModified':[]
+             }
+             ]}]
+             
+             /*,
                 {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
-                    'filesAdded': 
+                    'filesAdded':
                     [
                     {
                         'fileName':'persian',
@@ -213,7 +224,7 @@ function ready(error, xml) {
                 }
             ]
         }
-    ];
+    ];*/
 //    console.log(data)
     if(REAL_DATA){
         data = realData
@@ -323,14 +334,15 @@ function ready(error, xml) {
                                             
                                             //console.log(ant.group1); 
                                             authors[commit["author"]] = author;
-                                            checkRoom(commit['filesAdded'], ant);
-
+//                                            checkRoom(commit['filesAdded'], ant);
+                                            checkRoom(commit, ant);
                                         } else {
                                             author["contribution"]  += 1;
                                             var ant = author["antMarker"]
 
                                             //ant = movePosition(ant, nextPos);
-                                            checkRoom(commit['filesAdded'], ant);
+//                                            checkRoom(commit['filesAdded'], ant);
+                                            checkRoom(commit, ant);
                                         }
                                             
                                             //Tooltip for each ant
@@ -493,7 +505,8 @@ function ready(error, xml) {
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
-            files.forEach(function(file){
+            filesAdded = files['filesAdded']
+            filesAdded.forEach(function(file){
                 var filename = file['fileName'];
                 var existingFile = rooms[filename];
                 if(!existingFile){
@@ -508,6 +521,11 @@ function ready(error, xml) {
                     //room exist so modidfy that room
                 }
             });
+            filesModified = files['filesModified']
+            filesModified.forEach(function(file){
+                                  var existingRoom = rooms[file];
+                                  ant.moveToRoom(existingRoom)
+                                  })
 
             //console.log(ant.name)
             //console.log(ant.moveStack)
