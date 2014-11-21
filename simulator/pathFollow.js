@@ -1145,7 +1145,7 @@ function ready(error, xml) {
     
     function resumeFunction(){
         console.log("hi");
-        alert("btnnnnn");
+        TICK_DELAY = TICK_DELAY / 2;
     }
     
 
