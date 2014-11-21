@@ -3,29 +3,20 @@ queue()
 .await(ready);
 
 function ready(error, xml) {
-    //read deoendency data
-   var dependencyData1 = dependencyData
-    //mockData
-    //var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
-    
-//    console.log(realData);
+    var dependencyData1 = dependencyData
 
     // global constants
-    var REAL_DATA = true;
-    var ONE_TICK = 10;
+    var REAL_DATA = true;   //if true, run the code with real data
+    var ONE_TICK = 500;     //speed of one tick
     var TICK_DELAY = ONE_TICK;
     var SPEED_COUNTER = 0;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
     
-//    var realDataForRelationsChange = [{"date":{"year":2014,"month":10,"day":24,"hour":0,"minute":0,"second":0},"commits":[{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":39,"second":9},"filesAdded":[{"fileName":"A","parents":["D"]},{"fileName":"B","parents":["A"]},{"fileName":"C","parents":["A"]},{"fileName":"D","parents":[]},{"fileName":"E","parents":["D"]}],"filesModified":[],"relationshipModified":[],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":52,"second":29},"filesAdded":[],"filesModified":["C","E"],"relationshipModified":[{"fileName":"C","parents":["B"]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":53,"second":23},"filesAdded":[],"filesModified":["A","E"],"relationshipModified":[{"fileName":"A","parents":[]},{"fileName":"E","parents":["A"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":55,"second":0},"filesAdded":[],"filesModified":["B","C"],"relationshipModified":[{"fileName":"B","parents":["D"]},{"fileName":"C","parents":["D"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":20,"second":25},"filesAdded":[{"fileName":"F","parents":[]}],"filesModified":["B","C","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","E","D","F"]},{"fileName":"C","parents":[]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":21,"second":25},"filesAdded":[],"filesModified":["B","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","D","F"]},{"fileName":"E","parents":["F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":21},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["D","F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":53},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["A","C","E"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":39,"second":9},"filesAdded":[],"filesModified":[],"relationshipModified":[],"filesDeleted":["A","B"]}]}];
-    
-    
-//    var dependencyData = [{"id":1,"fileName":"BorrowerUser","directory":"users","targetedBy":[]},{"id":2,"fileName":"ClerkUser","directory":"users","targetedBy":["LibrarianUser"]},{"id":3,"fileName":"LibrarianUser","directory":"users","targetedBy":[]},{"id":4,"fileName":"Main","directory":"gui","targetedBy":["ClerkUser","BorrowerUser","LibrarianUser"]}];
+    var realDataForRelationsChange = [{"date":{"year":2014,"month":10,"day":24,"hour":0,"minute":0,"second":0},"commits":[{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":39,"second":9},"filesAdded":[{"fileName":"A","parents":["D"]},{"fileName":"B","parents":["A"]},{"fileName":"C","parents":["A"]},{"fileName":"D","parents":[]},{"fileName":"E","parents":["D"]}],"filesModified":[],"relationshipModified":[],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":52,"second":29},"filesAdded":[],"filesModified":["C","E"],"relationshipModified":[{"fileName":"C","parents":["B"]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":53,"second":23},"filesAdded":[],"filesModified":["A","E"],"relationshipModified":[{"fileName":"A","parents":[]},{"fileName":"E","parents":["A"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":14,"minute":55,"second":0},"filesAdded":[],"filesModified":["B","C"],"relationshipModified":[{"fileName":"B","parents":["D"]},{"fileName":"C","parents":["D"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":20,"second":25},"filesAdded":[{"fileName":"F","parents":[]}],"filesModified":["B","C","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","E","D","F"]},{"fileName":"C","parents":[]},{"fileName":"E","parents":[]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":21,"second":25},"filesAdded":[],"filesModified":["B","E"],"relationshipModified":[{"fileName":"B","parents":["A","C","D","F"]},{"fileName":"E","parents":["F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":21},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["D","F"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":22,"second":53},"filesAdded":[],"filesModified":["B"],"relationshipModified":[{"fileName":"B","parents":["A","C","E"]}],"filesDeleted":[]},{"author":"BoRa Choi","Email":"boradori_@hotmail.com","timestamp":{"year":2014,"month":10,"day":24,"hour":18,"minute":39,"second":9},"filesAdded":[],"filesModified":[],"relationshipModified":[],"filesDeleted":["A","B"]}]}];
     
     if(REAL_DATA){
         for(var i = 0; i < realData.length; i++){
-    //        console.log(realData[i]);
             realData[i].date = new Date(realData[i].date.year,realData[i].date.month,realData[i].date.day,0,0,0);
             if(realData[i].commits !== null){
                 for(var j = 0; j < realData[i].commits.length;j++){
@@ -38,6 +29,7 @@ function ready(error, xml) {
         console.log(realData)
         console.log(dependencyData)
     }
+    //mock data
     var data = [
         {
             'date':new Date(2014, 0, 1, 0, 0, 0, 0),
@@ -114,11 +106,11 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-             },
-             {
+                },
+                {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
-                    'filesAdded':
+                    'filesAdded': 
                     [
                     {
                         'fileName':'persian',
@@ -135,7 +127,7 @@ function ready(error, xml) {
                         ]
                     } 
                     ],
-                    'filesModified': ['animals','oranges','persian', 'tools'],
+                    'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
                 }
@@ -223,7 +215,6 @@ function ready(error, xml) {
         }
     ];
 
-//    console.log(data)
     if(REAL_DATA){
         data = realData
     }
@@ -251,20 +242,10 @@ function ready(error, xml) {
 
     var isPaused = false;
     var universalHour;
+    var commits;
+    var commitsIndex = 0;
     var speedFlag = false;
-    
-    //var path = svg.select("path#wiggle"),
-    //startPoint = pathStartPoint(path);
 
-    //http://stackoverflow.com/questions/13563471/random-colors-for-circles-in-d3-js-graph
-    /*var marker = svg.append("circle");
-    marker.attr("r", 7)
-    .attr("transform", "translate(" + startPoint + ")")
-    .style("fill",function() {
-           return "hsl(" + Math.random() * 360 + ",100%,50%)";
-           })
-    transition();*/
-    var intervalId;
 
     simulateDay(0, data.length, data)
 
@@ -273,100 +254,38 @@ function ready(error, xml) {
         console.log("check1");
         if (index < lastIndex) {
             var entry = iData[index];
-            var today = new Date(entry["date"]);
+            today = new Date(entry["date"]);
             var tommorrow = new Date(entry["date"]);
             tommorrow.setDate(tommorrow.getDate()+1);
 
 
+            commits = entry["commits"];
 
-            var commits = entry["commits"];
-            //console.log("today:"+today);
-            //console.log("tmrw:"+tommorrow);
-            intervalId = setInterval(function() {
+            var intervalId = setInterval(function() {
 
                 if(!isPaused){
                     todayLabel.text(today)
 
-                    //console.log(today.getTime());
+                    console.log(today.getTime());
                     if (today.getTime() < tommorrow.getTime()){
 
                         if(today.getHours()==0||today.getHours()==12){
                             initializeSky(today.getHours());
                         }
 
-
                         if(today.getHours()==0){
                             initializeOrbits();
                         }
                         
                         if(commits !== null){
-                            commits.forEach(function(commit){
-                                if(!commit["processed"]){
-                                //console.log("now:"+today+" timestamp:"+commit["timestamp"])
-
-                                    if(today.getTime()>commit["timestamp"]){
-                                        isPaused = true;
-                                        universalHour = today.getHours();
-                                        pauseAnimationForCommit();
-                                        commit["processed"] = true;
-                                        var author = authors[commit["author"]];
-                                        // console.log(authors);
-                                        var nextPos = nextPosition();
-
-                                        if(!author){
-                                            author = {};
-                                            author["contribution"] = 10;
-                                            
-                                            var ant = new ants(svg,commit["author"]);
-                                            ant.name = commit["author"];
-                                            author["antMarker"] = ant;
-                                            
-                                            //console.log(ant.group1); 
-                                            authors[commit["author"]] = author;
-//                                            checkRoom(commit['filesAdded'], ant);
-                                            checkRoom(commit, ant);
-                                        } else {
-                                            author["contribution"]  += 1;
-                                            var ant = author["antMarker"]
-
-                                            //ant = movePosition(ant, nextPos);
-//                                            checkRoom(commit['filesAdded'], ant);
-                                            checkRoom(commit, ant);
-                                        }
-                                            
-                                            //Tooltip for each ant
-                                            mergedRoom.selectAll('.eachAnt').on("mouseover", mouseoverAnt)
-                                            .on("mousemove", mousemove)
-                                            .on("mouseout", mouseout)
-                                            .attr("author", function(d) { return commit['author']});
-                                            
-                                            function mouseoverAnt()
-                                            {
-                                            var myAnt = d3.select(this);
-                                            
-                                            
-                                            myAnt.attr("class", "dataAntSelected").style("fill", "white");
-                                            
-                                            tooltip.html(    //Populate tooltip text
-                                                         "Name: " + myAnt.attr("author")
-                                                         )
-                                            .transition()
-                                            .delay(150)
-                                            //.duration(250)
-                                            .style("opacity", 1);
-                                            }
-                                            
-                                    }else{
-                                    //console.log("ho")
-                                    }
-                                }
-                            })
+                            iterateCommit(today,commits, commitsIndex)
                         }
 
                         today.setHours(today.getHours()+1);
 
                     } else {
                         pauseAnimationForCommit();
+                        commitsIndex = 0
                         clearInterval(intervalId)
                         if(speedFlag){
                             TICK_DELAY = ONE_TICK;
@@ -386,6 +305,55 @@ function ready(error, xml) {
         } else {
             //after finishing all commits
             todayLabel.text("Project ended")
+        }
+    }
+
+
+    var iterateCommit = function(today, commits, index){
+        if(index < commits.length){
+            var commit = commits[index]
+
+            if(!commit["processed"]){
+                if(today.getTime()>commit["timestamp"]){
+                    isPaused = true;
+                    universalHour = today.getHours();
+                    pauseAnimationForCommit();
+                    commit["processed"] = true;
+                    var author = authors[commit["author"]];
+
+                    if(!author){
+                        author = {};
+                        author["contribution"] = 10;
+                        
+                        var ant = new ants(svg,commit["author"]);
+                        ant.name = commit["author"];
+                        author["antMarker"] = ant;
+                        
+                        authors[commit["author"]] = author;
+                        checkRoom(commit, ant);
+
+                    } else {
+                        author["contribution"]  += 1;
+                        var ant = author["antMarker"]
+
+                        checkRoom(commit, ant);
+                    }
+                        
+                    //Tooltip for each ant
+                    mergedRoom.selectAll('.eachAnt').on("mouseover", mouseoverAnt)
+                    .on("mousemove", mousemove)
+                    .on("mouseout", mouseout)
+                    .attr("author", function(d) { return commit['author']});
+                        
+                }else{
+                    if(isPaused){
+                        console.log("hE")                        
+                        isPaused = false;
+                        universalHour = today.getHours();
+                        resumeAnimeationFromCommit(universalHour);
+                    }
+                }
+            }            
         }
     }
 
@@ -512,16 +480,16 @@ function ready(error, xml) {
                 var existingFile = rooms[filename];
                 if(!existingFile){
                     //no room of this file... so create a new room
-
                     var newRoom = new Room(file)
                     rooms[filename] = newRoom; //creating an empty dictionary in the global "room" variable with the filename as the key
-                    //console.log(newRoom)
                     ant.moveToRoom(newRoom)
 
 
                 } else {
                     //room exist so modidfy that room
                 }
+            
+
             });
             filesModified = files['filesModified']
             filesModified.forEach(function(file){
@@ -530,17 +498,11 @@ function ready(error, xml) {
                                   })
 
             var a  = d3.select(ant.group1);
-            //console.log()
             a.moveToFront();            
-            /*
-            if(ant.room){
-                ant.moveUpToGround(ant.room)
-            }*/
 
             ant.runAllMove(ant.lastMoveIndex+1);
             ant.lastMoveIndex = ant.moveStack.length -1
         }
-
     }
     
     
@@ -572,33 +534,17 @@ function ready(error, xml) {
         }
 
         this.push = function (x,y,room, callback){
-            //console.log("grid:")
-            //console.log(this.rooms)
-            //console.log("pushing "+room.name+" to:( "+x+","+y+")")            
-            //console.log("rooms.length:"+this.rooms.length)
-            //console.log("y"+y)
-
-            
 
             if (y >= this.rooms.length) {
-                //need more depth
-                //console.log("PUSHING MORE DEPTH")
                 this.rooms.push([]);
             }
 
             if (x >= this.rooms[y].length){
-                //console.log("PUHSING MORE WIDTH")
                 this.rooms[y].push(0);
             }
 
-
-            //console.log("checking grid["+x+"]["+y+"]:")
-            //console.log(this.rooms[y][x])
             if (!this.rooms[y][x]) {
                 //if no room in the grid
-                
-                //console.log(room.name+" added")
-
                 this.rooms[y][x]=room
                 if(callback){
                     this.pushingRoom.moveStack.push(room)
@@ -606,18 +552,13 @@ function ready(error, xml) {
                 }
             }else {
                 //theres room in grid
-                //console.log("defined")
                 var occupyingRoom = this.rooms[y][x]
-
-                //console.log("occupying room:"+occupyingRoom.name)
 
                 if (occupyingRoom.parents.length == 0 && !(room.svg)){
                     room.x = room.x + 1                    
                     this.push(x+1, y, room)
 
                 } else {
-                    //console.log(occupyingRoom.parents[0].name)
-                    //console.log(room.parents[0].name)
                     //search for the root and then movement
                     occupyingRoomBranch = occupyingRoom
                     while(occupyingRoomBranch.parents.length != 0){
@@ -630,8 +571,6 @@ function ready(error, xml) {
                     
                     var occupyingRoot = occupyingRoomBranch
                     var currentRoot = currentBranch
-
-
 
                     var targetMove
                     if (currentRoot.x > occupyingRoot.x){
@@ -651,13 +590,9 @@ function ready(error, xml) {
                         nextRoom.x = nextRoom.x + 1
                         var pushNextRoomChildren = this.moveChildren
                         this.push(nextRoom.x, nextRoom.y, nextRoom,pushNextRoomChildren)
-
-                        //nextRoom.move(nextRoom.x , nextRoom.y)
                     }
 
                     this.push(targetMove.x,targetMove.y,targetMove, pushChildren)
-                    //this.pushingRoom.moveStack.push(parentRoom.childs[i])                    
-                    //targetMove.move(targetMove.x,targetMove.y)   
                     if(!this.rooms[y][x]){
                         this.rooms[y][x]=room
                         if(callback){
@@ -734,9 +669,6 @@ function ready(error, xml) {
             .delay((delay*(index-ant.lastMoveIndex)))            
             .attr("opacity", 1)
             .each("end", ant.runAllMove(index+1))
-
-            
-
         }
 
         this.calcX = function(){
@@ -771,9 +703,6 @@ function ready(error, xml) {
                             .attr("fill",color)
                             .attr("opacity",0);
 
-            //var tunnelSvg =  svg.append("rect")
-
-
             var name =  group.append("text")
                         .attr("x", calcX)
                         .attr("y", calcY)
@@ -785,12 +714,10 @@ function ready(error, xml) {
                         .style("fill", "white")
                         .attr("opacity",0);
             
-
             if (y > 0) {
                 var parentRoom = this.parents[0]
                 var parentRoomSvg = this.parents[0].svg
                 var color = parentRoomSvg.attr('fill');
-
 
                 tunnel
                 .attr("x2", (roomRx*2 + distanceXBetweenRooms)*(parentRoom.x)+(roomRx+distanceToBorder))
@@ -800,7 +727,6 @@ function ready(error, xml) {
 
                 roomSvg.attr("fill", color);
             }
-
 
             this.nameLabel = name
             this.svg = roomSvg;
@@ -828,14 +754,13 @@ function ready(error, xml) {
                 
                 for (var singleAnt in this.antsInside) {
                     if (this.antsInside.hasOwnProperty(singleAnt)) {
-                            var movingAnt = this.antsInside[singleAnt]
+                        var movingAnt = this.antsInside[singleAnt]
 
-                            movingAnt.group1.transition()
-                            .duration(200)
-                            .delay((delay*(i-ant.lastMoveIndex)))
-                            .attr("transform", "translate(" + [newXCoor,this.calcY()] + ")")
-                            movingAnt.x = newXCoor
-                        
+                        movingAnt.group1.transition()
+                        .duration(200)
+                        .delay((delay*(i-ant.lastMoveIndex)))
+                        .attr("transform", "translate(" + [newXCoor,this.calcY()] + ")")
+                        movingAnt.x = newXCoor
                     }
                 }
 
@@ -850,18 +775,9 @@ function ready(error, xml) {
         
         if(rooms[file['parents']]){
             //this room is a child of some file
-            //console.log("I HAVE A PARENT");
 
             var parentRoom = rooms[file['parents'][0]];
-                //var parentRoomSvg = parentRoom['roomSvg'];
-            //var parentRoomSvg = parentRoom.svg;
-
-            //console.log("bbox:"+parentRoomSvg.attr('cx'));
-            //console.log("printing a parent room:");
-            //console.log(parentRoom)
             var numParentKids = parentRoom.childs.length;
-            //var cx = parseInt(parentRoomSvg.attr('cx'));
-            //var cy = parseInt(parentRoomSvg.attr('cy'));
 
             this.parents = [];
             this.childs = [];
@@ -869,18 +785,6 @@ function ready(error, xml) {
             this.parents.push(parentRoom);
             parentRoom.childs.push(this);
 
-
-            //rooms[file['fileName']] = {};
-            //var newRootRoom = rooms[file['fileName']];
-            //newRootRoom['roomSvg'] = roomSvg;
-            //update relationship
-            //newRootRoom['parents'] = [];
-
-
-            //update relationship
-            //newRootRoom['parents'].push(parentName);
-            //newRootRoom['childs'] = [];                
-            //parentRoom['childs'].push(file['fileName']);
             this.x = parentRoom.x + numParentKids
             this.y = parentRoom.y + 1;
             grid.push(this.x, this.y, this)
@@ -891,13 +795,10 @@ function ready(error, xml) {
             //50 is the ry 
             //25 is tunner distance
 
-            //console.log("rooms"+rooms);
-            //console.log("numroot:"+numRootRooms);
             this.y = 0;
             this.x = 0;
             this.parents = [];
             this.childs = [];
-
 
             grid.pushingRoom = this
 
@@ -911,7 +812,6 @@ function ready(error, xml) {
         mergedRoom.selectAll('.eachRoom').on("mouseover", mouseover)
         .on("mousemove", mousemove)
         .on("mouseout", mouseout);
-        
         
         dependencyArray = {}
         console.log(dependencyData1)
@@ -937,7 +837,6 @@ function ready(error, xml) {
         }else
             this.group.attr("dependency", function(d) {return "hellllllo"});
         
-        
         this.group.attr("name", function(d) { return file['fileName']});     // TEXT HERE 1
         
 
@@ -950,26 +849,20 @@ function ready(error, xml) {
             tooltip.html(    //Populate tooltip text
                          "Name: " + myRoom.attr("name") + "</br>" +                              // TEXT HERE 2
                          "Dependency: " + myRoom.attr("dependency")
-                         
-                         
                          )
             .transition()
             .delay(150)
             //.duration(250)
             .style("opacity", 1);
         }
-        
-        
-        
-
     }
-    
     
     
     function mousemove()
     {    //Move tooltip to mouse location
         return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
     }
+
 
     function mouseout()
     {
@@ -988,7 +881,6 @@ function ready(error, xml) {
     }
     
     
-
     function countNumberRootRooms(){
         var count = 0;
         //console.log("print all rooms");
@@ -1019,7 +911,6 @@ function ready(error, xml) {
         marker.transition()
         .duration(TICK_DELAY)
         .attrTween("transform", translateAlong(path.node()))
-        //.each("end", transition);// infinite loop
     }
     
     function ants(canvas, newName) {
@@ -1043,13 +934,14 @@ function ready(error, xml) {
         this.moveDuration = 300
 
         this.createAnt = function createAnt(canvas, height, color, position){
-             // Draw the Circle
-             var circleData = [
-             { "cx": position+20, "cy": 20, "radius": 20, "color": color },
-             { "cx": position+50, "cy": 20, "radius": 20, "color": color },
-             { "cx": position+80, "cy": 20, "radius": 20, "color": color },
-             { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
-             { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
+             
+            // Draw the Circle
+            var circleData = [
+            { "cx": position+20, "cy": 20, "radius": 20, "color": color },
+            { "cx": position+50, "cy": 20, "radius": 20, "color": color },
+            { "cx": position+80, "cy": 20, "radius": 20, "color": color },
+            { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
+            { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
             // put circles in group1
             var group1 = mergedRoom.append("g");
@@ -1059,13 +951,11 @@ function ready(error, xml) {
             .enter()
             .append("circle");
             
-            
             var circleAttributes = circles
             .attr("cx", function (d) {return d.cx;})
             .attr("cy", function (d) {return d.cy;})
             .attr("r", function (d) {return d.radius;})
             .style("fill", function (d) {return d.color;});
-            
             
             // draw legs in group1
             for(i = 0; i < 2; i++){
@@ -1130,56 +1020,8 @@ function ready(error, xml) {
                 this.moveAnt(roomPath[i].svg[0][0].cx["baseVal"].value, roomPath[i].svg[0][0].cy["baseVal"].value)
                 this.roomStack.push(roomPath[i])
             }
-
-            //roomPath[0].antsInside.push({key:this.name, value:this})
-
-
-
         }
         
-     
-
-
-        // original move function of ant
-        // function movePosition(ant, nextPos, tempTime) {
-        //     var pos = ant.position;
-        //     var direction = ant.direction;
-
-        //     if(direction == "rigth"){
-        //         if(pos < nextPos){
-        //             ant.group1.transition()
-        //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
-        //             .each("end", function(tempTime) {
-        //                 isPaused = false;});
-        //         }
-        //         else if(pos > nextPos){
-        //             ant.direction = "left";
-        //             ant.group1.transition()
-        //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")" + "scale(" + [-1,1] + ")")
-        //             .each("end", function(tempTime) {
-        //                 isPaused = false;});
-        //         }
-        //     }else{
-        //         if(pos < nextPos){
-        //             ant.direction = "right";
-        //             ant.group1.transition()
-        //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")")
-        //             .each("end", function(tempTime) {
-        //                 isPaused = false;});
-        //         }
-        //         else if(pos > nextPos){
-        //             ant.group1.transition()
-        //             .duration(500)
-        //             .attr("transform", "translate(" + [nextPos,GROUND_LEVEL-55] + ")" + "scale(" + [-1,1] + ")")
-        //             .each("end", function(tempTime) {
-        //                 isPaused = false;});
-        //         }
-        //     }
-        //     ant.position = nextPos;
-        //     return ant;
 
         this.moveToRoom = function(room){
 
@@ -1192,9 +1034,6 @@ function ready(error, xml) {
             
             if(room.parents[0]){                
                 this.moveDownToParent(room)
-                //this.moveStack.push(this.moveStack[this.moveStack.length-1])//duplicates last traslate to make ant wait
-
-
 
                 this.moveStack.push(room) 
                 this.roomStack.push(0)
@@ -1204,10 +1043,7 @@ function ready(error, xml) {
                 this.room = room                
                 this.roomStack.push(room)
 
-                //this.room.antsInside.push({key:this.name, value:this})
-
             }else{
-                //console.log(room.svg[0][0].cx["baseVal"].value)     
                 this.moveAnt(room.svg[0][0].cx["baseVal"].value, GROUND_LEVEL-55)//move to the correct x on upper ground
                 this.roomStack.push(0)
 
@@ -1217,28 +1053,15 @@ function ready(error, xml) {
                 this.moveAnt(room.svg[0][0].cx["baseVal"].value, room.svg[0][0].cy["baseVal"].value) //move to newly created room
                 this.room = room
                 this.roomStack.push(room)
-
-                //this.room.antsInside.push({key:this.name, value:this})
-
-
             }
         }
 
         //runs the moves stack in the moveStack array
         this.runAllMove = function(i, j){
-            //console.log(this.moveStack.length)
-            //console.log(i)
             if (i < this.moveStack.length && i >= 0){
 
                 if(!this.moveStack[i].svg){
-                    //console.log(i)
-                    //console.log(this.moveStack)
-                    //console.log(this.roomStack)
-
                     if(this.roomStack[i]){
-                        console.log("at i: "+i+" "+this.name+" is inside "+this.roomStack[i].name)
-                        //console.log("roomstack at i: "+this.roomStack[i].name)
-
                         this.roomStack[i].antsInside[this.name]= this
                         if(i-1>=0){
                             var counter = 1;
@@ -1260,8 +1083,6 @@ function ready(error, xml) {
                     .attr("transform", this.moveStack[i])
                     .each("end", this.runAllMove(i+1))
 
-                    
-                    
                 }else{
                     var currentRoom = this.moveStack[i]
                     if(currentRoom.moveStack.length > 0){
@@ -1278,13 +1099,23 @@ function ready(error, xml) {
                     currentRoom.showSvg(this.moveDuration, i, this)
                 }
             }
+
             else{
+                if(commitsIndex+1 < commits.length){
                     this.group1.transition()
                     .delay(this.moveDuration*(i-this.lastMoveIndex))
-                     .each("end", function(){
-                         isPaused = false;
-                         resumeAnimeationFromCommit(universalHour);
-                     })
+                    .each("end", function(){
+                        commitsIndex = commitsIndex + 1
+                        iterateCommit(today,commits, commitsIndex)
+                    })
+                } else {
+                    this.group1.transition()
+                    .delay(this.moveDuration*(i-this.lastMoveIndex))
+                    .each("end", function(){
+                        isPaused = false;
+                        resumeAnimeationFromCommit(universalHour);
+                    })
+                }
             }
         }
 
@@ -1294,24 +1125,6 @@ function ready(error, xml) {
             var pos = this.position;
             var direction = this.direction;
             this.moveStack.push("translate(" + [x,y] + ")")
-            /*
-            if(direction == "rigth"){
-                if(pos < x){
-                    this.moveStack.push("translate(" + [x,y] + ")")
-                }
-                else if(pos >= x){
-                    this.direction = "left";
-                    this.moveStack.push("translate(" + [x,y] + ")" + "scale(" + [-1,1] + ")")
-                }
-            }else{
-                if(pos < x){
-                    this.direction = "right";
-                    this.moveStack.push("translate(" + [x,y] + ")")
-                }
-                else if(pos >= x){
-                    this.moveStack.push("translate(" + [x,y] + ")" + "scale(" + [-1,1] + ")")
-                }
-            }*/
             this.position = x;
         }
     }
@@ -1345,9 +1158,6 @@ function ready(error, xml) {
     .on("click", slowFunction);
 
     function resumeFunction(){
-        // pauseAnimationForCommit();
-        // clearInterval(intervalId)
-        // todayLabel.text("Project ended")
         console.log("resume");
         speedFlag = true;
     }
@@ -1372,17 +1182,6 @@ function ready(error, xml) {
                              { "cx": position+87, "cy": 15, "radius": 6, "color": "white" },
                              { "cx": position+87, "cy": 15, "radius": 3, "color": color } ];
 
-        // put circles in group1
-
-        // original version
-        // var group1 = canvas.append("g");
-
-        // var circles =   group1.selectAll("circle")
-        //                 .data(circleData)
-        //                 .enter()
-        //                 .append("circle");
-        // =======
-        // bora version
         var group1 = mergedRoom.append("g").attr("class", "eachAnt");
     
         var circles =   group1.selectAll("circle")
@@ -1411,28 +1210,20 @@ function ready(error, xml) {
             }
         }
         
-        
-        
         group1
         .attr("transform", "translate(" + [7,GROUND_LEVEL-height] + ")");
-
-
+        
         return group1;
     }
     
 
     function createBackground(canvas) {
-
-
         var sky =   canvas.append("rect")
                     .attr("x", 0)
                     .attr("y", 0)
                     .attr("width", window.innerWidth)
                     .attr("height", GROUND_LEVEL)
                     .style("fill", "#0c1317");
-        
-        
-        
         return sky;
     }
     
@@ -1508,7 +1299,6 @@ function ready(error, xml) {
                 var t_x = rotation_radius_x * Math.cos(t_angle);
                 var t_y = rotation_radius_y * Math.sin(t_angle);
 
-
                 return "translate(" + ((window.innerWidth/2) + t_x) + "," + (200 + t_y) + ")";
             };
         };
@@ -1523,11 +1313,6 @@ function ready(error, xml) {
                 return "translate(" + p.x + "," + p.y + ")";//Move marker
             }
         }
-    }
-
-
-    function nextPosition() {
-        return  Math.random()*500;
     }
 
 
