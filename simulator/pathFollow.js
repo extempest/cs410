@@ -61,7 +61,7 @@ function ready(error, xml) {
                 },
                 {
                     'author':'Byung',
-                    'timestamp': new Date(2014, 0, 1, 13, 1 , 1, 1),
+                    'timestamp': new Date(2014, 0, 1, 1, 30 , 1, 1),
                     'filesAdded': 
                     [
                     {
@@ -83,136 +83,8 @@ function ready(error, xml) {
                     'filesDeleted':[],
                     'relationshipModified':[]
                 },
-                {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 1, 3, 1 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'apple',
-                        'parents':
-                        [
-                        'fruits'
-                        ]
-                    },
-                    {
-                        'fileName':'oranges',
-                        'parents':
-                        [
-                        'fruits'
-                        ]
-                    } 
-                    ],                   
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                },
-                {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'persian',
-                        'parents':
-                        [
-                        'cat'
-                        ]
-                    },
-                    {
-                        'fileName':'dog',
-                        'parents':
-                        [
-                        'animals'
-                        ]
-                    } 
-                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                }
             ]
         },
-        {
-            'date':new Date(2014, 0, 2, 0, 0, 0, 0),
-            'commits':
-            [
-                {
-                    'author':'Aki',
-                    'timestamp': new Date(2014, 0, 2, 5, 1 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'mandarin',
-                        'parents':
-                        [
-                        'oranges'
-                        ]
-                    },
-                    {
-                        'fileName':'hammer',
-                        'parents': 
-                        [
-                        'tools'
-                        ]
-                    }
-                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                },
-                {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 2, 7, 1 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'banana',
-                        'parents':
-                        [
-                        'fruits'
-                        ]
-                    },
-                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                },    
-                {
-                    'author':'Thompson',
-                    'timestamp': new Date(2014, 0, 2, 8, 1 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'clothes',
-                        'parents':
-                        [
-                        ]
-                    },
-                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                },
-                {
-                    'author':'Byung',
-                    'timestamp': new Date(2014, 0, 2, 9, 1 , 1, 1),
-                    'filesAdded': 
-                    [
-                    {
-                        'fileName':'pants',
-                        'parents':
-                        [
-                        'clothes'
-                        ]
-                    },
-                    ],
-                    'filesModified': [],
-                    'filesDeleted':[],
-                    'relationshipModified':[]
-                }
-            ]
-        }
     ];
 //    console.log(data)
     if(REAL_DATA){
@@ -242,6 +114,9 @@ function ready(error, xml) {
 
     var isPaused = false;
     var universalHour;
+    var today;
+    var commits;
+    var commitsIndex;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -263,13 +138,13 @@ function ready(error, xml) {
     function simulateDay(index, lastIndex, iData){
         if (index < lastIndex) {
             var entry = iData[index];
-            var today = new Date(entry["date"]);
+            today = new Date(entry["date"]);
             var tommorrow = new Date(entry["date"]);
             tommorrow.setDate(tommorrow.getDate()+1);
 
 
 
-            var commits = entry["commits"];
+            commits = entry["commits"];
             //console.log("today:"+today);
             //console.log("tmrw:"+tommorrow);
             var intervalId = setInterval(function() {
@@ -290,66 +165,8 @@ function ready(error, xml) {
                         }
                         
                         if(commits !== null){
-                            commits.forEach(function(commit){
-                                if(!commit["processed"]){
-                                //console.log("now:"+today+" timestamp:"+commit["timestamp"])
-
-                                    if(today.getTime()>commit["timestamp"]){
-                                       isPaused = true;
-                                       universalHour = today.getHours();
-                                       pauseAnimationForCommit();
-                                        commit["processed"] = true;
-                                        var author = authors[commit["author"]];
-                                        // console.log(authors);
-                                        var nextPos = nextPosition();
-
-                                        if(!author){
-                                            author = {};
-                                            author["contribution"] = 10;
-                                            
-                                            var ant = new ants(svg,commit["author"]);
-                                            ant.name = commit["author"];
-                                            author["antMarker"] = ant;
-                                            
-                                            //console.log(ant.group1); 
-                                            authors[commit["author"]] = author;
-                                            checkRoom(commit['filesAdded'], ant);
-
-                                        } else {
-                                            author["contribution"]  += 1;
-                                            var ant = author["antMarker"]
-
-                                            //ant = movePosition(ant, nextPos);
-                                            checkRoom(commit['filesAdded'], ant);
-                                        }
-                                            
-                                            //Tooltip for each ant
-                                            mergedRoom.selectAll('.eachAnt').on("mouseover", mouseoverAnt)
-                                            .on("mousemove", mousemove)
-                                            .on("mouseout", mouseout)
-                                            .attr("author", function(d) { return commit['author']});
-                                            
-                                            function mouseoverAnt()
-                                            {
-                                            var myAnt = d3.select(this);
-                                            
-                                            
-                                            myAnt.attr("class", "dataAntSelected").style("fill", "white");
-                                            
-                                            tooltip.html(    //Populate tooltip text
-                                                         "Name: " + myAnt.attr("author")
-                                                         )
-                                            .transition()
-                                            .delay(150)
-                                            //.duration(250)
-                                            .style("opacity", 1);
-                                            }
-                                            
-                                    }else{
-                                    //console.log("ho")
-                                    }
-                                }
-                            })
+                            commitsIndex = 0
+                            iterateCommit(today,commits, commitsIndex)
                         }
 
                         today.setHours(today.getHours()+1);
@@ -364,6 +181,70 @@ function ready(error, xml) {
         } else {
             //after finishing all commits
             todayLabel.text("Project ended")
+        }
+    }
+
+    var iterateCommit = function(today, commits, index){
+        if(index < commits.length){
+            var commit = commits[index]
+            if(!commit["processed"]){
+            //console.log("now:"+today+" timestamp:"+commit["timestamp"])
+
+                if(today.getTime()>commit["timestamp"]){
+                   isPaused = true;
+                   universalHour = today.getHours();
+                   pauseAnimationForCommit();
+                    commit["processed"] = true;
+                    var author = authors[commit["author"]];
+                    // console.log(authors);
+                    var nextPos = nextPosition();
+
+                    if(!author){
+                        author = {};
+                        author["contribution"] = 10;
+                        
+                        var ant = new ants(svg,commit["author"]);
+                        ant.name = commit["author"];
+                        author["antMarker"] = ant;
+                        
+                        //console.log(ant.group1); 
+                        authors[commit["author"]] = author;
+                        checkRoom(commit['filesAdded'], ant);
+
+                    } else {
+                        author["contribution"]  += 1;
+                        var ant = author["antMarker"]
+
+                        //ant = movePosition(ant, nextPos);
+                        checkRoom(commit['filesAdded'], ant);
+                    }
+                        
+                        //Tooltip for each ant
+                        mergedRoom.selectAll('.eachAnt').on("mouseover", mouseoverAnt)
+                        .on("mousemove", mousemove)
+                        .on("mouseout", mouseout)
+                        .attr("author", function(d) { return commit['author']});
+                        
+                        function mouseoverAnt()
+                        {
+                        var myAnt = d3.select(this);
+                        
+                        
+                        myAnt.attr("class", "dataAntSelected").style("fill", "white");
+                        
+                        tooltip.html(    //Populate tooltip text
+                                     "Name: " + myAnt.attr("author")
+                                     )
+                        .transition()
+                        .delay(150)
+                        //.duration(250)
+                        .style("opacity", 1);
+                        }
+                        
+                }else{
+                //console.log("ho")
+                }
+            }            
         }
     }
 
@@ -483,6 +364,8 @@ function ready(error, xml) {
     function checkRoom(files, ant){
         if (ant != null){
             //console.log(files);
+
+
             files.forEach(function(file){
                 var filename = file['fileName'];
                 var existingFile = rooms[filename];
@@ -498,6 +381,8 @@ function ready(error, xml) {
                 } else {
                     //room exist so modidfy that room
                 }
+            
+
             });
 
             var a  = d3.select(ant.group1);
@@ -511,7 +396,6 @@ function ready(error, xml) {
             ant.runAllMove(ant.lastMoveIndex+1);
             ant.lastMoveIndex = ant.moveStack.length -1
         }
-
     }
     
 
@@ -1246,12 +1130,24 @@ function ready(error, xml) {
                 }
             }
             else{
+
+                if(commitsIndex+1 < commits.length){
+                    this.group1.transition()
+                        .delay(this.moveDuration*(i-this.lastMoveIndex))
+                         .each("end", function(){
+                            commitsIndex = commitsIndex + 1
+                            iterateCommit(today,commits, commitsIndex)
+                         })
+                } else {
+
                     this.group1.transition()
                     .delay(this.moveDuration*(i-this.lastMoveIndex))
                      .each("end", function(){
                          isPaused = false;
                          resumeAnimeationFromCommit(universalHour);
                      })
+                }
+
             }
         }
 
