@@ -12,7 +12,7 @@ function ready(error, xml) {
 
     // global constants
     var REAL_DATA = true;
-    var ONE_TICK = 100;
+    var ONE_TICK = 10;
     var TICK_DELAY = ONE_TICK;
     var SPEED_COUNTER = 0;
     var GROUND_LEVEL = 200;
