@@ -11,7 +11,9 @@ function ready(error, xml) {
 
     // global constants
     var REAL_DATA = true;
-    var TICK_DELAY = 1000;
+    var ONE_TICK = 1000;
+    var TICK_DELAY = ONE_TICK;
+    var SPEED_COUNTER = 0;
     var GROUND_LEVEL = 200;
     var SPEED_CONTROLLER = 2;
 
@@ -240,6 +242,7 @@ function ready(error, xml) {
 
     var isPaused = false;
     var universalHour;
+    var speedFlag = false;
     
     //var path = svg.select("path#wiggle"),
     //startPoint = pathStartPoint(path);
@@ -254,11 +257,11 @@ function ready(error, xml) {
     transition();*/
 
 
-
     simulateDay(0, data.length, data)
 
 
     function simulateDay(index, lastIndex, iData){
+        console.log("check1");
         if (index < lastIndex) {
             var entry = iData[index];
             var today = new Date(entry["date"]);
@@ -342,6 +345,17 @@ function ready(error, xml) {
                     } else {
                         pauseAnimationForCommit();
                         clearInterval(intervalId)
+                        if(speedFlag){
+                            TICK_DELAY = ONE_TICK;
+                            speedFlag = false;
+                        }
+                        else{
+                            console.log(Math.pow(2,SPEED_COUNTER))
+                            console.log(SPEED_COUNTER)
+                            TICK_DELAY = TICK_DELAY / Math.pow(2,SPEED_COUNTER);
+                            SPEED_COUNTER = 0;
+                        }
+
                         simulateDay(index+1,lastIndex,iData)
                     }
                 }
@@ -1129,25 +1143,48 @@ function ready(error, xml) {
     }
 
     
-    function createBtn(){
-        
-        return btn;
-    }
-    
-    //var resumeBtn = createBtn();
-    var btn = svg.append("rect")
-    .attr("x", window.innerWidth - 30)
+    //buttons for changing speed
+    var resumeBtn = svg.append("rect")
+    .attr("x", window.innerWidth - 100)
     .attr("y", 10)
-    .attr("width", 20)
-    .attr("height", 10)
-    .style("fill", "#A9672E")
+    .attr("width", 30)
+    .attr("height", 20)
+    .style("fill", "green")
     .on("click", resumeFunction);
     
+
+    var fastBtn = svg.append("rect")
+    .attr("x", window.innerWidth - 50)
+    .attr("y", 10)
+    .attr("width", 30)
+    .attr("height", 20)
+    .style("fill", "blue")
+    .on("click", fastFunction);
+
+
+    var slowBtn = svg.append("rect")
+    .attr("x", window.innerWidth - 50)
+    .attr("y", 40)
+    .attr("width", 30)
+    .attr("height", 20)
+    .style("fill", "red")
+    .on("click", slowFunction);
+
     function resumeFunction(){
-        console.log("hi");
-        TICK_DELAY = TICK_DELAY / 2;
+        console.log("resume");
+        speedFlag = true;
     }
-    
+
+    function fastFunction(){
+        console.log("fastFoward");
+        SPEED_COUNTER++;
+    }
+
+    function slowFunction(){
+        console.log("slower");
+        SPEED_COUNTER--;
+    }
+
 
     function createAnt(canvas, height, color, position){
          // Draw the Circle
