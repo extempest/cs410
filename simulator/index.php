@@ -60,19 +60,25 @@ stroke: black;
 <?php
     function printRealData(){
         // mock data
-        // $commitList = parse("CPSC304CoolTeam.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
+        $commitList = parse("CPSC304CoolTeam.txt"); //"mockTest.txt","CPSC304CoolTeam.txt","RxJava.txt", "scribe-java.txt"
         // real data
-        $commitList = parse("scribe-java.txt");
-        $newArray = sortCommits($commitList);
+        // $commitList = parse("scribe-java.txt");
+        $new_array = array();
+        foreach($commitList as $commit){
+            if(!(empty($commit['filesAdded']) && empty($commit['filesModified']) && empty($commit['filesDeleted']) && empty($commit['relationshipModified']))){
+                array_push($new_array, $commit);
+            }
+        }
+        $newArray = sortCommits($new_array);
         return convertJsArray($newArray);
     }
     ?>
 <?php
     function printDependency(){
         // mock data
-        // $php_array = readXML("CPSC304CoolTeam.xml"); //"scribe-java.xml", "CPSC304CoolTeam.xml"
+        $php_array = readXML("CPSC304CoolTeam.xml"); //"scribe-java.xml", "CPSC304CoolTeam.xml"
         // real data
-        $php_array = readXML("scribe-java.xml");
+        // $php_array = readXML("scribe-java.xml");
         return convertJsArray($php_array);
     }
     ?>
@@ -88,7 +94,6 @@ stroke: black;
         $classDiagram = simplexml_load_file($xmlFile);
         
         foreach($classDiagram as $object){
-            //            print_r($object);
             $className = str_word_count($object['name'],1);
             if(!empty($className) && $object['language'] == "java"){//the object is about class info
                 $directory = "";
@@ -123,14 +128,10 @@ stroke: black;
         foreach($dependencyList as $dependency){
             array_push($fileList[$dependency['target']]['targetedBy'], $fileList[$dependency['source']]['fileName']);
         }
-//        $fileList = array_filter($fileList);
-//        print_r($fileList);
-//        $fileList[0] = $file
         for($i = 0; $i < sizeof($fileList);$i++){
             $fileList[$i] = $fileList[$i+1];
             unset ($fileList[$i+1]);
         }
-//        array_pop($fileList);
         return $fileList;
     }
     ?>
@@ -188,13 +189,10 @@ stroke: black;
             while (($buffer = fgets($handle)) !== false){
                 $temp = str_word_count($buffer,1,'1234567890-+:');
                 $tempForCommit = str_word_count($buffer,1,'1234567890-+:/');
-                //print_r(sizeof($tempForCommit));
                 if(!empty($tempForCommit)){
-                    //print_r($tempForCommit);
                     
                     if($tempForCommit[0] == "commit"){
                         if($commitIndex != -1){
-                            //                      print_r($commitIndex);
                             $addedfiles = sortfiles($files, $javaAdded);
                             $modifiedfiles = sortfiles($files, $javaModified);
                             $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $addedfiles, $javaModified, $modifiedfiles, $javaDeleted);
@@ -207,17 +205,14 @@ stroke: black;
                         $javaAdded = array();
                         $javaModified = array();
                         $javaDeleted  = array();
-                        //unset($files,$addedfiles, $modifiedfiles, $javaAdded, $javaModified, $javaDeleted);
                     }
                     if($tempForCommit[0] == "Author:"){
                         $authorBuffer = str_word_count($buffer,1,'1234567890@._-');
-                        //print_r($lineBuffer);
                         $emailLine = $authorBuffer;
                         end($emailLine);
                         $emailIndex = key($emailLine);
                         $appendName = '';
                         for($i = 1; $i < $emailIndex; $i++){
-                            //                    print_r($authorBuffer[$i] . "byung!<br/>");
                             $appendName .= $authorBuffer[$i] . " ";
                         }
                         $author = trim($appendName);
@@ -281,10 +276,8 @@ stroke: black;
             }
             
             //This is for the last commit. Since I am creating $commit when a word "commit" is appeared, and there is no word "commit" at the end of file.
-            //print_r($commitIndex);
             $addedfiles = sortfiles($files, $javaAdded);
             $modifiedfiles = sortfiles($files, $javaModified);
-            //            $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime, $javaAdded, $javaModified, $addedfiles, $modifiedfiles, $javaDeleted);
             $commit = commitArray($author, $email, $commitYear, $commitMonth, $commitDay, $commitTime,  $addedfiles, $javaModified, $modifiedfiles, $javaDeleted);
             $commits[] = $commit;
             $commitIndex++;
@@ -327,28 +320,17 @@ stroke: black;
                         $parentClass[] = $lineArray[$i];
                 }
                 $childClass = $className;
-                //            print_r("class ".$childClass . " is a child of [");
-                //            for($i=0;$i<sizeof($parentClass);$i++)
-                //                print_r($parentClass[$i].", ");
-                //            print_r("]<br/>");
-                
             }
             //there is no extends
             if($lineArray[$index + 1] == "implements") {
                 for($i = $index + 2; $i < sizeof($lineArray); $i++)
                     $parentClass[] = $lineArray[$i];
-                $childClass = $className;
-                //            print_r("class ".$childClass . " is a child of [");
-                //            for($i=0;$i<sizeof($parentClass);$i++)
-                //                print_r($parentClass[$i].", ");
-                //            print_r("]<br/>");
-                
+                $childClass = $className;               
             }
             //it means there is no parent class
             if($index + 1 == sizeof($lineArray)){
                 $childClass = $className;
-                $parentClass = array();
-                //            print_r("class " .$childClass ." does not have parent class.<br/>");
+                $parentClass = array(); 
             }
         }
         
@@ -369,7 +351,6 @@ stroke: black;
         $timeArray = str_word_count($time,1,'1234567890');
         date_default_timezone_set("America/Los_Angeles");
         $monthNum = strtotime($month);
-        //        $str = "new Date(".$year.", ".date('m',$monthNum).", ".$day.", ".$timeArray[0].", ".$timeArray[1].", ".$timeArray[2].", 0)";
         $str = createTimeStamp((int)$year, (int)date('m',$monthNum), (int)$day, (int)$timeArray[0], (int)$timeArray[1], (int)$timeArray[2]);
         
         return $str;
