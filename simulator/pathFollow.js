@@ -106,19 +106,8 @@ function ready(error, xml) {
                     'filesModified': [],
                     'filesDeleted':[],
                     'relationshipModified':[]
-             },{
-             'author':'Thompson',
-             'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
-             'filesAdded':
-             [],
-             'filesModified': [ 'animals','fruits', 'tools'],
-             'filesDeleted':[],
-             'relationshipModified':[]
-             }
-             ]}]
-             
-             /*,
-                {
+             },
+             {
                     'author':'Thompson',
                     'timestamp': new Date(2014, 0, 1, 15, 1 , 1, 1),
                     'filesAdded':
@@ -138,7 +127,7 @@ function ready(error, xml) {
                         ]
                     } 
                     ],
-                    'filesModified': [],
+                    'filesModified': ['animals','oranges','persian', 'tools'],
                     'filesDeleted':[],
                     'relationshipModified':[]
                 }
@@ -224,7 +213,7 @@ function ready(error, xml) {
                 }
             ]
         }
-    ];*/
+    ];
 //    console.log(data)
     if(REAL_DATA){
         data = realData
