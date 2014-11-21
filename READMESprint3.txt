@@ -29,7 +29,25 @@ Input:
 Output: 
 Test:  
 
+JavaScript Parser Components:
 
+1. Make days depending on the size of php out
+Input: php outputs size X in length
+Outputs: X days is generated
+
+2. Room Grid Auto Adujusting System
+Input: php data array have overlapping room
+Output: move room so it wont overlap
+Test: 1st file: animal, 2nd file: tools, 3rd file: cat, 4th file: dog, 5th file: hammer. After the 5th file inputted the 'tools' branch should move
+
+3. Room Creation System
+Input: an array of files added in length X
+Output: rooms of X array created
+
+4. Ant Movement Creation
+Input: array of filesModified, filesCreated
+Output: depending on the structure of the hive move to the modified and created room
+ 
 
 Visualization Components:
 

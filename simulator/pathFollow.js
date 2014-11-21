@@ -10,7 +10,7 @@ function ready(error, xml) {
 //    console.log(realData);
 
     // global constants
-    var REAL_DATA = true;
+    var REAL_DATA = false;
     var ONE_TICK = 1000;
     var TICK_DELAY = ONE_TICK;
     var SPEED_COUNTER = 0;
